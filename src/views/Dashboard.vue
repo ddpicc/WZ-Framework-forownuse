@@ -5,8 +5,7 @@
  <Row >
 
     <Col :sm="24" :md="8">
-        <h3>👍WZ后台管理框架👍</h3>
-        <h5> <a href="https://github.com/herozhou/vue-framework-wz" target="_blank">github地址（喜欢就点个start呗）</a>  </h5>
+        <h3>云杰诊所后台管理</h3>
     </Col>
         
 

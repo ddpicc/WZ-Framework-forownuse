@@ -29,6 +29,8 @@ const userMap = {
 export default {
   loginByEmail: config => {
     const { email } = JSON.parse(config.body);
+    const { password } = JSON.parse(config.body);
+    //console.log(password);
       return userMap[email.split('@')[0]];
   },
   getInfo: config => {
