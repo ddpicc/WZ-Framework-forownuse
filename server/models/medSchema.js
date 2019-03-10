@@ -4,7 +4,9 @@ var Schema = mongoose.Schema;
 const medSchema = new Schema({
   medname :String,
   alias: String,
+  type: String,
   spec : String,
+  bagperbox : Number,
   count : Number,
   baseprice : Number,
   sellprice : Number,

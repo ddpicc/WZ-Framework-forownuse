@@ -1,132 +1,142 @@
 <template>
   <div class="animated fadeIn">
+		<Row>
+			<Col :md="24" >
+				<div class="doc-header">
+					<RadioGroup v-model="transactiontype" size="small">
+						<Radio label="处方"></Radio>
+						<Radio label="支出"></Radio>
+						<Radio label="显示全部"></Radio>
+					</RadioGroup>
+					<div class="actionMenu">
+						<Button type="success" size="small" v-if="outerNotClick" @click="toLoading">添加</Button>
+						<Button type="success" size="small" v-if="outerNotClick" @click="toLoading">搜索</Button>
+						<Button type="success" size="small" v-if="outerNotClick" @click="outerDb">出库</Button>
+						<Button type="success" size="small" v-if="!outerNotClick" @click="outerDbSure">出库</Button>
+						<Button type="success" size="small" v-if="!outerNotClick" @click="outerDbCancal">取消</Button>
+					</div>
+				</div>
 
-  <Row>
-        <Col span="24" >
-             <div  class="doc-header">
- 
-
- <Card style="width:350px">
-        <p slot="title">
-            <Icon type="ios-film-outline"></Icon>
-            经典电影
-        </p>
-        <a href="#" slot="extra" @click.prevent="changeLimit">
-            <Icon type="ios-loop-strong"></Icon>
-            换一换
-        </a>
-        <ul>
-            <li v-for="item in randomMovieList">
-                <a :href="item.url" target="_blank">{{ item.name }}</a>
-                <span>
-                    <Icon type="ios-star" v-for="n in 4" :key="n" color="#ffac2d"></Icon><Icon type="ios-star" v-if="item.rate >= 9.5" color="#ffac2d"></Icon><Icon type="ios-star-half" v-else color="#ffac2d"></Icon>
-                    {{ item.rate }}
-                </span>
-            </li>
-        </ul>
-    </Card>
-
-            </div>
-            <div style="" class="doc-content">
-             		   <h5>基本用法</h5>
-     			   <p>自定义标题、额外操作和主体内容，可以完全自由控制各个部分，也可以结合其它组件一起使用，较为灵活。</p>
-            </div>
-        </Col>
-
-
-       
-    </Row> 
-
-
-
-
-</div>
+				<div style="" class="doc-content">
+					<Table size="small" border :columns="orderCol" :data="orderData"></Table>
+				</div>
+			</Col>
+		</Row>
+  </div>
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                movieList: [
-                    {
-                        name: '肖申克的救赎',
-                        url: 'https://movie.douban.com/subject/1292052/',
-                        rate: 9.6
-                    },
-                    {
-                        name: '这个杀手不太冷',
-                        url: 'https://movie.douban.com/subject/1295644/',
-                        rate: 9.4
-                    },
-                    {
-                        name: '霸王别姬',
-                        url: 'https://movie.douban.com/subject/1291546/',
-                        rate: 9.5
-                    },
-                    {
-                        name: '阿甘正传',
-                        url: 'https://movie.douban.com/subject/1292720/',
-                        rate: 9.4
-                    },
-                    {
-                        name: '美丽人生',
-                        url: 'https://movie.douban.com/subject/1292063/',
-                        rate: 9.5
-                    },
-                    {
-                        name: '千与千寻',
-                        url: 'https://movie.douban.com/subject/1291561/',
-                        rate: 9.2
-                    },
-                    {
-                        name: '辛德勒的名单',
-                        url: 'https://movie.douban.com/subject/1295124/',
-                        rate: 9.4
-                    },
-                    {
-                        name: '海上钢琴师',
-                        url: 'https://movie.douban.com/subject/1292001/',
-                        rate: 9.2
-                    },
-                    {
-                        name: '机器人总动员',
-                        url: 'https://movie.douban.com/subject/2131459/',
-                        rate: 9.3
-                    },
-                    {
-                        name: '盗梦空间',
-                        url: 'https://movie.douban.com/subject/3541415/',
-                        rate: 9.2
-                    }
-                ],
-                randomMovieList: []
-            }
-        },
-        methods: {
-            changeLimit () {
-                function getArrayItems(arr, num) {
-                    const temp_array = [];
-                    for (let index in arr) {
-                        temp_array.push(arr[index]);
-                    }
-                    const return_array = [];
-                    for (let i = 0; i<num; i++) {
-                        if (temp_array.length>0) {
-                            const arrIndex = Math.floor(Math.random()*temp_array.length);
-                            return_array[i] = temp_array[arrIndex];
-                            temp_array.splice(arrIndex, 1);
-                        } else {
-                            break;
-                        }
-                    }
-                    return return_array;
-                }
-                this.randomMovieList = getArrayItems(this.movieList, 5);
-            }
-        },
-        mounted () {
-            this.changeLimit();
-        }
-    }
+	export default {
+		data () {
+			return {
+				transactiontype: '处方',
+				outerNotClick: true,
+				orderCol: [
+					{
+						type: 'index',
+						width: 40,
+            align: 'center'
+          },
+					{
+						title: '名字',
+						key: 'patient',
+						align: 'center',
+					},
+					{
+						title: '数量',
+						key: 'dose',
+						align: 'center'
+					},
+					{
+						title: '总价',
+						key: 'total',
+						align: 'center'
+					},
+					{
+						title: '日期',
+						key: 'date',
+						align: 'center'
+					},
+					{
+						title: '操作',
+						key: 'action',
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Button', {
+									props: {
+										type: 'error',
+										size: 'small'
+									},
+										on: {
+											click: () => {
+												this.remove(params.index)
+											}
+										}
+									}, '删除')
+								]);
+						}
+					}
+				],
+				orderData: [
+					{
+            patient: 'John Brown',
+            dose: 18,
+            total: 5,
+            date: '2016-10-03'
+          }
+				]
+			}
+		},
+		methods: {
+			modify (index) {
+				alert(this.orderData[index]);
+			},
+
+			remove (index) {
+				this.orderData.splice(index, 1);
+			},
+
+			toLoading () {
+				alert("ffffff");
+			},
+
+			outerDb: function(){
+				let objCol = {
+          type: 'selection',
+          width: 40,
+          align: 'center'
+				};
+				this.orderCol.splice(0,1,objCol);
+				this.outerNotClick = false;
+			},
+
+			outerDbSure: function(){
+
+			},
+
+			outerDbCancal: function(){
+				let objCol = {
+					type: 'index',
+					width: 40,
+          align: 'center'
+				};
+				this.orderCol.splice(0,1,objCol);
+				this.outerNotClick = true;
+			}
+
+
+		}
+	}
 </script>
+
+<style scoped>
+	.doc-header .actionMenu{
+		float: right;
+
+	}
+
+</style>
+								
+
 

@@ -7,7 +7,7 @@ const router = express.Router();
 const Med = require("../models/medSchema");
 
 // 查询所有英雄信息路由
-router.get("/hero", (req, res) => {
+router.get("/allmed", (req, res) => {
   Med.find({})
     .sort({ update_at: -1 })
     .then(heros => {
