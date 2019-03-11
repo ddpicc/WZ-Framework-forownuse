@@ -4,13 +4,12 @@ var Schema = mongoose.Schema;
 const medSchema = new Schema({
   medname :String,
   alias: String,
-  type: String,
+  medtype: String,
   spec : String,
   bagperbox : Number,
   count : Number,
   baseprice : Number,
   sellprice : Number,
-  profit: Number,
 }, { collection: 'myMed'})    //这里mongoose.Schema要写上第二个参数，明确指定到数据库中的哪个表取数据
 
 

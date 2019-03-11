@@ -50,11 +50,12 @@ router.put("/hero/:id", (req, res) => {
       $set: {
         medname: req.body.medname,
         alias: req.body.alias,
+        medtype: req.body.medtype,
         spec: req.body.spec,
+        bagperbox: req.body.bagperbox,
         count: req.body.count,
         baseprice: req.body.baseprice,
-        sellprice: req.body.sellprice,
-        profit: req.body.profit
+        sellprice: req.body.sellprice
       }
     },
     {

@@ -22,10 +22,10 @@
 		<Row>
       <Col :sm="24" :md="15">
 				<div class="doc-indiv">
-					<Input v-model="value" placeholder="Enter something..." style="width: 95%"/>
-					<Input v-model="value" placeholder="Enter something..." style="width: 70%"/>
-					<Input v-model="value" placeholder="Enter something..." style="width: 20%"/>
-					<Button type="success" size="small" @click="toLoading">+</Button>
+					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
+					<Input v-model="medName" class="doc-input2" placeholder="输入内容..." style="width: 70%"/>
+					<Input v-model="dose" class="doc-input2" placeholder="Enter something..." style="width: 20%"/>
+					<Button type="success" class="doc-input2" size="small" @click="toLoading">+</Button>
 				</div>
 			</Col>
       <Col :sm="24" :md="9">
@@ -44,6 +44,9 @@
 			return {
 				medtype: '免煎药',
 				deleteNotClick: true,
+				patientName: '',
+				medName: '',
+				dose: '',
 				createOrdCol: [
 					{
 						title: '名称',
@@ -231,6 +234,10 @@
 
 	.doc-indiv{
 		margin-top:5px;margin-bottom:5px;padding:5px;line-height:20px
+	}
+
+	.doc-indiv .doc-input2{
+		margin-top:9px;
 	}
 
 </style>
