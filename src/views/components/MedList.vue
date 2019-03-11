@@ -29,7 +29,7 @@
             <Input v-model="formModify.alias" placeholder="Enter your e-mail"></Input>
         </FormItem>
 				<FormItem label="类别" prop="medtype">
-					<RadioGroup v-model="formModify.medtype" size="large">
+					<RadioGroup v-model="formModify.medtype" size="default">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
 					</RadioGroup>

@@ -205,6 +205,8 @@
        picker.$emit('pick', [start, end]);
      }
    }]
+  
+  export const tryconst = 55555
 
  export function getTime(type) {
    if (type === 'start') {
