@@ -20,6 +20,23 @@
 			</Col>
 		</Row>
 		<Row>
+			<Col :md="24" >
+				<div class="tableSum">
+					<Tag type="border" color="primary">每付价钱</Tag>
+					<Tag type="border" color="primary">{{ordTotal}}元</Tag>
+				</div>
+			</Col>
+		</Row>
+		<Row>
+			<Col :md="24" >
+				<div class="tableSum">
+					<Input v-model="orderCount" size="small" @on-focus="focus($event)"/>
+					<Tag type="border" color="primary" style="width: 40%">合计：   </Tag>
+					<Input v-model="total" size="small" @on-focus="focus($event)"/>
+				</div>
+			</Col>
+		</Row>
+		<Row>
       <Col :sm="24" :md="15">
 				<div class="doc-indiv">
 					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
@@ -47,6 +64,9 @@
 				patientName: '',
 				medName: '',
 				dose: '',
+				ordTotal: '0',
+				orderCount: '',
+				total: '',
 				createOrdCol: [
 					{
 						title: '名称',
@@ -146,6 +166,12 @@
 			}
 		},
 		methods: {
+			//select text when get focus
+      focus(event) {
+				//alert(event.currentTarget);
+        event.currentTarget.select();
+			},
+			
 			remove (index) {
 				alert(tryconst);
 			},
@@ -238,6 +264,11 @@
 
 	.doc-indiv .doc-input2{
 		margin-top:9px;
+	}
+
+	.tableSum{
+		float: right;
+		display: flex;
 	}
 
 </style>

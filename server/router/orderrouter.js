@@ -22,7 +22,22 @@ router.get("/order", (req, res) => {
   Ord.find({})
     .sort({ update_at: -1 })
     .then(heros => {
-      res.json(3);
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
+ //查找需要出库的订单
+ router.get("/orderNeedOut", (req, res) => {
+  Ord.find({"editable": false,
+            "type": "收入"})
+    .sort({ update_at: -1 })
+    .then(heros => {
+      res.json(heros);
     })
     .catch(err => {
       console.log(2);

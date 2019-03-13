@@ -331,10 +331,8 @@ export default {
                 const token=this.$store.getters.token;
                 
              this.$Notice.success({
-                    title: '欢迎使用 WZ 框架',
-                    desc:  `你的账户权限是 ${token} 
-                            <br>
-                            喜欢就去github给个 start 鼓励一下吧`,
+                    title: '欢迎使用',
+                    desc:  `你的账户权限是 ${token}`,
                     duration: 10
                 });
 

@@ -66,23 +66,6 @@ router.put("/hero/:id", (req, res) => {
     .catch(err => res.json(err));
 });
 
-// 添加图片路由
-router.put("/addpic/:id", (req, res) => {
-  Med.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $push: {
-        imgArr: req.body.url
-      }
-    },
-    {
-      new: true
-    }
-  )
-    .then(hero => res.json(hero))
-    .catch(err => res.json(err));
-});
-
 //删除一条英雄信息路由
 router.delete("/hero/:id", (req, res) => {
   Med.findOneAndRemove({
