@@ -40,9 +40,11 @@
       <Col :sm="24" :md="15">
 				<div class="doc-indiv">
 					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
-					<Input v-model="medName" class="doc-input2" placeholder="输入内容..." style="width: 70%"/>
-					<Input v-model="dose" class="doc-input2" placeholder="Enter something..." style="width: 20%"/>
+					<v-autocomplete :items="items" v-model="item" :get-label="getLabel" :component-item='template' @update-items="updateItems" :min-len='1'> </v-autocomplete>
+					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." style="width: 20%"/>
 					<Button type="success" class="doc-input2" size="small" @click="toLoading">+</Button>
+
+
 				</div>
 			</Col>
       <Col :sm="24" :md="9">
@@ -56,17 +58,27 @@
 
 <script>
 	import { tryconst } from 'utils/index';
+	import ItemTemplate from './ItemTemplate.vue'
 	export default {
 		data () {
 			return {
 				medtype: '免煎药',
 				deleteNotClick: true,
 				patientName: '',
-				medName: '',
-				dose: '',
+				inputDose: '',
 				ordTotal: '0',
 				orderCount: '',
 				total: '',
+				item: null,
+			items: [],
+			Animals: [{id: 1, name: 'Golden Retriever', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+  {id: 2, name: 'Cat', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+  {id: 3, name: 'Squirrel', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+  {id: 4, name: 'Cougar', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+  {id: 5, name: 'Rave', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+  {id: 6, name: 'Alligator', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+{id: 7, name: 'Black Bear', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'}],
+      template: ItemTemplate,
 				createOrdCol: [
 					{
 						title: '名称',
@@ -176,6 +188,22 @@
 				alert(tryconst);
 			},
 
+		  getLabel (item) {
+      	if (item) {
+        	return item.name
+      	}
+      	return ''
+    },
+    updateItems (text) {
+			//alert(text);
+			if(!text){
+				this.items = [];
+				return;
+			}
+      this.items = this.Animals.filter((item) => {
+        return (item.name.toLowerCase().indexOf(text.toLowerCase()) == 0)
+      })
+    },
 			toLoading () {
 				if(this.medtype == '草药'){
 					alert("hahaha");
