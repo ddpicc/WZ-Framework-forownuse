@@ -40,11 +40,18 @@
       <Col :sm="24" :md="15">
 				<div class="doc-indiv">
 					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
-					<v-autocomplete :items="items" v-model="item" :get-label="getLabel" :component-item='template' @update-items="updateItems" :min-len='1'> </v-autocomplete>
+					<AutoComplete
+						v-model="inputMed"
+        		@on-search="handleSearch2"
+						placeholder="input here"
+						@on-focus="focus($event)"
+						@on-clear="kkk"
+						:clearable="true"
+						style="width:70%">
+						<Option v-for="item in list" :value="item" :key="item">{{ item }} 1111</Option>
+					</AutoComplete>
 					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." style="width: 20%"/>
 					<Button type="success" class="doc-input2" size="small" @click="toLoading">+</Button>
-
-
 				</div>
 			</Col>
       <Col :sm="24" :md="9">
@@ -58,7 +65,6 @@
 
 <script>
 	import { tryconst } from 'utils/index';
-	import ItemTemplate from './ItemTemplate.vue'
 	export default {
 		data () {
 			return {
@@ -69,16 +75,8 @@
 				ordTotal: '0',
 				orderCount: '',
 				total: '',
-				item: null,
-			items: [],
-			Animals: [{id: 1, name: 'Golden Retriever', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-  {id: 2, name: 'Cat', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-  {id: 3, name: 'Squirrel', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-  {id: 4, name: 'Cougar', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-  {id: 5, name: 'Rave', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-  {id: 6, name: 'Alligator', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
-{id: 7, name: 'Black Bear', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'}],
-      template: ItemTemplate,
+				inputMed: '',
+				list: [],
 				createOrdCol: [
 					{
 						title: '名称',
@@ -141,18 +139,6 @@
 					{
 						medname: '蜜款冬花',
 						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
 					}
 				],
 				infoDisplayCol: [
@@ -188,28 +174,31 @@
 				alert(tryconst);
 			},
 
-		  getLabel (item) {
-      	if (item) {
-        	return item.name
-      	}
-      	return ''
-    },
-    updateItems (text) {
-			//alert(text);
-			if(!text){
-				this.items = [];
-				return;
-			}
-      this.items = this.Animals.filter((item) => {
-        return (item.name.toLowerCase().indexOf(text.toLowerCase()) == 0)
-      })
-    },
 			toLoading () {
 				if(this.medtype == '草药'){
 					alert("hahaha");
 				};
 				alert(tryconst);
 			},
+
+			kkk(){
+				alert("11111");
+			},
+
+			handleSearch2 (value) {
+				if(value.length < 2){
+					this.list = [];
+					return;
+				}
+
+				let state= ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'];
+				this.list = state.filter( function (item) {
+  				return item.indexOf(value) === 0;
+					}
+				);
+				//alert(this.list);
+				//this.list = ['Alabama', 'Alaska'];
+      },
 
 			deleteMed: function(){
 				this.deleteNotClick = false;
@@ -292,6 +281,7 @@
 
 	.doc-indiv .doc-input2{
 		margin-top:9px;
+
 	}
 
 	.tableSum{
