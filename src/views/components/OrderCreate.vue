@@ -45,12 +45,14 @@
         		@on-search="handleSearch2"
 						placeholder="input here"
 						@on-focus="focus($event)"
+						@keyup.enter.native="moveFocusToDose"
 						@on-clear="kkk"
+						ref="mark1"
 						:clearable="true"
 						style="width:70%">
-						<Option v-for="item in list" :value="item" :key="item">{{ item }} 1111</Option>
+						<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
 					</AutoComplete>
-					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." style="width: 20%"/>
+					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." ref="mark" @keyup.enter.native="postToTb" style="width: 20%"/>
 					<Button type="success" class="doc-input2" size="small" @click="toLoading">+</Button>
 				</div>
 			</Col>
@@ -71,12 +73,13 @@
 				medtype: '免煎药',
 				deleteNotClick: true,
 				patientName: '',
+				inputMed: '',
 				inputDose: '',
 				ordTotal: '0',
 				orderCount: '',
-				total: '',
-				inputMed: '',
+				total: '',			
 				list: [],
+				cacheMedData: [],
 				createOrdCol: [
 					{
 						title: '名称',
@@ -169,7 +172,44 @@
 				//alert(event.currentTarget);
         event.currentTarget.select();
 			},
-			
+
+			moveFocusToDose: function(){
+        /* let searchStr = this.inputMed;
+        if(searchStr === ""){
+          alert("不能为空");
+          return;
+        }
+        
+        //check if it is exist
+        let existInDb = this.medsToShow.find(function(p){
+            return p.medname === searchStr;
+        });
+
+        if(typeof(existInDb)=="undefined"){
+            alert("药品库中没有这种药，请重输");
+            return;
+        }
+
+        //check if already exist in table
+        let existInTable = this.orderMed.find(function(p){
+            return p.medname === searchStr;
+        });
+        if(typeof(existInTable)!="undefined"){
+            alert("不能重复添加药品");
+            return;
+        }
+
+        this.remainInv = existInDb.inventory;
+        this.singlePrice = existInDb.sellprice;
+        this.singleG = existInDb.spec; */
+        //move focus to input dose
+        this.$refs.mark.$el.querySelector('input').focus();
+      },
+
+			postToTb () {
+				this.$refs.mark1.$el.querySelector('input').focus();
+			},
+
 			remove (index) {
 				alert(tryconst);
 			},
@@ -191,9 +231,9 @@
 					return;
 				}
 
-				let state= ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'];
+				let state = this.cacheMedData;
 				this.list = state.filter( function (item) {
-  				return item.indexOf(value) === 0;
+  				return item.alias.indexOf(value) === 0;
 					}
 				);
 				//alert(this.list);
@@ -243,7 +283,8 @@
     	getAll: function() {
 				return new Promise((resolve, reject) => {
 					this.$http.get("/medapi/allmed").then(response => {
-						this.data6 = response.data;
+						this.cacheMedData = response.data;
+						alert(JSON.stringify(this.cacheMedData));
 						resolve();
 					}).catch(error => {
 						reject(error);

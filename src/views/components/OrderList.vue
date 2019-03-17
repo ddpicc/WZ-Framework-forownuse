@@ -143,10 +143,6 @@
       },
 
       handleSelectChange: function(selection){
-        //keep track the id and store in an array
-        //selection.forEach(element => {
-        //  this.cacheSelectedRow.push(element._id);
-        //});
         if(selection.length == 0){
           this.isDisabled = true;}
         else{
