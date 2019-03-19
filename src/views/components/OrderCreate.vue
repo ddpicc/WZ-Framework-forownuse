@@ -42,13 +42,12 @@
 					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
 					<AutoComplete
 						v-model="inputMed"
-        		@on-search="handleSearch2"
+        		@on-search="handleSearch"
 						placeholder="input here"
 						@on-focus="focus($event)"
 						@keyup.enter.native="moveFocusToDose"
-						@on-clear="kkk"
+						@on-select="handleSelect"
 						ref="mark1"
-						:clearable="true"
 						style="width:70%">
 						<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
 					</AutoComplete>
@@ -80,69 +79,51 @@
 				total: '',			
 				list: [],
 				cacheMedData: [],
+				orderMed1PerObj: [],
+				orderMed4PerObj: [],
 				createOrdCol: [
 					{
 						title: '名称',
-						key: 'medname',
+						key: 'medname1',
 						align: 'center',
 					},
 					{
 						title: '数量',
-						key: 'mednumber',
+						key: 'mednumber1',
 						align: 'center'
 					},
           {
 						title: '名称',
-						key: 'medname',
+						key: 'medname2',
 						align: 'center',
 					},
 					{
 						title: '数量',
-						key: 'mednumber',
+						key: 'mednumber2',
 						align: 'center'
 					},
           {
 						title: '名称',
-						key: 'medname',
+						key: 'medname3',
 						align: 'center',
 					},
 					{
 						title: '数量',
-						key: 'mednumber',
+						key: 'mednumber3',
 						align: 'center'
 					},
           {
 						title: '名称',
-						key: 'medname',
+						key: 'medname4',
 						align: 'center',
 					},
 					{
 						title: '数量',
-						key: 'mednumber',
+						key: 'mednumber4',
 						align: 'center'
 					},
 				],
 				createOrdData: [
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					},
-					{
-						medname: '蜜款冬花',
-						mednumber: 3,
-					}
 				],
 				infoDisplayCol: [
 					{
@@ -173,40 +154,111 @@
         event.currentTarget.select();
 			},
 
+			disPlayToTb() {
+				this.createOrdData = [];
+				var emptyStr = "{";
+				var carry = 4;
+				//alert(JSON.stringify(this.orderMed1PerObj));
+				for(var i=0; i < this.orderMed1PerObj.length; i++){
+					let tempStrName = "medname" + (i%4+1);
+					let tempStrNumber = 'mednumber' + (i%4+1);
+					emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
+					if(i>0 && (i+1) % 4 == 0){
+						emptyStr = emptyStr.substr(0,emptyStr.length-1);
+						emptyStr = emptyStr + '}';
+						//alert(emptyStr);
+						let tempObj = JSON.parse(emptyStr);
+						//alert(tempObj);
+						this.createOrdData.push(tempObj);
+						emptyStr = "{";
+					}
+				}
+				//alert(i);
+				if( i%4 != 0){
+					//alert("ffffffff");
+					emptyStr = emptyStr.substr(0,emptyStr.length-1);
+					emptyStr = emptyStr + '}';
+					//alert(emptyStr);
+					let tempObj = JSON.parse(emptyStr);
+					this.createOrdData.push(tempObj);
+					//alert(tempObj);
+				}
+			},
+
 			moveFocusToDose: function(){
-        /* let searchStr = this.inputMed;
+        let searchStr = this.inputMed;
         if(searchStr === ""){
           alert("不能为空");
           return;
         }
         
         //check if it is exist
-        let existInDb = this.medsToShow.find(function(p){
+        let existInDb = this.cacheMedData.find(function(p){
             return p.medname === searchStr;
         });
 
         if(typeof(existInDb)=="undefined"){
             alert("药品库中没有这种药，请重输");
             return;
-        }
-
+				}
+				
         //check if already exist in table
-        let existInTable = this.orderMed.find(function(p){
+        let existInTable = this.orderMed1PerObj.find(function(p){
             return p.medname === searchStr;
         });
         if(typeof(existInTable)!="undefined"){
             alert("不能重复添加药品");
             return;
-        }
-
-        this.remainInv = existInDb.inventory;
-        this.singlePrice = existInDb.sellprice;
-        this.singleG = existInDb.spec; */
+				}
+				
+				let tempObj = [{
+					"inventory": existInDb.count,
+					"spec": existInDb.spec,
+					"unitprice": existInDb.sellprice,
+				}];
+				this.infoDisplayData = tempObj;
+ 
         //move focus to input dose
         this.$refs.mark.$el.querySelector('input').focus();
       },
 
 			postToTb () {
+				let searchStr = this.inputMed;
+        if(searchStr === ""){
+          alert("不能为空");
+          this.$refs.mark1.$el.querySelector('input').focus();
+          return;
+        }
+        
+        //check if it is exist
+        let existInDb = this.cacheMedData.find(function(p){
+            return p.medname === searchStr;
+        });
+        if(typeof(existInDb)=="undefined"){
+            alert("药品库中没有这种药，请重输");
+            this.$refs.mark1.$el.querySelector('input').focus();
+            return;
+        }
+
+        //check if already exist in table
+        let existInTable = this.orderMed1PerObj.find(function(p){
+            return p.medname === searchStr;
+        });
+        if(typeof(existInTable)!="undefined"){
+            alert("不能重复添加药品");
+            this.$refs.mark1.$el.querySelector('input').focus();
+            return;
+				}
+				
+				//update order med cache
+				this.orderMed1PerObj.push({
+					medname: this.inputMed,
+					count: this.inputDose,
+					baseprice: existInDb.baseprice,
+					sellprice: existInDb.sellprice
+				})
+
+				this.disPlayToTb();
 				this.$refs.mark1.$el.querySelector('input').focus();
 			},
 
@@ -221,11 +273,13 @@
 				alert(tryconst);
 			},
 
-			kkk(){
-				alert("11111");
+			
+			handleSelect(){
+				//not sure why this is needed. But if the focus is not set, the focus will not move. Seems if will select itself first
+				this.$refs.mark1.$el.querySelector('input').focus();
 			},
 
-			handleSearch2 (value) {
+			handleSearch (value) {
 				if(value.length < 2){
 					this.list = [];
 					return;
@@ -236,8 +290,6 @@
   				return item.alias.indexOf(value) === 0;
 					}
 				);
-				//alert(this.list);
-				//this.list = ['Alabama', 'Alaska'];
       },
 
 			deleteMed: function(){
@@ -284,7 +336,7 @@
 				return new Promise((resolve, reject) => {
 					this.$http.get("/medapi/allmed").then(response => {
 						this.cacheMedData = response.data;
-						alert(JSON.stringify(this.cacheMedData));
+						//alert(JSON.stringify(this.cacheMedData));
 						resolve();
 					}).catch(error => {
 						reject(error);
@@ -329,5 +381,14 @@
 		float: right;
 		display: flex;
 	}
+
+	.ivu-select-item:hover {
+    background: #2e8de6;
+}
+
+.ivu-select-item-focus{
+	background: #2e8de6;
+}
+
 
 </style>
