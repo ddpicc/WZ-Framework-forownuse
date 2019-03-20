@@ -10,7 +10,7 @@
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="outerNotClick" @click="toLoading">添加</Button>
-						<Button type="success" size="small" v-if="outerNotClick" @click="toLoading">搜索</Button>
+						<Button type="success" size="small" v-if="outerNotClick" @click="modal1 = true">搜索</Button>
 						<Button type="success" size="small" v-if="outerNotClick" @click="outerDb">出库</Button>
 						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick" @click="outerDbSure">出库</Button>
 						<Button type="success" size="small" v-if="!outerNotClick" @click="outerDbCancal">取消</Button>
@@ -22,18 +22,27 @@
 				</div>
 			</Col>
 		</Row>
+    <Modal
+        v-model="modal1"
+        title="Common Modal dialog box title"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <test/>
+    </Modal>
   </div>
 </template>
 
 <script>
-	import orderExpandRow from './OrderExpand.vue';
+  import orderExpandRow from './OrderExpand.vue';
+  import test from './test.vue';
 	export default {
-    components: { orderExpandRow },
+    components: { orderExpandRow, test },
 		data () {
 			return {
 				transactiontype: '处方',
         outerNotClick: true,
         isDisabled: true,
+        modal1: false,
 				orderCol: [
           {
             type: 'expand',
@@ -95,7 +104,7 @@
                 return h('div', [
                   h('Button', {
                     props: {
-                      type: 'primary',
+                      type: 'success',
                       size: 'small'
                     },
                       on: {

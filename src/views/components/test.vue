@@ -1,31 +1,30 @@
 <template>
-    <AutoComplete
-        v-model="value3"
-        :data="data3"
-        :filter-method="filterMethod"
-        placeholder="input here"
-        @on-focus="focus($event)"
-        style="width:200px">
-    </AutoComplete>
+    <div class="demo-split">
+        <Split v-model="split2" mode="vertical">
+            <div slot="top" class="demo-split-pane">
+                Top Pane
+            </div>
+            <div slot="bottom" class="demo-split-pane">
+                Bottom Pane
+            </div>
+        </Split>
+    </div>
 </template>
 <script>
     export default {
         data () {
             return {
-                value3: '',
-                data3: ['Steve Jobs', 'Stephen Gary Wozniak', 'Jonathan Paul Ive']
+                split2: 0.5
             }
         },
-        methods: {
-            filterMethod (value, option) {
-                if(!value)
-                    return;
-                return option.toUpperCase().indexOf(value.toUpperCase()) !== -1;
-            },
-            focus(event) {
-				//alert(event.currentTarget);
-                event.currentTarget.select();
-			},
-        }
     }
 </script>
+<style>
+    .demo-split{
+        height: 200px;
+        border: 1px solid #dcdee2;
+    }
+    .demo-split-pane{
+        padding: 10px;
+    }
+</style>

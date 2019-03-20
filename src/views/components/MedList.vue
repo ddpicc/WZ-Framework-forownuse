@@ -55,10 +55,10 @@
     <Modal v-model="formAddVisible" title="新增药品" @on-ok="okAdd" @on-cancel="clearFormAdd">
 			<Form ref="formAdd" :model="formAdd" :rules="ruleAdd" :label-width="80" inline>
         <FormItem label="药品名称" prop="medname">
-            <Input v-model="formAdd.medname" placeholder="Enter your name"></Input>
+            <Input v-model="formAdd.medname"></Input>
         </FormItem>
         <FormItem label="别名" prop="alias">
-            <Input v-model="formAdd.alias" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.alias"></Input>
         </FormItem>
 				<FormItem label="类别" prop="medtype">
 					<RadioGroup v-model="formAdd.medtype" size="default" style="width: 136px">
@@ -67,19 +67,19 @@
 					</RadioGroup>
 				</FormItem>
 				<FormItem label="规格" prop="spec" class="aaaa">
-            <Input v-model="formAdd.spec" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.spec"></Input>
         </FormItem>
 				<FormItem label="袋/盒" prop="bagperbox">
-            <Input v-model="formAdd.bagperbox" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.bagperbox"></Input>
         </FormItem>
 				<FormItem label="数量" prop="count">
-            <Input v-model="formAdd.count" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.count"></Input>
         </FormItem>
 				<FormItem label="进价" prop="baseprice">
-            <Input v-model="formAdd.baseprice" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.baseprice"></Input>
         </FormItem>
 				<FormItem label="零售价" prop="sellprice">
-            <Input v-model="formAdd.sellprice" placeholder="Enter your e-mail"></Input>
+            <Input v-model="formAdd.sellprice"></Input>
         </FormItem>
     	</Form>
 		</Modal>
@@ -259,7 +259,6 @@
             this.$Message.info('已取消删除');
           }
         });
-				//this.data6.splice(index, 1);
       },
 
 			searchMed: function(){

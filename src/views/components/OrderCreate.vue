@@ -259,11 +259,10 @@
 				})
 
 				this.disPlayToTb();
+				if(this.orderCount === '')
+          this.orderCount = 1;
 				this.$refs.mark1.$el.querySelector('input').focus();
-			},
-
-			remove (index) {
-				alert(tryconst);
+				this.inputDose = 1;
 			},
 
 			toLoading () {
@@ -295,7 +294,8 @@
 			deleteMed: function(){
 				this.deleteNotClick = false;
 				//dynamic modify column
-				let deleteCol = {
+				//need to find a better way
+				let deleteCol1 = {
 					title: '',
 					key: 'action',
 					width: 30,
@@ -309,17 +309,80 @@
 								},
 								on: {
 									click: () => {
-										this.remove(params.index)
+										this.remove1(params.index)
 									}
 								}
 							},)
 						]);
 					}
 				};
-				this.createOrdCol.splice(2,0,deleteCol);
-				this.createOrdCol.splice(5,0,deleteCol);
-				this.createOrdCol.splice(8,0,deleteCol);
-				this.createOrdCol.splice(11,0,deleteCol);
+				this.createOrdCol.splice(2,0,deleteCol1);
+				let deleteCol2 = {
+					title: '',
+					key: 'action',
+					width: 30,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Icon', {
+								props: {
+									type: 'md-trash',
+									size: 'small'
+								},
+								on: {
+									click: () => {
+										this.remove2(params.index)
+									}
+								}
+							},)
+						]);
+					}
+				};
+				this.createOrdCol.splice(5,0,deleteCol2);
+				let deleteCol3 = {
+					title: '',
+					key: 'action',
+					width: 30,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Icon', {
+								props: {
+									type: 'md-trash',
+									size: 'small'
+								},
+								on: {
+									click: () => {
+										this.remove3(params.index)
+									}
+								}
+							},)
+						]);
+					}
+				};
+				this.createOrdCol.splice(8,0,deleteCol3);
+				let deleteCol4 = {
+					title: '',
+					key: 'action',
+					width: 30,
+					align: 'center',
+					render: (h, params) => {
+						return h('div', [
+							h('Icon', {
+								props: {
+									type: 'md-trash',
+									size: 'small'
+								},
+								on: {
+									click: () => {
+										this.remove4(params.index)
+									}
+								}
+							},)
+						]);
+					}
+				};
+				this.createOrdCol.splice(11,0,deleteCol4);
 			},
 
 			deleteCancal: function(){
@@ -342,7 +405,32 @@
 						reject(error);
 					});
 				});
-			}
+			},
+
+			deleteAndDisplay(indexToDel){
+        this.orderMed1PerObj.splice(indexToDel,1);
+        this.disPlayToTb();
+      },
+
+      remove1(index){
+        var indexToDel = index * 4 + 0;
+        this.deleteAndDisplay(indexToDel);
+      },
+
+      remove2(index){
+        var indexToDel = index * 4 + 1;
+        this.deleteAndDisplay(indexToDel);
+      },
+
+      remove3(index){
+        var indexToDel = index * 4 + 2;
+        this.deleteAndDisplay(indexToDel);
+			},
+			
+			remove4(index){
+        var indexToDel = index * 4 + 3;
+        this.deleteAndDisplay(indexToDel);
+      },
 
 		},
 
