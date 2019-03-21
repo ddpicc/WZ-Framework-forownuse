@@ -8,7 +8,7 @@
 						<Radio label="草药"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
-						<Button type="success" size="small" v-if="deleteNotClick" @click="toLoading" @keyup.alt.enter.native="toLoading">添加</Button>
+						<Button type="success" size="small" v-if="deleteNotClick" @click="postOrdToDbSure">添加</Button>
 						<Button type="success" size="small" v-if="deleteNotClick" @click="deleteMed">删除</Button>
 						<Button type="success" size="small" v-if="!deleteNotClick" @click="deleteCancal">取消</Button>
 					</div>
@@ -51,8 +51,8 @@
 						style="width:70%">
 						<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
 					</AutoComplete>
-					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." ref="mark" @keyup.enter.native="postToTb" style="width: 20%"/>
-					<Button type="success" class="doc-input2" size="small" @click="toLoading">+</Button>
+					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." @on-focus="focus($event)" ref="mark" @keyup.enter.native="postToTb" style="width: 20%"/>
+					<Button type="success" class="doc-input2" size="small" @click="postToTb">+</Button>
 				</div>
 			</Col>
       <Col :sm="24" :md="9">
@@ -61,6 +61,17 @@
 				</div>
 			</Col>
     </Row>
+		<Modal
+        v-model="modal3"
+        title="Modal Title"
+        ok-text="OK"
+        cancel-text="Cancel">
+				<div ref="print">
+        <p v-for="item in createOrdData" :key="item.id">
+					{{item.medname1}}   {{item.count1}}  {{item.medname2}}   {{item.count2}}
+				</p>
+				</div>
+    </Modal>
 	</div>
 </template>
 
@@ -69,12 +80,14 @@
 	export default {
 		data () {
 			return {
+				modal3: false,
 				medtype: '免煎药',
 				deleteNotClick: true,
 				patientName: '',
 				inputMed: '',
 				inputDose: '',
-				ordTotal: '0',
+				ordTotal: 0,
+				ordBaseTotal: 0,
 				orderCount: '',
 				total: '',			
 				list: [],
@@ -89,7 +102,7 @@
 					},
 					{
 						title: '数量',
-						key: 'mednumber1',
+						key: 'count1',
 						align: 'center'
 					},
           {
@@ -99,7 +112,7 @@
 					},
 					{
 						title: '数量',
-						key: 'mednumber2',
+						key: 'count2',
 						align: 'center'
 					},
           {
@@ -109,7 +122,7 @@
 					},
 					{
 						title: '数量',
-						key: 'mednumber3',
+						key: 'count3',
 						align: 'center'
 					},
           {
@@ -119,12 +132,11 @@
 					},
 					{
 						title: '数量',
-						key: 'mednumber4',
+						key: 'count4',
 						align: 'center'
 					},
 				],
-				createOrdData: [
-				],
+				createOrdData: [],
 				infoDisplayCol: [
 					{
 						title: '库存',
@@ -161,7 +173,7 @@
 				//alert(JSON.stringify(this.orderMed1PerObj));
 				for(var i=0; i < this.orderMed1PerObj.length; i++){
 					let tempStrName = "medname" + (i%4+1);
-					let tempStrNumber = 'mednumber' + (i%4+1);
+					let tempStrNumber = 'count' + (i%4+1);
 					emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
 					if(i>0 && (i+1) % 4 == 0){
 						emptyStr = emptyStr.substr(0,emptyStr.length-1);
@@ -265,17 +277,65 @@
 				this.inputDose = 1;
 			},
 
-			toLoading () {
-				if(this.medtype == '草药'){
-					alert("hahaha");
-				};
-				alert(tryconst);
+			//获取当前时间，格式YYYY-MM-DD
+      getNowFormatDate() {
+				var date = new Date();
+				var seperator1 = "/";
+				var year = date.getFullYear();  //年
+				var month = date.getMonth() + 1;   //月
+				var strDate = date.getDate();   //日
+				if (month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if (strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = year + seperator1 + month + seperator1 + strDate;
+				return currentdate;
+      },
+
+			postOrdToDbSure:function() {
+				let mydate = this.getNowFormatDate();
+
+				if(this.createOrdData.length == 0){
+					alert("订单为空");
+					return;
+				}
+
+				var addOrd = [{
+					patient: this.patientName,
+					orderalias: 'new',
+					type: '收入',
+					date: mydate,
+					med: this.createOrdData,
+					dose: this.orderCount,
+					total: parseFloat(this.total),
+					totalprofit : (parseFloat(this.total) - parseFloat((this.ordBaseTotal * this.orderCount).toFixed(2))).toFixed(2),
+          editable: true,
+				}];
+
+				alert(JSON.stringify(addOrd));
+				return new Promise((resolve, reject) => {
+          this.$http.post("/ordapi/order", addOrd).then(response => {
+            this.$Message.success('添加成功!');        
+            resolve();
+          }).catch(error => {
+            this.$Message.error('修改失败');
+            reject(error);
+          });
+        });
 			},
 
 			
 			handleSelect(){
 				//not sure why this is needed. But if the focus is not set, the focus will not move. Seems if will select itself first
 				this.$refs.mark1.$el.querySelector('input').focus();
+			},
+
+			kkk(){
+				alert("kkkk");
+				this.modal3 = true;
+				this.$print(this.$refs.print);
 			},
 
 			handleSearch (value) {
@@ -435,14 +495,46 @@
 		},
 
 		watch: {
-			medtype: function() {
-
-			}
+      orderMed1PerObj: function(){
+        this.ordBaseTotal = 0;
+        this.ordTotal = 0;
+        for(let item of this.orderMed1PerObj) {
+          let basePriceOfMed = item.baseprice;
+          let sellPriceOfMed = item.sellprice;
+          let medDose = item.count;
+          this.ordBaseTotal = parseFloat((this.ordBaseTotal + parseFloat((basePriceOfMed*medDose).toFixed(2))).toFixed(2));
+          this.ordTotal = parseFloat((this.ordTotal + parseFloat((sellPriceOfMed*medDose).toFixed(2))).toFixed(2));
+          let temp = (this.ordTotal * this.orderCount).toFixed(2);
+          temp += ' 元';
+          this.total = temp;
+        }
+      },
+      
+      orderCount: function(val) {
+        if(val != ''){
+          this.orderCount = val;
+        }
+        let temp = (this.ordTotal * this.orderCount).toFixed(2);
+        temp += ' 元';
+        this.total = temp;
+      }, 
 		},
 
 		mounted: function() {
 			this.getAll();
-		}
+		},
+
+		created:function(e){
+    // 主页添加键盘事件,注意,不能直接在焦点事件上添加回车
+			var lett=this;
+			document.onkeydown=function(e){
+				var key=e.keyCode;
+				var altKey = e.altKey;
+				if(altKey && key==13){
+					lett.kkk();
+				}
+			}
+		},
 
 	}
 </script>

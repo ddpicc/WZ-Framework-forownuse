@@ -22,21 +22,13 @@
 				</div>
 			</Col>
 		</Row>
-    <Modal
-        v-model="modal1"
-        title="Common Modal dialog box title"
-        @on-ok="ok"
-        @on-cancel="cancel">
-        <test/>
-    </Modal>
   </div>
 </template>
 
 <script>
   import orderExpandRow from './OrderExpand.vue';
-  import test from './test.vue';
 	export default {
-    components: { orderExpandRow, test },
+    components: { orderExpandRow },
 		data () {
 			return {
 				transactiontype: '处方',
@@ -193,7 +185,15 @@
         this.outerNotClick = true;
         //clear selection
         this.$refs.selectionTB.selectAll(false);
-			},
+      },
+
+      ok: function(){
+        alert(kkk);
+      },
+
+      cancel: function(){
+
+      },
     
     // 获取全部数据
     	getAll: function() {
