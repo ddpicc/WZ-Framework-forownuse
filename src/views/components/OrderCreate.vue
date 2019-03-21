@@ -61,16 +61,26 @@
 				</div>
 			</Col>
     </Row>
-		<Modal
-        v-model="modal3"
-        title="Modal Title"
-        ok-text="OK"
-        cancel-text="Cancel">
-				<div ref="print">
-        <p v-for="item in createOrdData" :key="item.id">
-					{{item.medname1}}   {{item.count1}}  {{item.medname2}}   {{item.count2}}
-				</p>
-				</div>
+		<Modal v-model="printmodal" title="Modal Title" ok-text="OK" cancel-text="Cancel" ref="print">
+			<p slot="header">
+            <span>{{ patientName }}</span>
+        </p>
+			<div>
+				<Row :gutter="16" v-for="item in createOrdData" :key="item.id">
+					<Col span="6">
+							<div>{{item.medname1}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count1}}</div>
+					</Col>
+					<Col span="6">
+							<div>{{item.medname2}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count2}}</div>
+					</Col>
+					<Col span="6">
+							<div>{{item.medname3}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count3}}</div>
+					</Col>
+					<Col span="6">
+							<div>{{item.medname4}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count4}}</div>
+					</Col>
+				</Row>
+  		</div>
     </Modal>
 	</div>
 </template>
@@ -80,7 +90,7 @@
 	export default {
 		data () {
 			return {
-				modal3: false,
+				printmodal: false,
 				medtype: '免煎药',
 				deleteNotClick: true,
 				patientName: '',
@@ -334,7 +344,7 @@
 
 			kkk(){
 				alert("kkkk");
-				this.modal3 = true;
+				this.printmodal = true;
 				this.$print(this.$refs.print);
 			},
 
