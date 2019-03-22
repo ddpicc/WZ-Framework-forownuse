@@ -61,11 +61,13 @@
 				</div>
 			</Col>
     </Row>
-		<Modal v-model="printmodal" title="Modal Title" ok-text="OK" cancel-text="Cancel" ref="print">
-			<p slot="header">
-            <span>{{ patientName }}</span>
-        </p>
-			<div>
+		<Modal v-model="printmodal" ok-text="打印" cancel-text="取消" @on-ok="printOrder">
+			<div ref="print">
+				<Row>
+					<Col>
+						<h6> {{patientName}}  </h6>
+					</Col>
+				</Row>			
 				<Row :gutter="16" v-for="item in createOrdData" :key="item.id">
 					<Col span="6">
 							<div>{{item.medname1}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count1}}</div>
@@ -343,8 +345,10 @@
 			},
 
 			kkk(){
-				alert("kkkk");
 				this.printmodal = true;
+			},
+
+			printOrder: function(){
 				this.$print(this.$refs.print);
 			},
 
@@ -540,7 +544,7 @@
 			document.onkeydown=function(e){
 				var key=e.keyCode;
 				var altKey = e.altKey;
-				if(altKey && key==13){
+				if(altKey && key==35){
 					lett.kkk();
 				}
 			}

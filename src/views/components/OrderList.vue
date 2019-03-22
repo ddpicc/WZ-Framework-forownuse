@@ -152,10 +152,10 @@
       },
 
 			toLoading () {
-        let newary = this.cacheAllOrder.filter((item) => item.editable == true);
-        this.orderData = newary;
+        alert("添加");
 			},
 
+      //display select column and enable selection
 			outerDb: function(){
         //change index column to selection column
 				let objCol = {
@@ -169,10 +169,26 @@
         //update table
         let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
         this.orderData = editableOrder;
-			},
+      },
+      
+      updateOrdEditStaut: function(id) {
+        var ordId = id;
+        return new Promise((resolve, reject) => {
+          this.$http.put(`/ordapi/updateOrdstatus/${ordId}`).then(response => {
+            resolve();
+          }).catch(error => {
+            reject(error);
+          });
+        });
+      },
 
 			outerDbSure: function(){
         alert(JSON.stringify(this.cacheSelectedRow));
+        for(let item of this.cacheSelectedRow){
+          let medArry = item.med;
+          alert(JSON.stringify(medArry));
+        }
+        
 			},
 
 			outerDbCancal: function(){
@@ -185,14 +201,7 @@
         this.outerNotClick = true;
         //clear selection
         this.$refs.selectionTB.selectAll(false);
-      },
-
-      ok: function(){
-        alert(kkk);
-      },
-
-      cancel: function(){
-
+        this.orderData = this.cacheAllOrder;
       },
     
     // 获取全部数据

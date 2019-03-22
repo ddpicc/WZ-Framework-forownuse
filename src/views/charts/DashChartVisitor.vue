@@ -1,119 +1,99 @@
 <template>
-
   <Col :span="24">
-    <chart :options="option" class="echarts" id="chart" > </chart>
-
+    <chart :options="option" class="echarts" id="chart" theme="macarons" autoResize> </chart>
   </Col>
-
 </template>
 
 <style scoped>
 .echarts {
-  border-radius:4px;
-    
+  border-radius:4px;    
   height: 250px;
   width: 100%;
-
 }
-
-
 </style>
 
 <script>
+	export default {
+		mounted(){
+		
+		},
 
-
-
-var data = [{
-    value: 3661,
-    name: '<10w'
-}, {
-    value: 5713,
-    name: '10w-50w'
-}, {
-    value: 9938,
-    name: '50w-100w'
-}, {
-    value: 17623,
-    name: '100w-500w'
-}, {
-    value: 3299,
-    name: '>500w'
-}];
-
-
-export default {
-    mounted(){
-    },
-  data: function () {
-   
+  data: function () {   
     return {
-
-
-
-
-
-option : {
-    backgroundColor: '#49586e',
-    title: {
-        text: '注册资金',
-        x: '20%',
-        y: 'center',
-        textStyle: {
-            fontWeight: 'normal',
-            fontSize: 20,
-             color: '#fff',
-        }
-    },
+			option : {
+    		title: {
+					text: '最近12个月收入情况',
+				},
     tooltip: {
-        show: true,
-        trigger: 'item',
-        formatter: "{b}: {c} ({d}%)"
+        trigger: 'axis',
     },
     legend: {
-        orient: 'vertical',
-        right: '5%',
-         top: '25%',
-           textStyle: {
-            fontWeight: 'normal',
-            fontSize: 16,
-             color: '#fff',
-        },
-        data: ['<10w', '10w-50w', '50w-100w', '100w-500w', '>500w']
+        data:['收入','利润']
     },
-    series: [{
-        type: 'pie',
-        selectedMode: 'single',
-         center: ['30%', '50%'],
-        radius: ['50%', '80%'],
-        // color: ['#86D560', '#AF89D6', '#59ADF3', '#FF999A', '#FFCC67'],
-        color: ['#AF89D6', '#5ab6df', '#6a8bc0', '#4acacb', '#fe8676'],
-
-        label: {
-            normal: {
-                position: 'inner',
-                formatter: '{d}%',
-
-                textStyle: {
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    fontSize: 12
-                }
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : ['周一','周二','周三','周四','周五','周六','周日']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel : {
+                formatter: '{value} °C'
             }
+        }
+    ],
+    series: [
+			{
+				name:'收入',
+        type: 'line',
+        data:[11, 11, 15, 13, 12, 13, 10],
+        markPoint : {
+          data : [
+            {type : 'max', name: '最大值'},
+            {type : 'min', name: '最小值'}
+          ]
+				},
+				markLine : {
+          data : [
+            {type : 'average', name: '平均值'}
+          ]
+      	}
+      },
+ 			{
+        name:'利润',
+        type:'line',
+        data:[1, -2, 2, 5, 3, 2, 0],
+        markPoint : {
+          data : [
+            {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
+          ]
         },
-        labelLine: {
-            normal: {
-                show: false
-            }
-        },
-        data: data
-    }]
+        markLine : {
+          data : [
+            {type : 'average', name : '平均值'}
+          ]
+        }
+      }
+    ]
+  }
 }
+	}
+	}
   
     
 
-
-
-    }
-  }
-}
 </script>

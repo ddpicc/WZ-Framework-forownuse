@@ -10,6 +10,7 @@ Vue.use(TreeView);
 
 import ECharts from 'vue-echarts/components/ECharts.vue'
 Vue.component('chart', ECharts)
+import 'echarts/theme/macarons'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'

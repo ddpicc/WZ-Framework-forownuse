@@ -1,8 +1,6 @@
 <template>
-
-  <Col :span="24" style="background-color:white">
+  <Col :span="24">
     <chart :options="option" class="echarts" id="chart" > </chart>
-
   </Col>
 
 </template>
