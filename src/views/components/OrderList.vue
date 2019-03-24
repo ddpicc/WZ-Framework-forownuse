@@ -27,6 +27,7 @@
 
 <script>
   import orderExpandRow from './OrderExpand.vue';
+  var idAry = [];
 	export default {
     components: { orderExpandRow },
 		data () {
@@ -171,24 +172,40 @@
         this.orderData = editableOrder;
       },
       
-      updateOrdEditStaut: function(id) {
-        var ordId = id;
+      updateOrdEditStaut: function(idAry) {
+        alert(idAry);
+        /* var ordId = id;
         return new Promise((resolve, reject) => {
           this.$http.put(`/ordapi/updateOrdstatus/${ordId}`).then(response => {
             resolve();
           }).catch(error => {
             reject(error);
           });
-        });
+        }); */
+      },
+
+      updateOrdMed: function() {
+        for(let item of this.cacheSelectedRow){
+          idAry.push(item._id);
+          let temp = {
+            medary: item.med,
+            dose: item.dose
+          }
+          return new Promise((resolve, reject) => {
+            this.$http.put('/ordapi/order', temp).then(response => {
+              resolve();
+            }).catch(error => {
+              reject(error);
+            })
+          });
+        }
       },
 
 			outerDbSure: function(){
-        alert(JSON.stringify(this.cacheSelectedRow));
-        for(let item of this.cacheSelectedRow){
-          let medArry = item.med;
-          alert(JSON.stringify(medArry));
-        }
-        
+        //alert(JSON.stringify(this.cacheSelectedRow));
+        this.updateOrdMed();
+        this.updateOrdEditStaut(idAry);
+
 			},
 
 			outerDbCancal: function(){
