@@ -279,7 +279,7 @@
             this.formAddVisible = false;
             this.$Message.success('添加成功!');
             this.getAll();
-            clearFormAdd();
+            this.clearFormAdd();
             resolve();
           }).catch(error => {
             this.$Message.error('添加失败');
@@ -290,7 +290,7 @@
       clearFormAdd: function(){
         this.formAdd.medname = "";
         this.formAdd.alias = "";
-        this.formAdd.medtype = "";
+        this.formAdd.medtype = "免煎药";
         this.formAdd.spec = "";
         this.formAdd.bagperbox = "";
         this.formAdd.count = "";

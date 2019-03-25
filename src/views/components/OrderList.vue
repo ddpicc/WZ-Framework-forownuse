@@ -197,9 +197,6 @@
 			outerDbSure: function(){
         //alert(JSON.stringify(this.cacheSelectedRow));
         this.updateOrdMedandStatus();
-        this.getAll();
-        let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
-        this.orderData = editableOrder;
 			},
 
 			outerDbCancal: function(){

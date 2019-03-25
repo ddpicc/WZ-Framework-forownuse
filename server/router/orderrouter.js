@@ -196,26 +196,6 @@ router.put("/order", (req, res) => {
     res.send('更新成功');
   }
   
-  
-  /*Med.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: {
-        medname: req.body.medname,
-        alias: req.body.alias,
-        spec: req.body.spec,
-        count: req.body.count,
-        baseprice: req.body.baseprice,
-        sellprice: req.body.sellprice,
-        profit: req.body.profit
-      }
-    },
-    {
-      new: true
-    }
-  )
-    .then(hero => res.json(hero))
-    .catch(err => res.json(err));*/
 });
 
 module.exports = router;

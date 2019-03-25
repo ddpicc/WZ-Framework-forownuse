@@ -326,7 +326,6 @@
           editable: true,
 				}];
 
-				alert(JSON.stringify(addOrd));
 				return new Promise((resolve, reject) => {
           this.$http.post("/ordapi/order", addOrd).then(response => {
             this.$Message.success('添加成功!');        
