@@ -171,41 +171,35 @@
         let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
         this.orderData = editableOrder;
       },
-      
-      updateOrdEditStaut: function(idAry) {
-        alert(idAry);
-        /* var ordId = id;
-        return new Promise((resolve, reject) => {
-          this.$http.put(`/ordapi/updateOrdstatus/${ordId}`).then(response => {
-            resolve();
-          }).catch(error => {
-            reject(error);
-          });
-        }); */
-      },
 
-      updateOrdMed: function() {
+      updateOrdMedandStatus: async function() {
         for(let item of this.cacheSelectedRow){
-          idAry.push(item._id);
           let temp = {
             medary: item.med,
-            dose: item.dose
+            dose: item.dose,
+            id: item._id
           }
-          return new Promise((resolve, reject) => {
-            this.$http.put('/ordapi/order', temp).then(response => {
-              resolve();
-            }).catch(error => {
-              reject(error);
-            })
-          });
+          await this.$http.put('/ordapi/order', temp);
         }
+        return new Promise((resolve, reject) => {
+					this.$http.get("/ordapi/order").then(response => {
+            this.cacheAllOrder = response.data;
+            let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
+            this.orderData = editableOrder;
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
+				});
+
       },
 
 			outerDbSure: function(){
         //alert(JSON.stringify(this.cacheSelectedRow));
-        this.updateOrdMed();
-        this.updateOrdEditStaut(idAry);
-
+        this.updateOrdMedandStatus();
+        this.getAll();
+        let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
+        this.orderData = editableOrder;
 			},
 
 			outerDbCancal: function(){

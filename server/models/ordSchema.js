@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const medSchema = require('./medSchema')
 var Schema = mongoose.Schema;
 
 const ordSchema = new Schema({

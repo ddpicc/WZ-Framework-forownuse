@@ -1,37 +1,18 @@
 <template>
-  <div class="demo-split">
-    <Split v-model="split2" mode="vertical">
-      <div slot="top" class="demo-split-pane">
-        <Button type="success" size="small" @click="clickEvent">搜索</Button>
-      </div>
-      <div slot="bottom" class="demo-split-pane">
-        Bottom Pane
-      </div>
-    </Split>
-  </div>
+    <Row>
+        <Col :md="24" :sm="24">
+            <DatePicker type="daterange" transfer="true" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+        </Col>
+    </Row>
 </template>
 <script>
-  export default {
-    data () {
-      return {
-        split2: 0.5,
-        patientName: '天天',
-      }
-    },
-
-    methods: {
-      clickEvent(){
-        this.$emit('sendValueToParent',this.patientName);
-      }
-    },
-  }
+    export default {
+        
+    }
 </script>
-<style>
-  .demo-split{
-    height: 200px;
-    border: 1px solid #dcdee2;
-  }
-  .demo-split-pane{
-    padding: 10px;
-  }
+
+<style scoped>
+  .ivu-picker-panel-content ivu-picker-panel-content-left {
+  width: 100px; 
+}
 </style>

@@ -177,6 +177,18 @@ router.put("/order", (req, res) => {
         });
     }
     })
+    Ord.findOneAndUpdate(
+      { _id: req.body.id },
+      {
+        $set: {
+          editable: false,
+        }
+      }
+    ).catch(err => {
+      errstr = err;
+      console.log(err);
+    });
+
   if(errstr){
     res.json(errstr);
   }

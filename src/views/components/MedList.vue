@@ -199,7 +199,7 @@
         formAdd: {
           medname: "",
           alias: "",
-          medtype: "",
+          medtype: "免煎药",
           spec: "",
           bagperbox: "",
           count: "",

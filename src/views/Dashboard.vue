@@ -9,7 +9,7 @@
         <section class="panel">
           <div class="panel-body">
             <div class="summary">
-              <span>yearly  income</span>
+              <span>全年开销</span>
               <h3 class="green-txt">$ 45,600</h3>
             </div>                         
             <div id="expense" class="chart-bar"> <img src="static/img/greenincome.png"></div>
@@ -19,7 +19,7 @@
         <section class="panel">
           <div class="panel-body">                  
             <div class="summary">
-              <span>yearly expense</span>
+              <span>全年收入</span>
               <h3 class="red-txt">$ 45,600</h3>
             </div>
             <div id="income" class="chart-bar">
@@ -47,7 +47,7 @@
                             230
                         </div>
                          <div class="title">
-                          New Order
+                          当天收入
                         </div>
                   </div>
               </div>
@@ -64,7 +64,7 @@
                             3490
                         </div>
                          <div class="title">
-                            Copy Sold
+                          当天病人
                         </div>
                   </div>
 
@@ -86,7 +86,7 @@
                           22014
                         </div>
                          <div class="title">
-                           Total Revenue
+                           月收入
                         </div>
                   </div>
               </div>
@@ -103,7 +103,7 @@
                             390
                         </div>
                          <div class="title">
-                             Unique Visitors
+                             月病人
                         </div>
                   </div>
                 </div>
@@ -139,27 +139,6 @@
 
 
 </Row>
-
- <Row :gutter="16">
-        <Col :xs="24" :sm="24" :md="12" :lg="12">
-         
-<vue-calendar></vue-calendar>
-        </Col>
-
-  
-        <Col :xs="24" :sm="24" :md="12" :lg="12">
-         <todo-list></todo-list>
-        </Col>
-       
-     
-    </Row>
-
-
-
-
-
-
-   
 
 
   </div>
