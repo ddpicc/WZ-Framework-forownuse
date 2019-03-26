@@ -33,7 +33,7 @@
     <Row  :gutter="16" style="margin-top:45px">
 
 
-      <Col :xs="24" :sm="12"   :md="12" :lg="12">
+      <Col :xs="24" :sm="12" :md="12" :lg="12">
 
         <div class="state-overview">
             <Col span="12">
@@ -164,23 +164,21 @@ export default {
             }
         },
         methods:{
-              test_logout(){
-                 this.$store.dispatch('LogOut').then(() => {
-                    this.$router.push({ path: '/login' });
-                  }).catch(err => {
-                    this.$message.error(err);
-                  });
-              }
+          test_logout(){
+            this.$store.dispatch('LogOut').then(() => {
+              this.$router.push({ path: '/login' });
+            }).catch(err => {
+              this.$message.error(err);
+            });
+          }
         },
         mounted(){
-                const token=this.$store.getters.token;
-                
-             this.$Notice.success({
-                    title: '欢迎使用',
-                    desc:  `你的账户权限是 ${token}`,
-                    duration: 5
-                });
-
+          const token=this.$store.getters.token;                
+          this.$Notice.success({
+            title: '欢迎使用',
+            desc:  `你的账户权限是 ${token}`,
+            duration: 5
+          });
         }
 }
 </script>

@@ -19,6 +19,7 @@
 
 				<div style="" class="doc-content">
 					<Table size="small" border ref="selectionTB" :columns="orderCol" :data="orderData" @on-selection-change="handleSelectChange"></Table>
+          <Page :total="orderCount" :page-size="pageSize" show-total class="paging" @on-change="changepage"></Page>
 				</div>
 			</Col>
 		</Row>
@@ -36,6 +37,9 @@
         outerNotClick: true,
         isDisabled: true,
         modal1: false,
+        //page
+        pageSize: 5,
+        orderCount: 0,
 				orderCol: [
           {
             type: 'expand',
@@ -177,7 +181,10 @@
           let temp = {
             medary: item.med,
             dose: item.dose,
-            id: item._id
+            date: item.date,
+            id: item._id,
+            total: item.total,
+            totalprofit: item.totalprofit
           }
           await this.$http.put('/ordapi/order', temp);
         }
@@ -210,6 +217,11 @@
         //clear selection
         this.$refs.selectionTB.selectAll(false);
         this.orderData = this.cacheAllOrder;
+        if(this.orderCount < this.pageSize){
+          this.orderData = this.cacheAllOrder;
+        }else{
+          this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
+        }
       },
     
     // 获取全部数据
@@ -217,12 +229,23 @@
 				return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order").then(response => {
             this.cacheAllOrder = response.data;
-						this.orderData = this.cacheAllOrder;
+            this.orderCount = this.cacheAllOrder.length;
+            if(this.orderCount < this.pageSize){
+              this.orderData = this.cacheAllOrder;
+            }else{
+              this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
+            }
 						resolve();
 					}).catch(error => {
 						reject(error);
 					});
 				});
+      },
+
+      changepage: function(index){
+        var _start = ( index - 1 ) * this.pageSize;
+        var _end = index * this.pageSize;
+        this.orderData = this.cacheAllOrder.slice(_start,_end);
       }
     },
 
@@ -235,8 +258,12 @@
 <style scoped>
 	.doc-header .actionMenu{
 		float: right;
-
 	}
+
+  .paging{
+    float:right;
+    margin-top:10px;
+  }
 
 </style>
 								

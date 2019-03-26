@@ -4,6 +4,7 @@ const router = express.Router();
 //引入数据模型模块
 const Ord = require("../models/ordSchema");
 const Med = require("../models/medSchema");
+const Status = require("../models/overallStatus");
 
 router.post("/order", (req, res) => {
   console.log(req.body);
@@ -132,6 +133,9 @@ router.put("/order", (req, res) => {
   let errstr;
   let dose = req.body.dose;
   let arr = [];
+  let ordDate = req.body.date;
+  let ordTotal = req.body.total;
+  let ordTotalProfit = req.body.totalprofit;
   arr = req.body.medary;
   arr.forEach(element => {
     //console.log(element.medname);
@@ -187,6 +191,32 @@ router.put("/order", (req, res) => {
     ).catch(err => {
       errstr = err;
       console.log(err);
+    });
+
+    Status.findOne({name: "GlobalStatus"}, function (err, status) {
+      console.log("Update global status");
+      console.log(ordDate);
+      let tempYear = ordDate.split('/')[0];
+      let yearAndMon = ordDate.substr(0,7);
+      if(typeof(status.yearlyIncome[tempYear]) == 'undefined'){
+        status.yearlyIncome[tempYear] = ordTotal;
+      } else{
+        status.yearlyIncome[tempYear] = status.yearlyIncome[tempYear] + ordTotal;
+      };
+      if(typeof(status.monthlyIncome[yearAndMon]) == 'undefined'){
+        status.monthlyIncome[yearAndMon] = ordTotal;
+      } else{
+        status.monthlyIncome[yearAndMon] = status.monthlyIncome[yearAndMon] + ordTotal;
+      };
+      if(typeof(status.monthlyProfit[yearAndMon]) == 'undefined'){
+        status.monthlyProfit[yearAndMon] = ordTotalProfit;
+      } else{
+        status.monthlyProfit[yearAndMon] = status.monthlyProfit[yearAndMon] + ordTotalProfit;
+      };
+      status.markModified("yearlyIncome");
+      status.markModified("monthlyIncome");
+      status.markModified("monthlyProfit");
+      status.save();
     });
 
   if(errstr){
