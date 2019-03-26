@@ -47,6 +47,19 @@ router.get("/order", (req, res) => {
   }
 );
 
+router.get("/getGlobalStatus", (req, res) => {
+  Status.findOne({name: "GlobalStatus"})
+    .then(heros => {
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
+
  //查找最近三个月的订单
 router.get("/getOrdinThreeMonth", (req, res) => {
   let nowdate = new Date();

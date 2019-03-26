@@ -10,7 +10,7 @@
           <div class="panel-body">
             <div class="summary">
               <span>全年开销</span>
-              <h3 class="green-txt">$ 45,600</h3>
+              <h3 class="green-txt">$ {{yearOutcome}}</h3>
             </div>                         
             <div id="expense" class="chart-bar"> <img src="static/img/greenincome.png"></div>
           </div>
@@ -20,7 +20,7 @@
           <div class="panel-body">                  
             <div class="summary">
               <span>全年收入</span>
-              <h3 class="red-txt">$ 45,600</h3>
+              <h3 class="red-txt">$ {{yearIncome}}</h3>
             </div>
             <div id="income" class="chart-bar">
               <img src="static/img/redincome.png">                     
@@ -31,45 +31,39 @@
     </Row>
 
     <Row  :gutter="16" style="margin-top:45px">
-
-
       <Col :xs="24" :sm="12" :md="12" :lg="12">
-
         <div class="state-overview">
-            <Col span="12">
-                
-              <div class="panel purple">
-                <div class="symbol">
-                      <Icon type="clipboard" size="50" color="white"></Icon>
-                </div>
-                 <div  class="state-value">
-                        <div class="value">
-                            230
-                        </div>
-                         <div class="title">
-                          当天收入
-                        </div>
-                  </div>
+          <Col span="12">                
+            <div class="panel purple">
+              <div class="symbol">
+                <Icon type="clipboard" size="50" color="white"></Icon>
               </div>
-
-
-            </Col>
-            <Col span="12">
-               <div  class="panel red">
-                  <div class="symbol"> 
-                      <Icon type="pricetags" size="50" color="white"></Icon>
-                   </div>
-                    <div  class="state-value">
-                        <div class="value">
-                            3490
-                        </div>
-                         <div class="title">
-                          当天病人
-                        </div>
-                  </div>
-
+              <div  class="state-value">
+                <div class="value">
+                    $ {{dayIncome}}
                 </div>
-            </Col>
+                <div class="title">
+                    当天收入
+                </div>
+              </div>
+            </div>
+          </Col>
+
+          <Col span="12">
+            <div  class="panel red">
+              <div class="symbol"> 
+                <Icon type="pricetags" size="50" color="white"></Icon>
+              </div>
+              <div  class="state-value">
+                <div class="value">
+                  {{dayPatient}}
+                </div>
+                <div class="title">
+                  当天病人
+                </div>
+              </div>
+            </div>
+          </Col>
         </div>
 
 
@@ -83,7 +77,7 @@
                   </div>
                     <div  class="state-value">
                         <div class="value">
-                          22014
+                          $ {{monthIncome}}
                         </div>
                          <div class="title">
                            月收入
@@ -100,7 +94,7 @@
                   </div>
                     <div  class="state-value">
                         <div class="value">
-                            390
+                            {{monthPatient}}
                         </div>
                          <div class="title">
                              月病人
@@ -145,41 +139,60 @@
 </template>
 
 <script>
-import DashChartCount from './charts/DashChartCount';
 import DashChartVisitor from './charts/DashChartVisitor';
 import DashChartLarge from './charts/DashChartLarge';
-import VueCalendar from './components/VueCalendar';
-import TodoList from '@/components/TodoList'
 
 export default {
-  components:{DashChartCount,DashChartVisitor,DashChartLarge,VueCalendar,TodoList},
+  components:{DashChartVisitor,DashChartLarge},
   name: 'dashboard',
-        data () {
-            return {
-                value1: 0,
-                value2: 0,
-                value3: 0,
+    data () {
+      return {
+        yearOutcome: 0,
+        yearIncome: 0,
+        dayIncome: 0,
+        dayPatient: 0,
+        monthIncome: 0,
+        monthPatient: 0
+      }
+    },
+    methods:{
+      test_logout(){
+        this.$store.dispatch('LogOut').then(() => {
+          this.$router.push({ path: '/login' });
+        }).catch(err => {
+          this.$message.error(err);
+        });
+      },
 
-                speed:10000,
-            }
-        },
-        methods:{
-          test_logout(){
-            this.$store.dispatch('LogOut').then(() => {
-              this.$router.push({ path: '/login' });
-            }).catch(err => {
-              this.$message.error(err);
-            });
-          }
-        },
-        mounted(){
-          const token=this.$store.getters.token;                
-          this.$Notice.success({
-            title: '欢迎使用',
-            desc:  `你的账户权限是 ${token}`,
-            duration: 5
-          });
-        }
+      loadGlobalStatus: function() {
+        var date = new Date();
+        var yearIndex = date.getFullYear();
+        return new Promise((resolve, reject) => {
+					this.$http.get("/ordapi/getGlobalStatus").then(response => {
+            let dataArray = response.data;
+            this.yearIncome = dataArray.yearlyIncome[yearIndex];
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
+				});
+      },
+
+      loadMonthStatus: function() {
+        
+      }
+
+    },
+
+    mounted(){
+      const token=this.$store.getters.token;                
+      this.$Notice.success({
+        title: '欢迎使用',
+        desc:  `你的账户权限是 ${token}`,
+        duration: 5
+      });
+      this.loadGlobalStatus();
+    }
 }
 </script>
 

@@ -207,8 +207,6 @@
           sellprice: ""
         },
         ruleAdd: {}
-
-
 			}
 		},
 		methods: {
