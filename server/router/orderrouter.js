@@ -47,9 +47,43 @@ router.get("/order", (req, res) => {
   }
 );
 
+//从globalstatus库查找总计信息
 router.get("/getGlobalStatus", (req, res) => {
   Status.findOne({name: "GlobalStatus"})
     .then(heros => {
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
+//查找当月的订单
+router.get("/getCurrentMonth", (req, res) => {
+  let nowdate = new Date();
+  let curmonth = nowdate.getMonth()+1;
+  let curyear = nowdate.getFullYear();
+  let endyear = curyear;
+  let endMonth = (curmonth+1) %12;
+  if(endMonth == 0)
+    endMonth = '12';
+  if(endMonth < 10)
+    endMonth = '0' + endMonth;
+  if(curmonth < 10)
+    curmonth = '0' + curmonth;
+  if(curmonth == 12)
+    endyear = curyear + 1;
+  let start = curyear + '/' + curmonth;
+  let end = endyear + '/' + endMonth;
+  console.log(start);
+  console.log(end);
+  Ord.find({"date":{$gte: start, $lte: end},
+            "editable": false,
+            "type": "收入"})
+    .then(heros => {
+      console.log(heros);
       res.json(heros);
     })
     .catch(err => {
@@ -72,17 +106,17 @@ router.get("/getOrdinThreeMonth", (req, res) => {
     endMon = '12';
   if(endMon<10)
     endMon = '0' + endMon;
-  let start = nowdate.getFullYear() + '/' + startMon;
+  let start = nowdate.getFullYear() + '/' + startMon;      //year - 1???
   let end = nowdate.getFullYear() + '/' + endMon;
-  console.log(start);
-  console.log(end);
+  //console.log(start);
+  //console.log(end);
   Ord.find({"date":{$gte: start, $lte: end},
             "editable": false,
             "type": "收入"})
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);
-      console.log(heros);
+      //console.log(heros);
     })
     .catch(err => {
       console.log(2);
@@ -215,16 +249,19 @@ router.put("/order", (req, res) => {
         status.yearlyIncome[tempYear] = ordTotal;
       } else{
         status.yearlyIncome[tempYear] = status.yearlyIncome[tempYear] + ordTotal;
+        status.yearlyIncome[tempYear] = parseInt(status.yearlyIncome[tempYear]).toFixed(2);
       };
       if(typeof(status.monthlyIncome[yearAndMon]) == 'undefined'){
         status.monthlyIncome[yearAndMon] = ordTotal;
       } else{
         status.monthlyIncome[yearAndMon] = status.monthlyIncome[yearAndMon] + ordTotal;
+        status.monthlyIncome[yearAndMon] = parseInt(status.monthlyIncome[yearAndMon]).toFixed(2);
       };
       if(typeof(status.monthlyProfit[yearAndMon]) == 'undefined'){
         status.monthlyProfit[yearAndMon] = ordTotalProfit;
       } else{
         status.monthlyProfit[yearAndMon] = status.monthlyProfit[yearAndMon] + ordTotalProfit;
+        status.monthlyProfit[yearAndMon] = parseInt(status.monthlyProfit[yearAndMon]).toFixed(2);
       };
       status.markModified("yearlyIncome");
       status.markModified("monthlyIncome");

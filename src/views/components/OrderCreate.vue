@@ -105,7 +105,6 @@
 				list: [],
 				cacheMedData: [],
 				orderMed1PerObj: [],
-				orderMed4PerObj: [],
 				createOrdCol: [
 					{
 						title: '名称',
@@ -328,7 +327,16 @@
 
 				return new Promise((resolve, reject) => {
           this.$http.post("/ordapi/order", addOrd).then(response => {
-            this.$Message.success('添加成功!');        
+						this.$Message.success('添加成功!');
+						this.patientName = '';
+						this.inputMed = '';
+						this.inputDose = 1;
+						this.ordTotal = 0;
+						this.ordBaseTotal = 0;
+						this.orderCount = '';
+						this.total = '';
+						this.createOrdData = [];
+						this.orderMed1PerObj = [];
             resolve();
           }).catch(error => {
             this.$Message.error('修改失败');
@@ -343,7 +351,7 @@
 				this.$refs.mark1.$el.querySelector('input').focus();
 			},
 
-			kkk(){
+			showPrint(){
 				this.printmodal = true;
 			},
 
@@ -544,7 +552,7 @@
 				var key=e.keyCode;
 				var altKey = e.altKey;
 				if(altKey && key==35){
-					lett.kkk();
+					lett.showPrint();
 				}
 			}
 		},

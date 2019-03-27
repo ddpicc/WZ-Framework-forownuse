@@ -17,7 +17,7 @@
     data() {   
       return {
         option : {}
-      };
+      }
     },
 
     methods: {
@@ -41,8 +41,8 @@
         let thirdMonth = nowMonth % 12;
         if(nowMonth<10)
           thirdMonth = '0' + nowMonth;
-        this.$http.get("/ordapi/getOrdinThreeMonth").then(function (data) {
-          for(let item of data.body) {
+        this.$http.get("/ordapi/getOrdinThreeMonth").then(response => { 
+          for(let item of response.body) {
             let tempMon = item.date.split('/')[1];
             tempMon = parseInt(tempMon);
             firstMonth = parseInt(firstMonth);
@@ -95,7 +95,10 @@
                   {
                       type : 'category',
                       boundaryGap : false,
-                      data : [(nowMonth-2)+'月', (nowMonth-1)+'月', nowMonth+'月' ]
+                      data : [(nowMonth-11+12)%12 === 0 ? 12 + '月': (nowMonth-11+12)%12 +'月', (nowMonth-10+12)%12 === 0 ? 12 + '月': (nowMonth-10+12)%12 +'月', (nowMonth-9+12)%12 === 0 ? 12 + '月': (nowMonth-9+12)%12 +'月', 
+                              (nowMonth-8+12)%12 === 0 ? 12 + '月': (nowMonth-8+12)%12 +'月', (nowMonth-7+12)%12 === 0 ? 12 + '月': (nowMonth-7+12)%12 +'月', (nowMonth-6+12)%12 === 0 ? 12 + '月': (nowMonth-6+12)%12 +'月', 
+                              (nowMonth-5+12)%12 === 0 ? 12 + '月': (nowMonth-5+12)%12 +'月', (nowMonth-4+12)%12 === 0 ? 12 + '月': (nowMonth-4+12)%12 +'月', (nowMonth-3+12)%12 === 0 ? 12 + '月': (nowMonth-3+12)%12 +'月', 
+                              (nowMonth-2+12)%12 === 0 ? 12 + '月': (nowMonth-2+12)%12 +'月', (nowMonth-1+12)%12 === 0 ? 12 + '月': (nowMonth-1+12)%12 +'月', nowMonth+'月' ]
                   }
               ],
               yAxis : [

@@ -9,7 +9,7 @@
      
     </ul>
 
-    <ul class="nav navbar-nav d-md-down-none">
+    <!-- <ul class="nav navbar-nav d-md-down-none">
       
        <li class="nav-item header-item">
   
@@ -30,7 +30,6 @@
       </li>
 
    <li class="nav-item header-item">
-        <!--   -->
 
         <Dropdown>
       <router-link tag="div" to='/'  style="height:55px;" class="nav-link">
@@ -46,26 +45,14 @@
         </DropdownMenu>
     </Dropdown>
 
-
-
       </li>
-
-
         <li class="nav-item header-item">
-      
-
          <router-link tag="div" to='/home1'  style="height:55px;" class="nav-link">
             <p><Icon type="trophy" size='30' color="#2d8cf0"></Icon></p>
             <p  style="color:white"> 销量排行 </p>
         </router-link> 
-
-
       </li>
-
-
-
-     
-    </ul>
+    </ul>  -->
 
 
     <ul class="nav navbar-nav ml-auto">

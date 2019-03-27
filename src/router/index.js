@@ -44,19 +44,19 @@ export const asyncRouterMap = [
     hidden:false,
     children: [
       {path: '/dashboard',name: 'Dashboard',icon:'speedometer',component: _import('Dashboard'),icon:'md-book'},
-      {path: '/introduction',name: '介绍',icon:'thumbsup',component: _import('Introduction'),meta: { role: ['admin'] }},
+      //{path: '/introduction',name: '介绍',icon:'thumbsup',component: _import('Introduction'),meta: { role: ['admin'] }},
       {path: '/orderCreate',name: '生成处方',component: _import('components/OrderCreate'),icon:'md-create'},
       {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit'},
       {path: '/orderlist',name: '订单管理',component: _import('components/OrderList'),icon:'md-list-box'},
       {path: '/test',name: 'test',component: _import('components/test'),icon:'ios-list-box-outline'},
-      {path: '/charts',name: 'echart',redirect: '/charts/shopchart',icon:'pie-graph',
+      /* {path: '/charts',name: 'echart',redirect: '/charts/shopchart',icon:'pie-graph',
         component: {render (c) { return c('router-view') }},
         children: [ {path: 'shopchart',name: '商场统计图表',icon:'stats-bars',component: _import('charts/ShopChart'), hidden:false, },
                     {path: 'radarchart',name: '雷达图',icon:'arrow-graph-up-right',component: _import('charts/RadarChart')},
                     {path: 'cakechart',name: '蛋糕销量图表',icon:'ios-analytics',component: _import('charts/CakeChart')}
                   ]
       },
-      {path: '/markdown',name: 'Markdown',icon:"android-list",component: _import('Markdown')},
+      {path: '/markdown',name: 'Markdown',icon:"android-list",component: _import('Markdown')}, */
       
     ]
   },

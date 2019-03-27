@@ -1,6 +1,6 @@
 <template>
   <Col :span="24">
-    <chart :options="option" class="echarts" id="chart" > </chart>
+    <chart :options="option" class="echarts" id="chart"> </chart>
   </Col>
 
 </template>
@@ -26,7 +26,6 @@ export default {
   data: function () {
    
     return {
-
 
 
 
