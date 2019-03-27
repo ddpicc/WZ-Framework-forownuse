@@ -176,6 +176,7 @@
         this.orderData = editableOrder;
       },
 
+      //need to divide them
       updateOrdMedandStatus: async function() {
         for(let item of this.cacheSelectedRow){
           let temp = {
@@ -186,7 +187,13 @@
             total: item.total,
             totalprofit: item.totalprofit
           }
-          await this.$http.put('/ordapi/order', temp);
+          let promise = new Promise((resolve, reject) => {
+            this.$http.put('/ordapi/order', temp);
+            resolve();
+          }).catch(error => {
+            reject(error);
+          });
+          let result = await promise;
         }
         return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order").then(response => {

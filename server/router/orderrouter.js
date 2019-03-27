@@ -218,7 +218,7 @@ router.put("/order", (req, res) => {
         tempChangeCount = -1*element.count4*dose
         index = index + 1;
       }
-      console.log(tempMedname + '  count change:' +  tempChangeCount);
+      //console.log(tempMedname + '  count change:' +  tempChangeCount);
       Med.findOneAndUpdate({
         medname: tempMedname},
         {$inc: {count: tempChangeCount}})
@@ -228,46 +228,54 @@ router.put("/order", (req, res) => {
         });
     }
     })
-    Ord.findOneAndUpdate(
+    Ord.update(
       { _id: req.body.id },
       {
         $set: {
           editable: false,
         }
+      },
+      function(err, docs){
+        if(err) console.log(err);
+        Status.findOne({name: "GlobalStatus"}, function (err, status) {
+          console.log("Update global status");
+          console.log(ordDate);
+          let tempYear = ordDate.split('/')[0];
+          let yearAndMon = ordDate.substr(0,7);
+          let yearIncomeValue = 0;
+          let monthIncomeValue = 0;
+          let monthProfitValue = 0;
+          if(typeof(status.yearlyIncome[tempYear]) == 'undefined'){
+            status.yearlyIncome[tempYear] = ordTotal;
+          } else{
+            yearIncomeValue = status.yearlyIncome[tempYear] + ordTotal;
+            yearIncomeValue = parseInt(yearIncomeValue).toFixed(2);
+            console.log(status.yearlyIncome[tempYear]);
+          };
+          if(typeof(status.monthlyIncome[yearAndMon]) == 'undefined'){
+            status.monthlyIncome[yearAndMon] = ordTotal;
+          } else{
+            monthIncomeValue = status.monthlyIncome[yearAndMon] + ordTotal;
+            monthIncomeValue = parseInt(monthIncomeValue).toFixed(2);
+          };
+          if(typeof(status.monthlyProfit[yearAndMon]) == 'undefined'){
+            status.monthlyProfit[yearAndMon] = ordTotalProfit;
+          } else{
+            monthProfitValue = status.monthlyProfit[yearAndMon] + ordTotalProfit;
+            monthProfitValue = parseInt(monthProfitValue).toFixed(2);
+          };
+          status.yearlyIncome[tempYear] = yearIncomeValue;
+          status.monthlyIncome[yearAndMon] = monthIncomeValue;
+          status.monthlyProfit[yearAndMon] = monthProfitValue;
+          status.markModified("yearlyIncome");
+          status.markModified("monthlyIncome");
+          status.markModified("monthlyProfit");
+          status.save();
+        });
       }
-    ).catch(err => {
-      errstr = err;
-      console.log(err);
-    });
+    );
 
-    Status.findOne({name: "GlobalStatus"}, function (err, status) {
-      console.log("Update global status");
-      console.log(ordDate);
-      let tempYear = ordDate.split('/')[0];
-      let yearAndMon = ordDate.substr(0,7);
-      if(typeof(status.yearlyIncome[tempYear]) == 'undefined'){
-        status.yearlyIncome[tempYear] = ordTotal;
-      } else{
-        status.yearlyIncome[tempYear] = status.yearlyIncome[tempYear] + ordTotal;
-        status.yearlyIncome[tempYear] = parseInt(status.yearlyIncome[tempYear]).toFixed(2);
-      };
-      if(typeof(status.monthlyIncome[yearAndMon]) == 'undefined'){
-        status.monthlyIncome[yearAndMon] = ordTotal;
-      } else{
-        status.monthlyIncome[yearAndMon] = status.monthlyIncome[yearAndMon] + ordTotal;
-        status.monthlyIncome[yearAndMon] = parseInt(status.monthlyIncome[yearAndMon]).toFixed(2);
-      };
-      if(typeof(status.monthlyProfit[yearAndMon]) == 'undefined'){
-        status.monthlyProfit[yearAndMon] = ordTotalProfit;
-      } else{
-        status.monthlyProfit[yearAndMon] = status.monthlyProfit[yearAndMon] + ordTotalProfit;
-        status.monthlyProfit[yearAndMon] = parseInt(status.monthlyProfit[yearAndMon]).toFixed(2);
-      };
-      status.markModified("yearlyIncome");
-      status.markModified("monthlyIncome");
-      status.markModified("monthlyProfit");
-      status.save();
-    });
+    
 
   if(errstr){
     res.json(errstr);

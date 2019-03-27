@@ -142,6 +142,13 @@
 
     mounted: function () {
       this.loadMonthChart();
+      var lastMonth = []; 
+      for(var i = 0;i<30;i++)
+			{ 
+				lastMonth.unshift(new Date(new Date().setDate(new Date().getDate()-i)).toLocaleDateString());
+			}
+			alert(lastMonth);
+
 		}
 	}
   

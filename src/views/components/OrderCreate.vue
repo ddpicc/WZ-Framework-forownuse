@@ -337,6 +337,7 @@
 						this.total = '';
 						this.createOrdData = [];
 						this.orderMed1PerObj = [];
+						this.infoDisplayData = [];
             resolve();
           }).catch(error => {
             this.$Message.error('修改失败');
