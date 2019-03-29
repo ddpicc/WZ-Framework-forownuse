@@ -95,10 +95,11 @@
                   {
                       type : 'category',
                       boundaryGap : false,
-                      data : [(nowMonth-11+12)%12 === 0 ? 12 + '月': (nowMonth-11+12)%12 +'月', (nowMonth-10+12)%12 === 0 ? 12 + '月': (nowMonth-10+12)%12 +'月', (nowMonth-9+12)%12 === 0 ? 12 + '月': (nowMonth-9+12)%12 +'月', 
-                              (nowMonth-8+12)%12 === 0 ? 12 + '月': (nowMonth-8+12)%12 +'月', (nowMonth-7+12)%12 === 0 ? 12 + '月': (nowMonth-7+12)%12 +'月', (nowMonth-6+12)%12 === 0 ? 12 + '月': (nowMonth-6+12)%12 +'月', 
-                              (nowMonth-5+12)%12 === 0 ? 12 + '月': (nowMonth-5+12)%12 +'月', (nowMonth-4+12)%12 === 0 ? 12 + '月': (nowMonth-4+12)%12 +'月', (nowMonth-3+12)%12 === 0 ? 12 + '月': (nowMonth-3+12)%12 +'月', 
-                              (nowMonth-2+12)%12 === 0 ? 12 + '月': (nowMonth-2+12)%12 +'月', (nowMonth-1+12)%12 === 0 ? 12 + '月': (nowMonth-1+12)%12 +'月', nowMonth+'月' ]
+                      data : [nowMonth+'月', (nowMonth-1+12)%12 === 0 ? 12 + '月': (nowMonth-1+12)%12 +'月', (nowMonth-2+12)%12 === 0 ? 12 + '月': (nowMonth-2+12)%12 +'月', 
+                              (nowMonth-3+12)%12 === 0 ? 12 + '月': (nowMonth-3+12)%12 +'月', (nowMonth-4+12)%12 === 0 ? 12 + '月': (nowMonth-4+12)%12 +'月', (nowMonth-5+12)%12 === 0 ? 12 + '月': (nowMonth-5+12)%12 +'月', 
+                              (nowMonth-6+12)%12 === 0 ? 12 + '月': (nowMonth-6+12)%12 +'月', (nowMonth-7+12)%12 === 0 ? 12 + '月': (nowMonth-7+12)%12 +'月' ,(nowMonth-8+12)%12 === 0 ? 12 + '月': (nowMonth-8+12)%12 +'月', 
+                              (nowMonth-9+12)%12 === 0 ? 12 + '月': (nowMonth-9+12)%12 +'月', (nowMonth-10+12)%12 === 0 ? 12 + '月': (nowMonth-10+12)%12 +'月', (nowMonth-11+12)%12 === 0 ? 12 + '月': (nowMonth-11+12)%12 +'月'
+                              ]
                   }
               ],
               yAxis : [

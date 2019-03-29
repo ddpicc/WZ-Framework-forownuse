@@ -160,6 +160,7 @@ router.delete("/order/:id", (req, res) => {
 
 //更新订单状态
 router.put("/updateOrdstatus/:id", (req, res) => {
+  console.log("Update order status");
   Ord.findOneAndUpdate(
     { _id: req.params.id },
     {
@@ -176,13 +177,11 @@ router.put("/updateOrdstatus/:id", (req, res) => {
 });
 
 //更新药品的库存
-router.put("/order", (req, res) => {
+router.put("/updateOrdMed", (req, res) => {
+  console.log("Update order med");
   let errstr;
   let dose = req.body.dose;
   let arr = [];
-  let ordDate = req.body.date;
-  let ordTotal = req.body.total;
-  let ordTotalProfit = req.body.totalprofit;
   arr = req.body.medary;
   arr.forEach(element => {
     //console.log(element.medname);
@@ -227,63 +226,28 @@ router.put("/order", (req, res) => {
           console.log(err);
         });
     }
-    })
-    Ord.update(
-      { _id: req.body.id },
-      {
-        $set: {
-          editable: false,
-        }
-      },
-      function(err, docs){
-        if(err) console.log(err);
-        Status.findOne({name: "GlobalStatus"}, function (err, status) {
-          console.log("Update global status");
-          console.log(ordDate);
-          let tempYear = ordDate.split('/')[0];
-          let yearAndMon = ordDate.substr(0,7);
-          let yearIncomeValue = 0;
-          let monthIncomeValue = 0;
-          let monthProfitValue = 0;
-          if(typeof(status.yearlyIncome[tempYear]) == 'undefined'){
-            status.yearlyIncome[tempYear] = ordTotal;
-          } else{
-            yearIncomeValue = status.yearlyIncome[tempYear] + ordTotal;
-            yearIncomeValue = parseInt(yearIncomeValue).toFixed(2);
-            console.log(status.yearlyIncome[tempYear]);
-          };
-          if(typeof(status.monthlyIncome[yearAndMon]) == 'undefined'){
-            status.monthlyIncome[yearAndMon] = ordTotal;
-          } else{
-            monthIncomeValue = status.monthlyIncome[yearAndMon] + ordTotal;
-            monthIncomeValue = parseInt(monthIncomeValue).toFixed(2);
-          };
-          if(typeof(status.monthlyProfit[yearAndMon]) == 'undefined'){
-            status.monthlyProfit[yearAndMon] = ordTotalProfit;
-          } else{
-            monthProfitValue = status.monthlyProfit[yearAndMon] + ordTotalProfit;
-            monthProfitValue = parseInt(monthProfitValue).toFixed(2);
-          };
-          status.yearlyIncome[tempYear] = yearIncomeValue;
-          status.monthlyIncome[yearAndMon] = monthIncomeValue;
-          status.monthlyProfit[yearAndMon] = monthProfitValue;
-          status.markModified("yearlyIncome");
-          status.markModified("monthlyIncome");
-          status.markModified("monthlyProfit");
-          status.save();
-        });
-      }
-    );
+    });
+  });
+
+router.put("/updateGlobalStatus", (req, res) => {
+  let objYearlyIncome = req.body.yearlyIncome;
+  let objMonthlyIncome = req.body.monthlyIncome;
+  let objMonthlyProfit = req.body.monthlyProfit;
+  console.log(objYearlyIncome);
+  Med.findOne({name: "GlobalStatus"}, function(err, doc){
+    doc.yearlyIncome = objYearlyIncome;
+    doc.monthlyIncome = objMonthlyIncome;
+    doc.monthlyProfit = objMonthlyProfit;
+    doc.markModified('yearlyIncome');
+    doc.markModified('monthlyIncome');
+    doc.markModified('monthlyProfit');
+    doc.save();
+
+  });
+
+}),
 
     
 
-  if(errstr){
-    res.json(errstr);
-  }
-  else{
-    res.send('更新成功');
-  }
-  
-});
 
 module.exports = router;

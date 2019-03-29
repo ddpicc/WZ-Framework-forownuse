@@ -28,7 +28,9 @@
 
 <script>
   import orderExpandRow from './OrderExpand.vue';
+import { resolve } from 'url';
   var idAry = [];
+  var globalStatus = {};
 	export default {
     components: { orderExpandRow },
 		data () {
@@ -181,21 +183,54 @@
         for(let item of this.cacheSelectedRow){
           let temp = {
             medary: item.med,
-            dose: item.dose,
-            date: item.date,
-            id: item._id,
-            total: item.total,
-            totalprofit: item.totalprofit
+            dose: item.dose
           }
-          let promise = new Promise((resolve, reject) => {
-            this.$http.put('/ordapi/order', temp);
-            resolve();
-          }).catch(error => {
-            reject(error);
+          let promise1 = new Promise((resolve, reject) => {
+            this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
+              resolve();
+            }).catch(error => {
+              //reject(error);
+            });
           });
-          let result = await promise;
+          let result1 = promise1;
+
+          let promise2 = new Promise((resolve, reject) => {
+            this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
+            resolve();
+          });
+          let result2 = await promise2;
+
+          let tempDate = item.date;
+          let yearIndex = tempDate.split('/')[0];
+          let yearAndMonIndex = tempDate.substr(0,7);
+          if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
+            globalStatus.yearlyIncome[yearIndex] = item.total;
+          } else{
+            globalStatus.yearlyIncome[yearIndex] = parseInt(parseInt(globalStatus.yearlyIncome[yearIndex] + item.total).toFixed(2));
+          }
+          if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
+            globalStatus.monthlyIncome[yearAndMonIndex] = item.total;
+          } else{
+            globalStatus.monthlyIncome[yearAndMonIndex] = parseInt(parseInt(globalStatus.monthlyIncome[yearAndMonIndex] + item.total).toFixed(2));
+          }
+          if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
+            globalStatus.monthlyProfit[yearAndMonIndex] = item.total;
+          } else{
+            globalStatus.monthlyProfit[yearAndMonIndex] = parseInt(parseInt(globalStatus.monthlyProfit[yearAndMonIndex] + item.total).toFixed(2));
+          }
         }
-        return new Promise((resolve, reject) => {
+        alert(JSON.stringify(globalStatus.yearlyIncome));
+        let temp = {
+          yearlyIncome: globalStatus.yearlyIncome,
+          monthlyIncome: globalStatus.monthlyIncome,
+          monthlyProfit: globalStatus.monthlyProfit
+        }
+        let promise3 = new Promise((resolve, reject) => {
+          this.$http.put('/ordapi/updateGlobalStatus', temp)
+          resolve();
+        });
+        let result3 = promise3;
+        let promise4 = new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order").then(response => {
             this.cacheAllOrder = response.data;
             let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
@@ -204,8 +239,8 @@
 					}).catch(error => {
 						reject(error);
 					});
-				});
-
+        });
+        let result4 = promise4;
       },
 
 			outerDbSure: function(){
@@ -249,6 +284,27 @@
 				});
       },
 
+      getGlobalStatus: function() {
+        return new Promise((resolve, reject) => {
+          this.$http.get("/ordapi/getGlobalStatus").then(response => {
+            globalStatus = response.data;
+            if(typeof(globalStatus.yearlyIncome) == 'undefined'){
+              globalStatus.yearlyIncome = {};
+            }
+            if(typeof(globalStatus.monthlyIncome) == 'undefined'){
+              globalStatus.monthlyIncome = {};
+            }
+            if(typeof(globalStatus.monthlyProfit) == 'undefined'){
+              globalStatus.monthlyProfit = {};
+            }
+            alert(JSON.stringify(globalStatus));
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
+        })
+      },
+
       changepage: function(index){
         var _start = ( index - 1 ) * this.pageSize;
         var _end = index * this.pageSize;
@@ -257,7 +313,8 @@
     },
 
     mounted: function() {
-			this.getAll();
+      this.getAll();
+      this.getGlobalStatus();
 		}
 	}
 </script>
