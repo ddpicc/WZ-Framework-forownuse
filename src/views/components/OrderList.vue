@@ -181,7 +181,7 @@ import { resolve } from 'url';
       //need to divide them
       updateOrdMedandStatus: async function() {
         for(let item of this.cacheSelectedRow){
-          let temp = {
+          /* let temp = {
             medary: item.med,
             dose: item.dose
           }
@@ -198,15 +198,17 @@ import { resolve } from 'url';
             this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
             resolve();
           });
-          let result2 = await promise2;
+          let result2 = await promise2; */
 
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];
           let yearAndMonIndex = tempDate.substr(0,7);
+          alert(JSON.stringify(globalStatus.yearlyIncome));
           if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
-            globalStatus.yearlyIncome[yearIndex] = item.total;
+            globalStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
           } else{
-            globalStatus.yearlyIncome[yearIndex] = parseInt(parseInt(globalStatus.yearlyIncome[yearIndex] + item.total).toFixed(2));
+            let temp = parseInt(globalStatus.yearlyIncome[yearIndex]) + item.total;
+            globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
           }
           if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
             globalStatus.monthlyIncome[yearAndMonIndex] = item.total;
@@ -221,9 +223,9 @@ import { resolve } from 'url';
         }
         alert(JSON.stringify(globalStatus.yearlyIncome));
         let temp = {
-          yearlyIncome: globalStatus.yearlyIncome,
-          monthlyIncome: globalStatus.monthlyIncome,
-          monthlyProfit: globalStatus.monthlyProfit
+          "yearlyIncome": globalStatus.yearlyIncome,
+          "monthlyIncome": globalStatus.monthlyIncome,
+          "monthlyProfit": globalStatus.monthlyProfit
         }
         let promise3 = new Promise((resolve, reject) => {
           this.$http.put('/ordapi/updateGlobalStatus', temp)

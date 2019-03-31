@@ -230,17 +230,18 @@ router.put("/updateOrdMed", (req, res) => {
   });
 
 router.put("/updateGlobalStatus", (req, res) => {
-  let objYearlyIncome = req.body.yearlyIncome;
-  let objMonthlyIncome = req.body.monthlyIncome;
-  let objMonthlyProfit = req.body.monthlyProfit;
-  console.log(objYearlyIncome);
-  Med.findOne({name: "GlobalStatus"}, function(err, doc){
-    doc.yearlyIncome = objYearlyIncome;
-    doc.monthlyIncome = objMonthlyIncome;
-    doc.monthlyProfit = objMonthlyProfit;
+  var objYearlyIncome = req.body.yearlyIncome;
+  //var objMonthlyIncome = req.body.monthlyIncome;
+  //var objMonthlyProfit = req.body.monthlyProfit;
+  objYearlyIncome = JSON.stringify(objYearlyIncome).replace(/'/g, '"');
+  console.log(JSON.parse(objYearlyIncome));
+  Status.findOne({name: "GlobalStatus"}, function(err, doc){
+    doc.yearlyIncome = JSON.parse(objYearlyIncome);
+    //doc.monthlyIncome = JSON.parse(objMonthlyIncome);
+    //doc.monthlyProfit = JSON.parse(objMonthlyProfit);
     doc.markModified('yearlyIncome');
-    doc.markModified('monthlyIncome');
-    doc.markModified('monthlyProfit');
+    //doc.markModified('monthlyIncome');
+    //doc.markModified('monthlyProfit');
     doc.save();
 
   });
