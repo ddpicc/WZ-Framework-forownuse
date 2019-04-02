@@ -28,8 +28,7 @@
 
 <script>
   import orderExpandRow from './OrderExpand.vue';
-import { resolve } from 'url';
-  var idAry = [];
+  import { resolve } from 'url';
   var globalStatus = {};
 	export default {
     components: { orderExpandRow },
@@ -211,14 +210,16 @@ import { resolve } from 'url';
             globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
           }
           if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
-            globalStatus.monthlyIncome[yearAndMonIndex] = item.total;
+            globalStatus.monthlyIncome[yearAndMonIndex] = (item.total).toFixed(2);
           } else{
-            globalStatus.monthlyIncome[yearAndMonIndex] = parseInt(parseInt(globalStatus.monthlyIncome[yearAndMonIndex] + item.total).toFixed(2));
+            let temp = parseInt(globalStatus.monthlyIncome[yearAndMonIndex]) + item.total;
+            globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
           }
           if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
-            globalStatus.monthlyProfit[yearAndMonIndex] = item.total;
+            globalStatus.monthlyProfit[yearAndMonIndex] = (item.totalprofit).toFixed(2);
           } else{
-            globalStatus.monthlyProfit[yearAndMonIndex] = parseInt(parseInt(globalStatus.monthlyProfit[yearAndMonIndex] + item.total).toFixed(2));
+            let temp = parseInt(globalStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
+            globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
           }
         }
         alert(JSON.stringify(globalStatus.yearlyIncome));

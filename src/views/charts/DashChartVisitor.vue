@@ -13,6 +13,7 @@
 </style>
 
 <script>
+  var globalStatus = {};
 	export default {
     data() {   
       return {
@@ -21,58 +22,38 @@
     },
 
     methods: {
+      getYearMonthIndex(nowMonth, nowYear, count){
+        nowMonth = nowMonth - count;
+        if(nowMonth < 1)
+          nowYear = nowYear - 1;
+        nowMonth = (nowMonth + 12) % 12;
+        if(nowMonth == 0)
+          nowMonth = '12';
+        if (nowMonth >= 1 && nowMonth <= 9) {
+					nowMonth = "0" + nowMonth;
+        }
+        return nowYear + '/' + nowMonth;
+      },
+
       loadMonthChart: function() {
-        let _totalFstMon = 0.00;
-        let _profitFstMon = 0.00;
-
-        let _totalSecMon = 0.00;
-        let _profitSecMon = 0.00;
-
-        let _totalTrdMon = 0.00;
-        let _profitTrdMon = 0.00;
-
-        let nowMonth = new Date().getMonth()+1;
-        let firstMonth = (nowMonth-2) % 12;
-        if(firstMonth<10)
-          firstMonth = '0' + firstMonth;
-        let secondMonth = (nowMonth-1) % 12;
-        if(secondMonth<10)
-          secondMonth = '0' + secondMonth;
-        let thirdMonth = nowMonth % 12;
-        if(nowMonth<10)
-          thirdMonth = '0' + nowMonth;
-        this.$http.get("/ordapi/getOrdinThreeMonth").then(response => { 
-          for(let item of response.body) {
-            let tempMon = item.date.split('/')[1];
-            tempMon = parseInt(tempMon);
-            firstMonth = parseInt(firstMonth);
-            secondMonth = parseInt(secondMonth);
-            thirdMonth = parseInt(thirdMonth);
-            switch(tempMon){
-              case firstMonth:
-                _totalFstMon = _totalFstMon + item.total;
-                _profitFstMon = _profitFstMon + item.totalprofit;
-                break;
-              case secondMonth:
-                _totalSecMon = _totalSecMon + item.total;
-                _profitSecMon = _profitSecMon + item.totalprofit;
-                break;
-              case thirdMonth:
-                _totalTrdMon = _totalTrdMon + item.total;
-                _profitTrdMon = _profitTrdMon + item.totalprofit;
-                break;
-            }  
-          }
-          _totalFstMon = _totalFstMon.toFixed(2);
-          _profitFstMon = _profitFstMon.toFixed(2);
-          _totalSecMon = _totalSecMon.toFixed(2);
-          _profitSecMon = _profitSecMon.toFixed(2);
-          _totalTrdMon = _totalTrdMon.toFixed(2);
-          _profitTrdMon = _profitTrdMon.toFixed(2);
-          this.$nextTick( () => {
+        return new Promise((resolve, reject) => {
+          var nowMonth = new Date().getMonth()+1;
+          var nowYear = new Date().getFullYear();
+          this.$http.get("/ordapi/getGlobalStatus").then(response => {
+            globalStatus = response.data;
+            if(typeof(globalStatus.yearlyIncome) == 'undefined'){
+              globalStatus.yearlyIncome = {};
+            }
+            if(typeof(globalStatus.monthlyIncome) == 'undefined'){
+              globalStatus.monthlyIncome = {};
+            }
+            if(typeof(globalStatus.monthlyProfit) == 'undefined'){
+              globalStatus.monthlyProfit = {};
+            }
+            this.$nextTick( () => {
             this.option = {
               title: {
-                text: '最近12个月收入情况',
+                text: '最近12个月收入',
               },
               tooltip: {
                   trigger: 'axis',
@@ -111,7 +92,11 @@
                 {
                   name:'收入',
                   type: 'line',
-                  data:[_totalFstMon,_totalSecMon,_totalTrdMon],
+                  data:[globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,0)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,1)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,2)],
+                        globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,3)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,4)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,5)],
+                        globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,6)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,7)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,8)],
+                        globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,9)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,10)], globalStatus.monthlyIncome[this.getYearMonthIndex(nowMonth,nowYear,11)]
+                        ],
                   markPoint : {
                     data : [
                       {type : 'max', name: '最大值'},
@@ -127,7 +112,11 @@
                 {
                   name:'利润',
                   type:'line',
-                  data:[_profitFstMon,_profitSecMon,_profitTrdMon],
+                  data:[globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,0)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,1)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,2)],
+                        globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,3)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,4)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,5)],
+                        globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,6)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,7)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,8)],
+                        globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,9)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,10)], globalStatus.monthlyProfit[this.getYearMonthIndex(nowMonth,nowYear,11)]
+                        ],
                   markLine : {
                     data : [
                       {type : 'average', name : '平均值'}
@@ -137,19 +126,16 @@
               ]
             }
           })
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
         })
       }
     },
 
     mounted: function () {
       this.loadMonthChart();
-      var lastMonth = []; 
-      for(var i = 0;i<30;i++)
-			{ 
-				lastMonth.unshift(new Date(new Date().setDate(new Date().getDate()-i)).toLocaleDateString());
-			}
-			alert(lastMonth);
-
 		}
 	}
   

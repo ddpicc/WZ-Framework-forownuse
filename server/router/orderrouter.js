@@ -94,29 +94,19 @@ router.get("/getCurrentMonth", (req, res) => {
 );
 
 
- //查找最近三个月的订单
-router.get("/getOrdinThreeMonth", (req, res) => {
-  let nowdate = new Date();
-  let curmonth = (nowdate.getMonth()+1) % 12;
-  let startMon = (curmonth-2) % 12;
-  if(startMon<10)
-    startMon = '0' + startMon;
-  let endMon = (curmonth + 1) % 12;
-  if(endMon == 0)
-    endMon = '12';
-  if(endMon<10)
-    endMon = '0' + endMon;
-  let start = nowdate.getFullYear() + '/' + startMon;      //year - 1???
-  let end = nowdate.getFullYear() + '/' + endMon;
-  //console.log(start);
-  //console.log(end);
+ //查找最近30天的订单
+router.get("/getLast30Days", (req, res) => {
+  let start = req.query.startDate;
+  let end = req.query.endDate;
+  console.log(start);
+  console.log(end);
   Ord.find({"date":{$gte: start, $lte: end},
             "editable": false,
             "type": "收入"})
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);
-      //console.log(heros);
+      console.log(heros);
     })
     .catch(err => {
       console.log(2);
@@ -231,17 +221,19 @@ router.put("/updateOrdMed", (req, res) => {
 
 router.put("/updateGlobalStatus", (req, res) => {
   var objYearlyIncome = req.body.yearlyIncome;
-  //var objMonthlyIncome = req.body.monthlyIncome;
-  //var objMonthlyProfit = req.body.monthlyProfit;
+  var objMonthlyIncome = req.body.monthlyIncome;
+  var objMonthlyProfit = req.body.monthlyProfit;
   objYearlyIncome = JSON.stringify(objYearlyIncome).replace(/'/g, '"');
+  objMonthlyIncome = JSON.stringify(objMonthlyIncome).replace(/'/g, '"');
+  objMonthlyProfit = JSON.stringify(objMonthlyProfit).replace(/'/g, '"');
   console.log(JSON.parse(objYearlyIncome));
   Status.findOne({name: "GlobalStatus"}, function(err, doc){
     doc.yearlyIncome = JSON.parse(objYearlyIncome);
-    //doc.monthlyIncome = JSON.parse(objMonthlyIncome);
-    //doc.monthlyProfit = JSON.parse(objMonthlyProfit);
+    doc.monthlyIncome = JSON.parse(objMonthlyIncome);
+    doc.monthlyProfit = JSON.parse(objMonthlyProfit);
     doc.markModified('yearlyIncome');
-    //doc.markModified('monthlyIncome');
-    //doc.markModified('monthlyProfit');
+    doc.markModified('monthlyIncome');
+    doc.markModified('monthlyProfit');
     doc.save();
 
   });
