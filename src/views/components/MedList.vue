@@ -95,6 +95,7 @@
         formAddVisible: false,
         searchNotClick: true,
         modifyId: "",
+        searchMedString: "",
 				columns7: [
 					{
 						title: '药品名称',
@@ -260,11 +261,14 @@
       },
 
 			searchMed: function(){
-				this.searchNotClick = false;
+        this.searchNotClick = false;
+        
+        
 			},
 
 			searchCancal: function(){
-				this.searchNotClick = true;
+        this.searchNotClick = true;
+        this.searchMedString = "";
 			},
 
       toAdd () {

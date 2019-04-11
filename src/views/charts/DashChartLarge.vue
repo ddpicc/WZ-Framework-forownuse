@@ -121,6 +121,7 @@
     },
 
     mounted: function () {
+      alert(new Date(new Date().setDate(new Date().getDate()-3)).getDate());
       for(var i = 0;i<30;i++)
 			{ 
 				last30days.push(new Date(new Date().setDate(new Date().getDate()-i)).toLocaleDateString());

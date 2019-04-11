@@ -88,7 +88,7 @@
 </template>
 
 <script>
-	import { tryconst } from 'utils/index';
+	import { getTime } from 'utils/index';
 	export default {
 		data () {
 			return {
