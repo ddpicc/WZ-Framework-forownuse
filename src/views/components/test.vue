@@ -1,28 +1,40 @@
 <template>
 	<div class="animated fadeIn">
-		<div class="doc-header">
-			<Row>
-					<Col :md="24" :sm="24">
-							<DatePicker type="daterange" transfer="true" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
-					</Col>
-			</Row>
-		</div>
-		<div style="background:#eee;padding: 20px">
-        <Card :bordered="false">
-            <p slot="title">No border title</p>
-            <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
-        </Card>
-    </div>
-	</div>
+		<Row>
+			<Col :md="24" >
+				<div class="doc-header">
+						<p> Status </p>
+				</div>
+		
+				<div style="" class="doc-content">
+					<Row  :gutter="16">
+      			<Col :xs="24" :sm="24" :md="8" :lg="8">
+							<Table size="small" border :columns="columns7" :data="data6"></Table>
+						</Col>
+						<Col  :xs="24" :sm="24"   :md="16" :lg="16" >
+							<p> Status </p>
+							<Divider />
+							
+						</Col>
+					</Row>
+				</div>
+			</Col>
+		</Row>
+  </div>
 </template>
 <script>
     export default {
-        
+      data () {
+				return {
+					columns7: [],
+					data6: []
+				}
+			}
     }
 </script>
 
 <style scoped>
-  .ivu-picker-panel-content ivu-picker-panel-content-left {
+.ivu-picker-panel-content ivu-picker-panel-content-left {
   width: 100px; 
 }
 </style>

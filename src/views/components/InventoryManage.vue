@@ -18,7 +18,9 @@
         					<Col span="6">
 										<Button type="success" size="large" class="pannelInline">检查</Button>
         					</Col>
-								</Row>								
+								</Row>
+								<br>
+								<Table size="small" border :columns="columns7" :data="data6"></Table>								
 							</div>
         		</Panel>
 						<Panel name="2">
@@ -31,7 +33,9 @@
         					<Col span="6">
 										<Button type="success" size="large" class="pannelInline">检查</Button>
         					</Col>
-								</Row>				
+								</Row>
+								<br>
+								<Table size="small" border :columns="columns7" :data="data6"></Table>				
 							</div>
         		</Panel>
 						<Panel name="3">
@@ -44,14 +48,25 @@
         					<Col span="6">
 										<Button type="success" size="large" class="pannelInline">检查</Button>
         					</Col>
-								</Row>				
+								</Row>
+								<br>
+								<Table size="small" border :columns="columns7" :data="data6"></Table>					
 							</div>
         		</Panel>
         		<Panel name="4">
             	定时任务配置
 							<div slot='content'>
-            		<Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{ item + 1 }}</Tag>
-    						<Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
+            		<Tag type="dot" color="success" v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">{{ item }}</Tag>
+    						<AutoComplete
+									v-model="inputMed"
+									@on-search="handleSearch"
+									placeholder="input here"
+									@on-focus="focus($event)"
+									ref="mark1"
+									style="width:10%">
+									<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
+								</AutoComplete>
+								<Button icon="ios-add" @click="handleAdd"></Button>
 							</div>
         		</Panel>
     			</Collapse>
@@ -64,24 +79,35 @@
     export default {
       data () {
 				return {
-					count: [0, 1, 2],
+					count: [],
 					value1: '1',
-					value2: 0,
-					value3: 0,
-					value4: 0
+					value2: 2,
+					value3: 2,
+					value4: 2,
+					inputMed: '',
+					columns7: [],
+					data6: [],
+					list: []
 				}
       },
 			methods: {
-				handleAdd () {
-					if (this.count.length) {
-						this.count.push(this.count[this.count.length - 1] + 1);
-					} else {
-						this.count.push(0);
-					}
+				focus(event) {
+				//alert(event.currentTarget);
+        event.currentTarget.select();
 				},
+
+				handleAdd () {
+					if(this.count.indexOf(this.inputMed) === -1)
+						this.count.push(this.inputMed);
+				},
+
 				handleClose2 (event, name) {
 					const index = this.count.indexOf(name);
 					this.count.splice(index, 1);
+				},
+
+				handleSearch: function() {
+
 				}
 			}  
     }
