@@ -70,28 +70,29 @@
           </span>
         </a>
         <Dropdown-menu slot="list">
+          <!--
             <Dropdown-item>
-              <p class="dropdown-itemp"><Icon type="alert"></Icon>Updates<span class="badge badge-info">42</span></p>
-
-            
+              <p class="dropdown-itemp"><Icon type="alert"></Icon>Updates<span class="badge badge-info">42</span></p>            
             </Dropdown-item>
+
             <Dropdown-item>
-              <p class="dropdown-itemp"><Icon type="chatbox-working"></Icon>Messages<span class="badge badge-success">42</span></p>
-
+              <p class="dropdown-itemp" ><Icon type="chatbox-working"></Icon>Messages<span class="badge badge-success">42</span></p>
             </Dropdown-item>
-             <Dropdown-item>
+          -->
+
+            <Dropdown-item>
               <p class="dropdown-itemp">  <Icon type="chatbox-working"></Icon>Messages<span class="badge badge-danger">42</span></p>
+            </Dropdown-item>
 
-           </Dropdown-item>
-              <Dropdown-item divided>
+            <Dropdown-item divided>
               <p class="dropdown-itemp"><Icon type="android-contact"></Icon> Profile</p>
+            </Dropdown-item>
 
-              </Dropdown-item>
             <Dropdown-item >
               <p class="dropdown-itemp"><Icon type="android-settings"></Icon> Settings</p>
-              </Dropdown-item>
+            </Dropdown-item>
 
-                 <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
+            <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
 
         </Dropdown-menu>
     </Dropdown>

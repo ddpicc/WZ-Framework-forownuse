@@ -177,11 +177,11 @@
         event.currentTarget.select();
 			},
 
+			//display all the med 4 each line
 			disPlayToTb() {
 				this.createOrdData = [];
 				var emptyStr = "{";
 				var carry = 4;
-				//alert(JSON.stringify(this.orderMed1PerObj));
 				for(var i=0; i < this.orderMed1PerObj.length; i++){
 					let tempStrName = "medname" + (i%4+1);
 					let tempStrNumber = 'count' + (i%4+1);
@@ -189,22 +189,16 @@
 					if(i>0 && (i+1) % 4 == 0){
 						emptyStr = emptyStr.substr(0,emptyStr.length-1);
 						emptyStr = emptyStr + '}';
-						//alert(emptyStr);
 						let tempObj = JSON.parse(emptyStr);
-						//alert(tempObj);
 						this.createOrdData.push(tempObj);
 						emptyStr = "{";
 					}
 				}
-				//alert(i);
 				if( i%4 != 0){
-					//alert("ffffffff");
 					emptyStr = emptyStr.substr(0,emptyStr.length-1);
 					emptyStr = emptyStr + '}';
-					//alert(emptyStr);
 					let tempObj = JSON.parse(emptyStr);
 					this.createOrdData.push(tempObj);
-					//alert(tempObj);
 				}
 			},
 
