@@ -16,7 +16,8 @@
 <script>
 	var last30days = [];
 	var last30daysIncome = [];
-	var last30daysNum = [];
+  var last30daysNum = [];
+  import { dateToString, stringToDate} from 'utils/index';
 	export default {
     data() {   
       return {
@@ -25,23 +26,11 @@
     },
 
     methods: {
-      getYearMonthIndex(nowMonth, nowYear, count){
-        nowMonth = nowMonth - count;
-        if(nowMonth < 1)
-          nowYear = nowYear - 1;
-        nowMonth = (nowMonth + 12) % 12;
-        if(nowMonth == 0)
-          nowMonth = '12';
-        if (nowMonth >= 1 && nowMonth <= 9) {
-					nowMonth = "0" + nowMonth;
-        }
-        return nowYear + '/' + nowMonth;
-      },
 
       loadMonthChart: function() {
         return new Promise((resolve, reject) => {
-          var end = last30days[0];
-					var start = last30days[29];
+          var end = dateToString(new Date());
+					var start = dateToString(new Date(new Date().setDate(new Date().getDate()-29)));
           this.$http.get('/ordapi/getLast30Days', {
     				params: {
         			startDate: start,
@@ -49,6 +38,21 @@
     				}
 					}).then(response => {
             this.$nextTick( () => {
+              let index = 0;
+              let curDate = '';
+              for(let item of response.data){
+                if(item.date != curDate){
+                  index = parseInt((new Date() - stringToDate(item.date)) / (1000 * 60 * 60 * 24));
+                  alert(index);
+                  curDate = item.date;
+                  last30daysIncome[index] = item.total;
+                  last30daysNum[index] = 1;
+                }
+                else{
+                  last30daysIncome[index] = last30daysIncome[index] + item.total;
+                  last30daysNum[index] = last30daysNum[index] + 1;
+                }
+              }
             this.option = {
               title: {
                 text: '最近30天',
@@ -86,7 +90,7 @@
                 {
                   name:'收入',
                   type: 'line',
-                  data:[                  ],
+                  data:last30daysIncome,
                   markPoint : {
                     data : [
                       {type : 'max', name: '最大值'},
@@ -102,7 +106,7 @@
                 {
                   name:'人数',
                   type:'line',
-                  data:[                        ],
+                  data:last30daysNum,
                   markLine : {
                     data : [
                       {type : 'average', name : '平均值'}
@@ -121,7 +125,7 @@
     },
 
     mounted: function () {
-      alert(new Date(new Date().setDate(new Date().getDate()-3)).getDate());
+      //alert(new Date(new Date().setDate(new Date().getDate()-3)).getDate());
       for(var i = 0;i<30;i++)
 			{ 
 				last30days.push(new Date(new Date().setDate(new Date().getDate()-i)).toLocaleDateString());

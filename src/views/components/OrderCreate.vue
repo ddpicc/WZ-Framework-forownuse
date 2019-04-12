@@ -20,45 +20,52 @@
 			</Col>
 		</Row>
 		<Row>
-			<Col :md="24" >
-				<div class="tableSum">
-					<Tag type="border" color="primary">每付价钱</Tag>
-					<Tag type="border" color="primary">{{ordTotal}}元</Tag>
-				</div>
-			</Col>
-		</Row>
-		<Row>
-			<Col :md="24" >
-				<div class="tableSum">
-					<Input v-model="orderCount" size="small" @on-focus="focus($event)"/>
-					<Tag type="border" color="primary" style="width: 40%">合计：   </Tag>
-					<Input v-model="total" size="small" @on-focus="focus($event)"/>
-				</div>
-			</Col>
-		</Row>
-		<Row>
-      <Col :sm="24" :md="15">
+			<Col :xs="24" :sm="24" :md="12" :lg="12">
 				<div class="doc-indiv">
-					<Input v-model="patientName" class="doc-input1" placeholder="输入名字..." style="width: 95%"/>
-					<AutoComplete
-						v-model="inputMed"
-        		@on-search="handleSearch"
-						placeholder="input here"
-						@on-focus="focus($event)"
-						@keyup.enter.native="moveFocusToDose"
-						@on-select="handleSelect"
-						ref="mark1"
-						style="width:70%">
-						<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
-					</AutoComplete>
-					<Input v-model="inputDose" class="doc-input2" placeholder="Enter something..." @on-focus="focus($event)" ref="mark" @keyup.enter.native="postToTb" style="width: 20%"/>
-					<Button type="success" class="doc-input2" size="small" @click="postToTb">+</Button>
+					<Row>
+						<Col span="24">
+							<Input v-model="patientName" class="doc-input1" placeholder="输入名字..."/>
+						</Col>
+					</Row>
+					<Row>
+						<Col span="15">
+							<AutoComplete
+								v-model="inputMed"
+								@on-search="handleSearch"
+								placeholder="input here"
+								@on-focus="focus($event)"
+								@keyup.enter.native="moveFocusToDose"
+								@on-select="handleSelect"
+								ref="mark1">
+								<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
+							</AutoComplete>
+						</Col>
+						<Col span="7">
+							<Input v-model="inputDose" placeholder="Enter something..." @on-focus="focus($event)" ref="mark" @keyup.enter.native="postToTb"/>
+						</Col>
+						<Col span="2">
+							<Button type="success" size="small" @click="postToTb">+</Button>
+						</Col>
+					</Row>
 				</div>
 			</Col>
-      <Col :sm="24" :md="9">
-				<div class="doc-indiv">
+			<Col :xs="24" :sm="24" :md="12" :lg="12">
+				<Row>
+					<Col span="12" offset="12">
+						<Tag type="border" color="primary">每付价钱</Tag>
+						<Tag type="border" color="primary">{{ordTotal}}元</Tag>
+					</Col>
+				</Row>
+				<Row>
+				<Col span="24">
+					<Input v-model="orderCount" size="small" @on-focus="focus($event)" style="width: 30%" />
+					<Tag type="border" color="primary" style="width: 20%">合计：   </Tag>
+					<Input v-model="total" size="small" @on-focus="focus($event)" style="width: 40%"/>
+				</Col>
+				</Row>
+				<Col span="24">
 					<Table size="small" border :columns="infoDisplayCol" :data="infoDisplayData"></Table>
-				</div>
+				</Col>
 			</Col>
     </Row>
 		<Modal v-model="printmodal" ok-text="打印" cancel-text="取消" @on-ok="printOrder">

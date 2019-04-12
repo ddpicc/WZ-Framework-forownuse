@@ -56,6 +56,37 @@
    }
  }
 
+ //formate date return date string as yyyy/mm/dd
+ export function dateToString(date) {
+  var seperator1 = "/";
+  var year = date.getFullYear();  //年
+  var month = date.getMonth() + 1;   //月
+  var strDate = date.getDate();   //日
+  if (month >= 1 && month <= 9) {
+    month = "0" + month;
+  }
+  if (strDate >= 0 && strDate <= 9) {
+    strDate = "0" + strDate;
+  }
+  var currentdate = year + seperator1 + month + seperator1 + strDate;
+  return currentdate;
+ }
+
+ export function stringToDate(dateStr) {
+  var dateArr = dateStr.split('/');
+  var year = parseInt(dateArr[0]);
+  var month;
+  //处理月份为04这样的情况                         
+  if(dateArr[1].indexOf("0") == 0){
+      month = parseInt(dateArr[1].substring(1));
+  }else{
+       month = parseInt(dateArr[1]);
+  }
+  var day = parseInt(dateArr[2]);
+  var date = new Date(year,month -1,day);
+  return date; 
+ }
+
 // 格式化时间
  export function getQueryObject(url) {
    url = url == null ? window.location.href : url;

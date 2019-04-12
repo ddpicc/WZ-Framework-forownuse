@@ -87,7 +87,7 @@ router.get("/getCurrentMonth", (req, res) => {
       res.json(heros);
     })
     .catch(err => {
-      console.log(2);
+      console.log('error');
       res.json(err);
     });
   }
@@ -126,7 +126,6 @@ router.get("/getOrderStatement", (req, res) => {
             "editable": false})
     .sort({ update_at: -1 })
     .then(heros => {
-      console.log("asgsdh");
       res.json(heros);
       console.log(heros);
     })

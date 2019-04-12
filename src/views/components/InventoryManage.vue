@@ -20,7 +20,7 @@
         					</Col>
 								</Row>
 								<br>
-								<Table size="small" border :columns="columns7" :data="data6"></Table>								
+								<Table size="small" border :columns="columns1" :data="data1"></Table>								
 							</div>
         		</Panel>
 						<Panel name="2">
@@ -35,7 +35,7 @@
         					</Col>
 								</Row>
 								<br>
-								<Table size="small" border :columns="columns7" :data="data6"></Table>				
+								<Table size="small" border :columns="columns2" :data="data2"></Table>				
 							</div>
         		</Panel>
 						<Panel name="3">
@@ -50,7 +50,7 @@
         					</Col>
 								</Row>
 								<br>
-								<Table size="small" border :columns="columns7" :data="data6"></Table>					
+								<Table size="small" border :columns="columns3" :data="data3"></Table>					
 							</div>
         		</Panel>
         		<Panel name="4">
@@ -85,8 +85,94 @@
 					value3: 2,
 					value4: 2,
 					inputMed: '',
-					columns7: [],
-					data6: [],
+					columns1: [
+						{
+							title: '名称',
+							key: 'medname1',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count1',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname2',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count2',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname3',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count3',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname4',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count4',
+							align: 'center'
+						},
+					],
+					data1: [],
+					columns2: [
+						{
+							title: '名称',
+							key: 'medname1',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count1',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname2',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count2',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname3',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count3',
+							align: 'center'
+						},
+						{
+							title: '名称',
+							key: 'medname4',
+							align: 'center',
+						},
+						{
+							title: '数量',
+							key: 'count4',
+							align: 'center'
+						},
+					],
+					data2: [],
+					columns3: [],
+					data3: [],
 					list: []
 				}
       },
