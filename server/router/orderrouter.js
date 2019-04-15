@@ -60,6 +60,17 @@ router.get("/getGlobalStatus", (req, res) => {
   }
 );
 
+router.delete("/delGlobalMsg", (req, res) => {
+  let msgIndex = req.query.msgIndex;
+  Status.findOne({name: "GlobalStatus"}, function(err, doc){
+    let msgArray = doc.warning;
+    msgArray.splice(msgIndex,1);
+    doc.warning = msgArray;
+    doc.save();
+    res.json(doc);
+  });
+});
+
 //查找当月的订单
 router.get("/getCurrentMonth", (req, res) => {
   let nowdate = new Date();
@@ -218,6 +229,8 @@ router.put("/updateOrdMed", (req, res) => {
     });
   });
 
+
+//update value in global status
 router.put("/updateGlobalStatus", (req, res) => {
   var objYearlyIncome = req.body.yearlyIncome;
   var objMonthlyIncome = req.body.monthlyIncome;
@@ -234,10 +247,9 @@ router.put("/updateGlobalStatus", (req, res) => {
     doc.markModified('monthlyIncome');
     doc.markModified('monthlyProfit');
     doc.save();
-
   });
-
 }),
+
 
     
 

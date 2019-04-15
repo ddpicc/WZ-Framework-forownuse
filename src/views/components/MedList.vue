@@ -83,6 +83,13 @@
         </FormItem>
     	</Form>
 		</Modal>
+
+    <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
+        cancel-text="取消">
+      <div style="text-align:center">
+        <Input v-model="searchMedString" placeholder="药品名称"></Input>
+      </div>
+    </Modal>
 	</div>
 </template>
 
@@ -93,6 +100,7 @@
 				medtype: '免煎药',
 				formModifyVisible: false,
         formAddVisible: false,
+        searchVisible: false,
         searchNotClick: true,
         modifyId: "",
         searchMedString: "",
@@ -262,6 +270,7 @@
 
 			searchMed: function(){
         this.searchNotClick = false;
+        this.searchVisible = true;
         
         
 			},

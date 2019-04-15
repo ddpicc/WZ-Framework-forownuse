@@ -2,7 +2,8 @@ const express = require('express');
 const med = require('./router/medrouter')
 const ord = require('./router/orderrouter')
 const mongoose = require("mongoose");
-//const Med = require("./models/medSchema");
+const Med = require("./models/medSchema");
+const overallStatus = require("./models/overallStatus");
 
 const bodyParser = require("body-parser")
 var schedule = require("node-schedule");
@@ -10,11 +11,11 @@ var schedule = require("node-schedule");
 
 
 //这一句是连接上数据库
-//var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
-//var db = mongoose.connect(url, {useNewUrlParser: true});
-
-var url = 'mongodb://localhost:27017/myDbs';
+var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
 var db = mongoose.connect(url, {useNewUrlParser: true});
+
+//var url = 'mongodb://localhost:27017/myDbs';
+//var db = mongoose.connect(url, {useNewUrlParser: true});
 
 //这里的myDbs是数据库的名字，不是表的名字
 
@@ -33,8 +34,15 @@ schedule.scheduleJob(rule, function(){
 	Med.find({"medname": "艾叶"})
 	.then(heros => {
 		console.log(heros)
-	})
-}); */
+    })
+	overallStatus.findOne({name: "GlobalStatus"}, function(err, doc){
+	let msgArray = doc.warning;
+	msgArray.unshift("fuck");
+	doc.warning = msgArray;
+	doc.save();
+	});
+	
+});  */
 
 
 app.all("*",(req,res,next) => {

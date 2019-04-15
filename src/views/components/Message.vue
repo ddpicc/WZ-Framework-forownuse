@@ -2,26 +2,19 @@
 	<div class="animated fadeIn">
 		<Row>
 			<Col :md="24" >
-				<Card>
-          <h3>A high quality UI Toolkit based on Vue.js</h3>
-        </Card>
-				<Card>
-            <h3>A high quality UI Toolkit based on Vue.js</h3>
-        </Card>
-				<Card>
-            <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
+				<Card v-for="(item, index) in messages" :key="index">
+					<Row>
+						<Col span='20'>
+          		<h6>{{index+1}} {{item}}</h6>
+						</Col>
+						<Col span='4'>
+							<div>
+								<Button type="success" class="pannelInline" @click="delectMsg(index)">删除</Button>
+							</div>
+						</Col>
+					</Row>
         </Card>
 			</Col>
-		</Row>
-		<Row>
-			<div class="outerDiv">
-				<Col span="20">
-					<div class="outerDiv">div四边设置虚线边框</div>
-				</Col>
-				<Col span="4">
-					<div class="outerDiv">div四边设置虚线边框</div>
-				</Col>
-			</div>
 		</Row>
   </div>
 </template>
@@ -29,13 +22,50 @@
     export default {
       data () {
 				return {
+					messages: []
 				}
+			},
+			methods: {
+				// 获取全部数据
+				getAll: function() {
+					return new Promise((resolve, reject) => {
+						this.$http.get("/ordapi/getGlobalStatus").then(response => {
+							this.messages = response.data.warning;
+							resolve();
+						}).catch(error => {
+							reject(error);
+						});
+					});
+				},
+
+				delectMsg: function(index) {
+					return new Promise((resolve, reject) => {
+						this.$http.delete("/ordapi/delGlobalMsg",{
+							params: {
+								msgIndex : index
+							}
+						}).then(
+							response => {
+								this.$Message.success('删除成功!');
+								this.messages = response.data.warning;
+								resolve();
+							}
+						).catch(error => {
+							this.$Message.error('删除失败');
+							reject(error);
+						});
+					});
+				}
+			},
+
+			mounted: function() {
+				this.getAll();
 			}
     }
 </script>
 
 <style scoped>
-	.outerDiv{
-		border:3px solid #000
+	.pannelInline{
+		float: right;
 	}
 </style>

@@ -6,6 +6,7 @@ const statusSchema = new Schema({
   yearlyOutcome: Schema.Types.Mixed,
   monthlyIncome: Schema.Types.Mixed,
   monthlyProfit : Schema.Types.Mixed,
+  warning: [String]
 }, { collection: 'myStatus'})    //这里mongoose.Schema要写上第二个参数，明确指定到数据库中的哪个表取数据
 
 

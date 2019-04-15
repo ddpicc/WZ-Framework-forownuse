@@ -19,6 +19,23 @@ router.get("/allmed", (req, res) => {
     });
 });
 
+//查看免煎药库存，返回库存小于count的数据
+router.get("/checkMianjian", (req, res) => {
+  let count = req.query.count;
+  Med.find({"count":{$lte: count},
+            "medtype": "免煎药"})
+    .sort({ update_at: -1 })
+    .then(heros => {
+      res.json(heros);
+      console.log(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
 // 通过ObjectId查询单个英雄信息路由
 router.get("/hero/:id", (req, res) => {
   Med.findById(req.params.id)
