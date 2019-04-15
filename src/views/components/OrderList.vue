@@ -202,7 +202,7 @@
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];
           let yearAndMonIndex = tempDate.substr(0,7);
-          alert(JSON.stringify(globalStatus.yearlyIncome));
+          //alert(JSON.stringify(globalStatus.yearlyIncome));
           if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
             globalStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
           } else{
@@ -222,7 +222,7 @@
             globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
           }
         }
-        alert(JSON.stringify(globalStatus.yearlyIncome));
+        //alert(JSON.stringify(globalStatus.yearlyIncome));
         let temp = {
           "yearlyIncome": globalStatus.yearlyIncome,
           "monthlyIncome": globalStatus.monthlyIncome,
@@ -300,7 +300,6 @@
             if(typeof(globalStatus.monthlyProfit) == 'undefined'){
               globalStatus.monthlyProfit = {};
             }
-            alert(JSON.stringify(globalStatus));
 						resolve();
 					}).catch(error => {
 						reject(error);

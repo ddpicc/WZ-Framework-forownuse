@@ -34,7 +34,5 @@
 </script>
 
 <style scoped>
-.ivu-picker-panel-content ivu-picker-panel-content-left {
-  width: 100px; 
-}
+
 </style>

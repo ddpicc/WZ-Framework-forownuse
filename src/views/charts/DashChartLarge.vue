@@ -43,7 +43,6 @@
               for(let item of response.data){
                 if(item.date != curDate){
                   index = parseInt((new Date() - stringToDate(item.date)) / (1000 * 60 * 60 * 24));
-                  alert(index);
                   curDate = item.date;
                   last30daysIncome[index] = item.total;
                   last30daysNum[index] = 1;

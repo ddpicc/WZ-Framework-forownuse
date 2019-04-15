@@ -81,7 +81,7 @@
           -->
 
             <Dropdown-item>
-              <p class="dropdown-itemp">  <Icon type="chatbox-working"></Icon>Messages<span class="badge badge-danger">42</span></p>
+              <p class="dropdown-itemp" @click="clickMessage"><Icon type="chatbox-working" ></Icon> Messages<span class="badge badge-danger" >42</span></p>
             </Dropdown-item>
 
             <Dropdown-item divided>
@@ -92,7 +92,7 @@
               <p class="dropdown-itemp"><Icon type="android-settings"></Icon> Settings</p>
             </Dropdown-item>
 
-            <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
+            <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon> Logout</p></a></Dropdown-item>
 
         </Dropdown-menu>
     </Dropdown>
@@ -102,18 +102,29 @@
         <a class="nav-link navbar-toggler aside-menu-toggler"  @click="asideToggle">&#9776;</a>
       </li>
     </ul>
+    <Modal v-model="modal12" title="警告信息">
+        <message></message>
+        <div slot="footer">
+          <Button type="primary" size="large" long @click="modal12=false">关闭</Button>
+        </div>
+    </Modal>
   </navbar>
 </template>
 <script>
 
 import navbar from './Navbar'
+import message from 'src/views/components/Message.vue'
 
 export default {
   name: 'topHeader',
   components: {
-    navbar,
-    
+    navbar,message
   },
+  data () {
+		return {
+      modal12: false
+		}
+	},
   methods: {
     Logout(e){
          e.preventDefault();
@@ -123,8 +134,8 @@ export default {
                 this.$message.error(err);
               });
     },
-    click () {
-      // do nothing
+    clickMessage () {
+      this.modal12 = true;
     },
     sidebarToggle (e) {
       e.preventDefault()
