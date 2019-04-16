@@ -180,7 +180,7 @@
       //need to divide them
       updateOrdMedandStatus: async function() {
         for(let item of this.cacheSelectedRow){
-          /* let temp = {
+          let temp = {
             medary: item.med,
             dose: item.dose
           }
@@ -197,7 +197,7 @@
             this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
             resolve();
           });
-          let result2 = await promise2; */
+          let result2 = await promise2;
 
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];

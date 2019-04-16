@@ -57,7 +57,7 @@
             	定时任务配置
 							<div slot='content'>
 								<Tabs v-model="tabsValue">
-        					<TabPane label="标签一" name="name1">
+        					<TabPane label="免煎药" name="name1">
 										<Tag type="dot" color="success" v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">{{ item }}</Tag>
 										<AutoComplete
 											v-model="inputMed"
@@ -70,8 +70,8 @@
 										</AutoComplete>
 										<Button icon="ios-add" @click="handleAdd"></Button>
 									</TabPane>
-									<TabPane label="标签二" name="name2">标签二的内容</TabPane>
-									<TabPane label="标签三" name="name3">标签三的内容</TabPane>
+									<TabPane label="草药" name="name2">标签二的内容</TabPane>
+									<TabPane label="其他" name="name3">标签三的内容</TabPane>
 								</Tabs>
 							</div>
         		</Panel>

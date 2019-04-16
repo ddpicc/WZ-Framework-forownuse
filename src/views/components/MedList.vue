@@ -15,7 +15,7 @@
 				</div>
 
 				<div style="" class="doc-content">
-					<Table size="small" border :columns="columns7" :data="data6"></Table>
+					<Table :loading="loading" size="small" border :columns="columns7" :data="data6"></Table>
 				</div>
 			</Col>
 		</Row>
@@ -85,7 +85,7 @@
 		</Modal>
 
     <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
-        cancel-text="取消">
+        cancel-text="取消" @on-ok="searchHandler">
       <div style="text-align:center">
         <Input v-model="searchMedString" placeholder="药品名称"></Input>
       </div>
@@ -94,6 +94,7 @@
 </template>
 
 <script>
+  var cacheAllMed = [];
 	export default {
 		data () {
 			return {
@@ -104,6 +105,7 @@
         searchNotClick: true,
         modifyId: "",
         searchMedString: "",
+        loading: false,
 				columns7: [
 					{
 						title: '药品名称',
@@ -278,7 +280,16 @@
 			searchCancal: function(){
         this.searchNotClick = true;
         this.searchMedString = "";
-			},
+        this.data6 = cacheAllMed;
+      },
+      
+      searchHandler: function(){
+        let searchStr = this.searchMedString;
+        this.data6 = cacheAllMed.filter( function (item) {
+  				return item.medname.indexOf(searchStr) === 0;
+					}
+				);
+      },
 
       toAdd () {
         this.formAddVisible = true;
@@ -311,9 +322,12 @@
 
 			// 获取全部数据
     	getAll: function() {
+        this.loading = true;
 				return new Promise((resolve, reject) => {
 					this.$http.get("/medapi/allmed").then(response => {
-						this.data6 = response.data;
+            this.data6 = response.data;
+            cacheAllMed = response.data;
+            this.loading = false;
 						resolve();
 					}).catch(error => {
 						reject(error);
