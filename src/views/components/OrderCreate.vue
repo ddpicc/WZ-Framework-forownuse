@@ -66,7 +66,7 @@
 				<Row>
 					<Col span="24">
 						<Input v-model="total" class="rightInput" @on-focus="focus($event)" style="width: 15%"/>
-						<Tag type="border" color="primary" class="rightInput" style="width: 20%">合计：</Tag>
+						 <Input v-model="value9" class="rightInput" style="width: 15%" :readonly="true" placeholder="合计:" />
 						<Input v-model="orderCount" class="rightInput" @on-focus="focus($event)" placeholder="几付" style="width: 15%"/>
 					</Col>
 				</Row>
@@ -117,6 +117,7 @@
 				orderCount: '',
 				total: '',			
 				list: [],
+				value9: '',
 				cacheMedData: [],
 				orderMed1PerObj: [],
 				createOrdCol: [

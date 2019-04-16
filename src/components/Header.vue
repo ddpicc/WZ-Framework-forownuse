@@ -56,10 +56,11 @@
 
 
     <ul class="nav navbar-nav ml-auto">
-      
+      <!--
       <li class="nav-item d-md-down-none">
         <a class="nav-link" ><Icon type="android-notifications" size="20"></Icon><span class="badge badge-pill badge-danger">5</span></a>
       </li>
+      -->
 
 
       <Dropdown class="nav-item">
