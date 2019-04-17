@@ -49,6 +49,9 @@
 				<FormItem label="零售价" prop="sellprice">
             <Input v-model="formModify.sellprice" placeholder="Enter your e-mail"></Input>
         </FormItem>
+        <FormItem label="计划监测" prop="checked">
+            <Checkbox v-model="formModify.checked">是</Checkbox>
+        </FormItem>
     	</Form>
 		</Modal>
 
@@ -113,11 +116,6 @@
 						align: 'center',
             render: (h, params) => {
               return h('div', [
-                h('Icon', {
-                  props: {
-                    type: 'person'
-                  }
-                }),
                 h('strong', params.row.medname)
               ]);
             }
@@ -152,16 +150,21 @@
             key: 'sellprice',
             align: 'center'
           },
+          {
+            title: '监测',
+            key: 'checked',
+            align: 'center'
+          },
 					{
             title: '操作',
             key: 'action',
             align: 'center',
             render: (h, params) => {
               return h('div', [
-                h('Button', {
+                h('Icon', {
                   props: {
-                    type: 'primary',
-                    size: 'small'
+                    type: 'ios-create',
+                    size: 20,
                   },
                   style: {
                     marginRight: '5px'
@@ -172,10 +175,10 @@
                     }
                   }
                 }, '修改'),
-                h('Button', {
+                h('Icon', {
                   props: {
-                    type: 'error',
-                    size: 'small'
+                    type: 'ios-close',
+                    size: 20,
                   },
                   on: {
                     click: () => {
@@ -196,7 +199,8 @@
           bagperbox: "",
           count: "",
           baseprice: "",
-          sellprice: ""
+          sellprice: "",
+          checked: false
         },
         ruleModify: {
             name: [

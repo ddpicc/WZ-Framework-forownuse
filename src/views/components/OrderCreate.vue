@@ -27,13 +27,13 @@
 						<Input v-model="patientName" border placeholder="输入姓名..."/>
 					</Col>
 					<Col span="3">
-						<Input v-model="patientName" placeholder="年龄..."/>
+						<Input v-model="patientAge" placeholder="年龄..."/>
 					</Col>
 					<Col span="4">
-						<Input v-model="patientName" placeholder="性别..."/>
+						<Input v-model="patientSex" placeholder="性别..."/>
 					</Col>
 					<Col span="9">
-						<Input v-model="patientName" placeholder="症状..."/>
+						<Input v-model="patientComment" placeholder="症状..."/>
 					</Col>
 				</Row>
 				<Row :gutter="8">
@@ -110,6 +110,9 @@
 				medtype: '免煎药',
 				deleteNotClick: true,
 				patientName: '',
+				patientAge: '',
+				patientSex: '',
+				patientComment: '',
 				inputMed: '',
 				inputDose: '',
 				ordTotal: 0,
@@ -322,8 +325,16 @@
 					return;
 				}
 
+				if(this.patientName == ''){
+					alert('姓名不能为空');
+					return;
+				}
+
 				var addOrd = [{
 					patient: this.patientName,
+					age: this.patientAge,
+					sex: this.patientSex,
+					comment: this.patientComment,
 					orderalias: 'new',
 					type: '收入',
 					date: mydate,
@@ -338,6 +349,9 @@
           this.$http.post("/ordapi/order", addOrd).then(response => {
 						this.$Message.success('添加成功!');
 						this.patientName = '';
+						this.patientAge = '';
+						this.patientSex = '';
+						this.patientComment = '';
 						this.inputMed = '';
 						this.inputDose = 1;
 						this.ordTotal = 0;

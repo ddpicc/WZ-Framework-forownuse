@@ -3,6 +3,9 @@ var Schema = mongoose.Schema;
 
 const ordSchema = new Schema({
     patient :String,
+    age: String,
+    sex: String,
+    comment: String,
     orderalias: String,
     type : String,
     date: String,

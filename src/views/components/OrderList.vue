@@ -9,20 +9,27 @@
 						<Radio label="显示全部"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
-						<Button type="success" size="small" v-if="outerNotClick" @click="toLoading">添加</Button>
-						<Button type="success" size="small" v-if="outerNotClick" @click="modal1 = true">搜索</Button>
-						<Button type="success" size="small" v-if="outerNotClick" @click="outerDb">出库</Button>
-						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick" @click="outerDbSure">出库</Button>
-						<Button type="success" size="small" v-if="!outerNotClick" @click="outerDbCancal">取消</Button>
+						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="toLoading">添加</Button>
+						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="searchPatient">搜索</Button>
+						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="outerDb">出库</Button>
+						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick && !searchNotClick" @click="outerDbSure">出库</Button>
+						<Button type="success" size="small" v-if="!outerNotClick || !searchNotClick" @click="outerDbCancal">取消</Button>
 					</div>
 				</div>
 
 				<div style="" class="doc-content">
-					<Table size="small" border ref="selectionTB" :columns="orderCol" :data="orderData" @on-selection-change="handleSelectChange"></Table>
+					<Table :loading="loading" size="small" border ref="selectionTB" :columns="orderCol" :data="orderData" @on-selection-change="handleSelectChange"></Table>
           <Page :total="orderCount" :page-size="pageSize" show-total class="paging" @on-change="changepage"></Page>
 				</div>
 			</Col>
 		</Row>
+
+    <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
+        cancel-text="取消" @on-ok="searchHandler">
+      <div style="text-align:center">
+        <Input v-model="searchPatientName" placeholder="病人名称"></Input>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -37,7 +44,10 @@
 				transactiontype: '处方',
         outerNotClick: true,
         isDisabled: true,
-        modal1: false,
+        searchNotClick: true,
+        searchVisible: false,
+        searchPatientName: '',
+        loading: false,
         //page
         pageSize: 5,
         orderCount: 0,
@@ -179,6 +189,7 @@
 
       //need to divide them
       updateOrdMedandStatus: async function() {
+        this.loading = true;
         for(let item of this.cacheSelectedRow){
           let temp = {
             medary: item.med,
@@ -238,6 +249,7 @@
             this.cacheAllOrder = response.data;
             let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
             this.orderData = editableOrder;
+            this.loading = false;
 						resolve();
 					}).catch(error => {
 						reject(error);
@@ -252,21 +264,40 @@
 			},
 
 			outerDbCancal: function(){
-				let objCol = {
-					type: 'index',
-					width: 40,
-          align: 'center'
-				};
-				this.orderCol.splice(1,1,objCol);
-        this.outerNotClick = true;
-        //clear selection
-        this.$refs.selectionTB.selectAll(false);
-        this.orderData = this.cacheAllOrder;
+        if(!this.outerNotClick){
+          let objCol = {
+            type: 'index',
+            width: 40,
+            align: 'center'
+          };
+          this.orderCol.splice(1,1,objCol);
+          this.outerNotClick = true;
+          //clear selection
+          this.$refs.selectionTB.selectAll(false);
+        } else{
+          this.searchNotClick = true;
+          this.searchPatientName = '';
+        }
+        this.orderCount = this.cacheAllOrder.length;
         if(this.orderCount < this.pageSize){
           this.orderData = this.cacheAllOrder;
         }else{
           this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
         }
+      },
+
+      searchPatient: function(){
+        this.searchNotClick = false;
+        this.searchVisible = true;
+
+      },
+
+      searchHandler: function(){
+        let searchStr = this.searchPatientName;
+        this.orderData = this.cacheAllOrder.filter( function (item) {
+  				return item.patient.indexOf(searchStr) === 0;
+					}
+        );
       },
     
     // 获取全部数据

@@ -54,7 +54,7 @@
 							</div>
         		</Panel>
         		<Panel name="4">
-            	定时任务配置
+            	定时任务监测列表
 							<div slot='content'>
 								<Tabs v-model="tabsValue">
         					<TabPane label="免煎药" name="name1">
@@ -65,7 +65,7 @@
 											placeholder="input here"
 											@on-focus="focus($event)"
 											ref="mark1"
-											style="width:10%">
+											style="width:15%">
 											<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
 										</AutoComplete>
 										<Button icon="ios-add" @click="handleAdd"></Button>
