@@ -84,6 +84,9 @@
 				<FormItem label="零售价" prop="sellprice">
             <Input v-model="formAdd.sellprice"></Input>
         </FormItem>
+        <FormItem label="计划监测" prop="checked">
+            <Checkbox v-model="formAdd.checked">是</Checkbox>
+        </FormItem>
     	</Form>
 		</Modal>
 
@@ -200,7 +203,7 @@
           count: "",
           baseprice: "",
           sellprice: "",
-          checked: false
+          checked: ""
         },
         ruleModify: {
             name: [
@@ -219,7 +222,8 @@
           bagperbox: "",
           count: "",
           baseprice: "",
-          sellprice: ""
+          sellprice: "",
+          checked: false
         },
         ruleAdd: {}
 			}
@@ -322,6 +326,7 @@
         this.formAdd.count = "";
         this.formAdd.baseprice = "";
         this.formAdd.sellprice = "";
+        this.formAdd.checked = false;
       },
 
 			// 获取全部数据

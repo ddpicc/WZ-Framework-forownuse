@@ -3,7 +3,7 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<p> Status </p>
+					<p> 状态 --------    定时任务每天晚上0点运行 </p>
 				</div>
 
 				<div style="" class="doc-content">
@@ -28,14 +28,14 @@
 							<div slot='content'>
             		<Row>
         					<Col span="18">
-										<Slider v-model="value3" :min=0 :max=8></Slider>
+										<Slider v-model="caoyaoV" :min=0 :max=8></Slider>
         					</Col>
         					<Col span="6">
-										<Button type="success" size="large" class="pannelInline">检查</Button>
+										<Button type="success" size="large" class="pannelInline"  @click="checkCaoyao">检查</Button>
         					</Col>
 								</Row>
 								<br>
-								<Table size="small" border :columns="columns2" :data="data2"></Table>				
+								<Table size="small" border :columns="colCaoyao" :data="dataCaoyao"></Table>				
 							</div>
         		</Panel>
 						<Panel name="3">
@@ -89,7 +89,7 @@
 					count: [],
 					value1: '1',
 					mianjianV: 2,
-					value3: 2,
+					caoyaoV: 2,
 					value4: 2,
 					tabsValue: "name2",
 					inputMed: '',
@@ -136,7 +136,7 @@
 						},
 					],
 					dataMianjian: [],
-					columns2: [
+					colCaoyao: [
 						{
 							title: '名称',
 							key: 'medname1',
@@ -178,7 +178,7 @@
 							align: 'center'
 						},
 					],
-					data2: [],
+					dataCaoyao: [],
 					columns3: [],
 					data3: [],
 					list: []
@@ -237,7 +237,42 @@
 							reject(error);
 						});
 					})
-				}
+				},
+
+				checkCaoyao: function() {
+					return new Promise((resolve, reject) => {
+						this.$http.get('/medapi/checkCaoyao', {
+							params: {
+								count : this.caoyaoV
+							}
+						}).then(response => {
+							cacheList = response.data;
+							this.dataCaoyao = [];
+							var emptyStr = "{";
+							var carry = 4;
+							for(var i=0; i < cacheList.length; i++){
+								let tempStrName = "medname" + (i%4+1);
+								let tempStrNumber = 'count' + (i%4+1);
+								emptyStr = emptyStr + '"' + tempStrName + '":"' + cacheList[i].medname + '","'  + tempStrNumber + '":"' + cacheList[i].count + '",';
+								if(i>0 && (i+1) % 4 == 0){
+									emptyStr = emptyStr.substr(0,emptyStr.length-1);
+									emptyStr = emptyStr + '}';
+									let tempObj = JSON.parse(emptyStr);
+									this.dataCaoyao.push(tempObj);
+									emptyStr = "{";
+								}
+							}
+							if( i%4 != 0){
+								emptyStr = emptyStr.substr(0,emptyStr.length-1);
+								emptyStr = emptyStr + '}';
+								let tempObj = JSON.parse(emptyStr);
+								this.dataCaoyao.push(tempObj);
+							}
+						}).catch(error => {
+							reject(error);
+						});
+					})
+				},
 			}
 		}
 </script>

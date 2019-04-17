@@ -36,6 +36,23 @@ router.get("/checkMianjian", (req, res) => {
   }
 );
 
+//查看草药库存，返回库存小于count的数据
+router.get("/checkMianjian", (req, res) => {
+  let count = req.query.count;
+  Med.find({"count":{$lte: count},
+            "medtype": "草药"})
+    .sort({ update_at: -1 })
+    .then(heros => {
+      res.json(heros);
+      console.log(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
 // 通过ObjectId查询单个英雄信息路由
 router.get("/hero/:id", (req, res) => {
   Med.findById(req.params.id)
@@ -72,7 +89,8 @@ router.put("/hero/:id", (req, res) => {
         bagperbox: req.body.bagperbox,
         count: req.body.count,
         baseprice: req.body.baseprice,
-        sellprice: req.body.sellprice
+        sellprice: req.body.sellprice,
+        checked: req.body.checked
       }
     },
     {

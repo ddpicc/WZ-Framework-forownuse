@@ -6,13 +6,13 @@
 					<RadioGroup v-model="transactiontype" size="small">
 						<Radio label="处方"></Radio>
 						<Radio label="支出"></Radio>
-						<Radio label="显示全部"></Radio>
+						<Radio label="全部"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="toLoading">添加</Button>
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="searchPatient">搜索</Button>
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="outerDb">出库</Button>
-						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick && !searchNotClick" @click="outerDbSure">出库</Button>
+						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick" @click="outerDbSure">出库</Button>
 						<Button type="success" size="small" v-if="!outerNotClick || !searchNotClick" @click="outerDbCancal">取消</Button>
 					</div>
 				</div>

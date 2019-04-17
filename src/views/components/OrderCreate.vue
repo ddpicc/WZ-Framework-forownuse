@@ -77,23 +77,33 @@
     </Row>
 		<Modal v-model="printmodal" ok-text="打印" cancel-text="取消" @on-ok="printOrder">
 			<div ref="print">
-				<Row>
-					<Col>
-						<h6> {{patientName}}  </h6>
+				<Row :gutter="16">
+					<Col span="4">
+						<p>姓名：{{patientName}}</p>
 					</Col>
-				</Row>			
+					<Col span="4">
+						<p>性别： {{patientSex}}</p>
+					</Col>
+					<Col span="4">
+						<p>年龄： {{patientAge}}</p>
+					</Col>
+					<Col span="12">
+						<p>症状：{{patientComment}}</p>
+					</Col>
+				</Row>
+				<br>		
 				<Row :gutter="16" v-for="item in createOrdData" :key="item.id">
-					<Col span="6">
-							<div>{{item.medname1}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count1}}</div>
+					<Col span="4">
+							<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
 					</Col>
-					<Col span="6">
-							<div>{{item.medname2}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count2}}</div>
+					<Col span="4">
+							<div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
 					</Col>
-					<Col span="6">
-							<div>{{item.medname3}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count3}}</div>
+					<Col span="4">
+							<div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
 					</Col>
-					<Col span="6">
-							<div>{{item.medname4}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count4}}</div>
+					<Col span="12">
+							<div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
 					</Col>
 				</Row>
   		</div>

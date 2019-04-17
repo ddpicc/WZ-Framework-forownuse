@@ -5,23 +5,32 @@
 </style>
 <template>
   <div>
-    <Row>
-    	<Col span="24">
-          <h6>{{ row.patient }}</h6>
+    <Row :gutter="16">
+    	<Col span="4">
+        <p>姓名：{{row.patient}}</p>
 			</Col>
+      <Col span="4">
+        <p>性别： {{row.sex}}</p>
+      </Col>
+      <Col span="4">
+        <p>年龄： {{row.age}}</p>
+      </Col>
+      <Col span="12">
+        <p>症状：{{row.comment}}</p>
+      </Col>
     </Row>
 		<Row :gutter="16" v-for="item in row.med" :key="item.id">
-        <Col span="6">
-            <div>{{item.medname1}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count1}}</div>
+        <Col span="4">
+            <div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
         </Col>
-        <Col span="6">
-            <div>{{item.medname2}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count2}}</div>
+        <Col span="4">
+            <div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
         </Col>
-        <Col span="6">
-            <div>{{item.medname3}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count3}}</div>
+        <Col span="4">
+            <div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
         </Col>
-        <Col span="6">
-            <div>{{item.medname4}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.count4}}</div>
+        <Col span="12">
+            <div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
         </Col>
     </Row>
   </div>
