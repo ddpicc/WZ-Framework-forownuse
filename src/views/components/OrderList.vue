@@ -30,6 +30,13 @@
         <Input v-model="searchPatientName" placeholder="病人名称"></Input>
       </div>
     </Modal>
+
+    <Modal v-model="addAdhoc" :closable="false" ok-text="添加"
+        cancel-text="取消" @on-ok="addHandler">
+      <div style="text-align:center">
+        
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -46,6 +53,7 @@
         isDisabled: true,
         searchNotClick: true,
         searchVisible: false,
+        addAdhoc: false,
         searchPatientName: '',
         loading: false,
         //page
@@ -169,7 +177,11 @@
 
 			toLoading () {
         alert("添加");
-			},
+      },
+      
+      addHandler: function(){
+
+      },
 
       //display select column and enable selection
 			outerDb: function(){
@@ -217,19 +229,19 @@
           if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
             globalStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
           } else{
-            let temp = parseInt(globalStatus.yearlyIncome[yearIndex]) + item.total;
+            let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + item.total;
             globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
           }
           if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
             globalStatus.monthlyIncome[yearAndMonIndex] = (item.total).toFixed(2);
           } else{
-            let temp = parseInt(globalStatus.monthlyIncome[yearAndMonIndex]) + item.total;
+            let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + item.total;
             globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
           }
           if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
             globalStatus.monthlyProfit[yearAndMonIndex] = (item.totalprofit).toFixed(2);
           } else{
-            let temp = parseInt(globalStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
+            let temp = parseFloat(globalStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
             globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
           }
         }

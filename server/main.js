@@ -11,11 +11,11 @@ var schedule = require("node-schedule");
 
 
 //这一句是连接上数据库
-//var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
-//var db = mongoose.connect(url, {useNewUrlParser: true});
-
-var url = 'mongodb://localhost:27017/myDbs';
+var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
 var db = mongoose.connect(url, {useNewUrlParser: true});
+
+//var url = 'mongodb://localhost:27017/myDbs';
+//var db = mongoose.connect(url, {useNewUrlParser: true});
 
 //这里的myDbs是数据库的名字，不是表的名字
 
@@ -33,7 +33,9 @@ rule.hour = 0;
 rule.minute = 0;
 rule.second = 0;
 schedule.scheduleJob(rule, function(){
-	Med.find({"medname": "艾叶"})
+	Med.find({"count":{$lte: 1},
+	"checked": true,
+	"medtype": "草药"})
 	.then(heros => {
 		console.log(heros)
     })

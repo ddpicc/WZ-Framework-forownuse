@@ -8,7 +8,8 @@ const Med = require("../models/medSchema");
 
 // 查询所有英雄信息路由
 router.get("/allmed", (req, res) => {
-  Med.find({})
+  let type = req.query.type;
+  Med.find({"medtype": type})
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);

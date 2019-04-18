@@ -19,17 +19,18 @@
         <p>症状：{{row.comment}}</p>
       </Col>
     </Row>
+    <br>
 		<Row :gutter="16" v-for="item in row.med" :key="item.id">
-        <Col span="4">
+        <Col span="6">
             <div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
         </Col>
-        <Col span="4">
+        <Col span="6">
             <div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
         </Col>
-        <Col span="4">
+        <Col span="6">
             <div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
         </Col>
-        <Col span="12">
+        <Col span="6">
             <div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
         </Col>
     </Row>

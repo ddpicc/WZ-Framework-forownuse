@@ -3,7 +3,7 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<RadioGroup v-model="medtype" size="small">
+					<RadioGroup v-model="medtype" size="small" @on-change="radioChange">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
 					</RadioGroup>
@@ -64,10 +64,10 @@
 					</Col>
 				</Row>
 				<Row>
-					<Col span="24">
-						<Input v-model="total" class="rightInput" @on-focus="focus($event)" style="width: 15%"/>
-						 <Input v-model="value9" class="rightInput" style="width: 15%" :readonly="true" placeholder="合计:" />
-						<Input v-model="orderCount" class="rightInput" @on-focus="focus($event)" placeholder="几付" style="width: 15%"/>
+					<Col span="24" style="text-align:right">
+						<Input v-model="orderCount"  @on-focus="focus($event)" placeholder="几付" style="width: 15%"/>
+						<Input v-model="value9"  style="width: 15%" :readonly="true" placeholder="合计:" />
+						<Input v-model="total"  @on-focus="focus($event)" style="width: 15%"/>
 					</Col>
 				</Row>
 				<Col span="22" offset="2">
@@ -93,16 +93,16 @@
 				</Row>
 				<br>		
 				<Row :gutter="16" v-for="item in createOrdData" :key="item.id">
-					<Col span="4">
+					<Col span="6">
 							<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
 					</Col>
-					<Col span="4">
+					<Col span="6">
 							<div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
 					</Col>
-					<Col span="4">
+					<Col span="6">
 							<div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
 					</Col>
-					<Col span="12">
+					<Col span="6">
 							<div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
 					</Col>
 				</Row>
@@ -509,10 +509,18 @@
 				this.createOrdCol.splice(8,1);
 			},
 
+			radioChange: function(){
+        this.getAll();
+      },
+
 			// 获取全部数据
     	getAll: function() {
 				return new Promise((resolve, reject) => {
-					this.$http.get("/medapi/allmed").then(response => {
+					this.$http.get("/medapi/allmed",{
+							params: {
+								type : this.medtype
+							}
+						}).then(response => {
 						this.cacheMedData = response.data;
 						//alert(JSON.stringify(this.cacheMedData));
 						resolve();

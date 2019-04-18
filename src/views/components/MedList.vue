@@ -3,7 +3,7 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<RadioGroup v-model="medtype" size="small">
+					<RadioGroup v-model="medtype" size="small" @on-change="radioChange">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
 					</RadioGroup>
@@ -317,6 +317,7 @@
           });
         });
       },
+
       clearFormAdd: function(){
         this.formAdd.medname = "";
         this.formAdd.alias = "";
@@ -329,11 +330,19 @@
         this.formAdd.checked = false;
       },
 
+      radioChange: function(){
+        this.getAll();
+      },
+
 			// 获取全部数据
     	getAll: function() {
         this.loading = true;
 				return new Promise((resolve, reject) => {
-					this.$http.get("/medapi/allmed").then(response => {
+					this.$http.get("/medapi/allmed",{
+							params: {
+								type : this.medtype
+							}
+						}).then(response => {
             this.data6 = response.data;
             cacheAllMed = response.data;
             this.loading = false;
@@ -348,7 +357,8 @@
 
 		watch: {
 			medtype: function() {
-
+        //if(this.medtype == "草药")
+          
 			}
 		},
 

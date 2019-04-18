@@ -21,6 +21,7 @@ router.post("/order", (req, res) => {
  //查找所有订单
 router.get("/order", (req, res) => {
   Ord.find({})
+    //.limit(1)
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);
