@@ -3,8 +3,8 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<RadioGroup v-model="transactiontype" size="small">
-						<Radio label="处方"></Radio>
+					<RadioGroup v-model="transactiontype" size="small" @on-change="radioChange">
+						<Radio label="收入"></Radio>
 						<Radio label="支出"></Radio>
 						<Radio label="全部"></Radio>
 					</RadioGroup>
@@ -27,11 +27,11 @@
     <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
         cancel-text="取消" @on-ok="searchHandler">
       <div style="text-align:center">
-        <Input v-model="searchPatientName" placeholder="病人名称"></Input>
+        <Input v-model="searchPatientName" placeholder="名称"></Input>
       </div>
     </Modal>
 
-    <Modal v-model="addAdhoc" :closable="false" ok-text="添加"
+    <Modal v-model="adhocVisible" :closable="false" ok-text="添加"
         cancel-text="取消" @on-ok="addHandler" @on-cancel="cancelHandler">
       <p slot="header" style="color:#f60;text-align:center">
           <span>添加临时收入/支出</span>
@@ -49,9 +49,18 @@
                 <Radio label="支出"></Radio>
             </RadioGroup>
         </FormItem>
-        <FormItem label="价钱"  prop="total">
-            <Input v-model="formAddAdhoc.total"></Input> 
-        </FormItem>
+        <Row  :gutter="16">
+          <Col span="8">
+            <FormItem label="价钱"  prop="total">
+                <Input v-model="formAddAdhoc.total"></Input> 
+            </FormItem>
+          </Col>
+          <Col span="16">
+            <FormItem label="日期" prop="date">
+              <DatePicker type="date" placeholder="Select date" v-model="formAddAdhoc.date"></DatePicker>
+            </FormItem>
+          </col>
+        </Row>
       </Form>
     </Modal>
   </div>
@@ -60,17 +69,18 @@
 <script>
   import orderExpandRow from './OrderExpand.vue';
   import { resolve } from 'url';
+  import { dateToString } from 'utils/index';
   var globalStatus = {};
 	export default {
     components: { orderExpandRow },
 		data () {
 			return {
-				transactiontype: '处方',
+				transactiontype: '收入',
         outerNotClick: true,
         isDisabled: true,
         searchNotClick: true,
         searchVisible: false,
-        addAdhoc: false,
+        adhocVisible: false,
         searchPatientName: '',
         loading: false,
         //page
@@ -199,18 +209,36 @@
       },
 
 			toAdd () {
-        this.addAdhoc = true;
+        this.adhocVisible = true;
       },
       
       addHandler: function(){
-        
+        //alert(dateToString(this.formAddAdhoc.date));
+        this.formAddAdhoc.date = dateToString(this.formAddAdhoc.date);
+        return new Promise((resolve, reject) => {
+          this.$http.post("/ordapi/adhoc", this.formAddAdhoc).then(
+            response => {
+            this.adhocVisible = false;
+            this.$Message.success('添加成功!');
+            this.getAll();
+            this.clesrFormAddAdhoc();
+            resolve();
+          }).catch(error => {
+            this.$Message.error('添加失败');
+            reject(error);
+          });
+        });
 
       },
 
-      cancelHandler: function(){
+      clesrFormAddAdhoc: function(){
         this.formAddAdhoc.patient = '';
         this.formAddAdhoc.comment = '';
         this.formAddAdhoc.total = 0;
+      },
+
+      cancelHandler: function(){
+        this.clesrFormAddAdhoc();
       },
 
       //display select column and enable selection
@@ -341,11 +369,19 @@
 					}
         );
       },
+
+      radioChange: function(){
+        this.getAll();
+      },
     
     // 获取全部数据
     	getAll: function() {
 				return new Promise((resolve, reject) => {
-					this.$http.get("/ordapi/order").then(response => {
+					this.$http.get("/ordapi/order",{
+							params: {
+								type : this.transactiontype
+							}
+						}).then(response => {
             this.cacheAllOrder = response.data;
             this.orderCount = this.cacheAllOrder.length;
             if(this.orderCount < this.pageSize){

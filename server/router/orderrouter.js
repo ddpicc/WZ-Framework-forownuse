@@ -20,20 +20,47 @@ router.post("/order", (req, res) => {
 
  //查找所有订单
 router.get("/order", (req, res) => {
-  Ord.find({})
-    //.limit(1)
-    .sort({ update_at: -1 })
-    .then(heros => {
-      res.json(heros);
-    })
-    .catch(err => {
-      console.log(2);
-      res.json(err);
-    });
+  let type = req.query.type;
+  if(type == '全部') {
+    Ord.find()
+      //.limit(1)
+      .sort({ update_at: -1 })
+      .then(heros => {
+        res.json(heros);
+      })
+      .catch(err => {
+        console.log(2);
+        res.json(err);
+      });
+  }else{
+    Ord.find({'type': type})
+      //.limit(1)
+      .sort({ update_at: -1 })
+      .then(heros => {
+        res.json(heros);
+      })
+      .catch(err => {
+        console.log(2);
+        res.json(err);
+      });
+  }
   }
 );
 
- //查找需要出库的订单
+// 添加一个adhoc 订单
+router.post("/adhoc", (req, res) => {
+  //使用Ord model上的create方法储存数据
+  req.body.editable = false;
+  Ord.create(req.body, (err, hero) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(hero);
+    }
+  });
+});
+
+/*  //查找需要出库的订单
  router.get("/orderNeedOut", (req, res) => {
   Ord.find({"editable": false,
             "type": "收入"})
@@ -46,7 +73,7 @@ router.get("/order", (req, res) => {
       res.json(err);
     });
   }
-);
+); */
 
 //从globalstatus库查找总计信息
 router.get("/getGlobalStatus", (req, res) => {
@@ -61,6 +88,7 @@ router.get("/getGlobalStatus", (req, res) => {
   }
 );
 
+//删除一条message
 router.delete("/delGlobalMsg", (req, res) => {
   let msgIndex = req.query.msgIndex;
   Status.findOne({name: "GlobalStatus"}, function(err, doc){

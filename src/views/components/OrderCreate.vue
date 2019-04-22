@@ -112,7 +112,6 @@
 </template>
 
 <script>
-	import { getTime } from 'utils/index';
 	export default {
 		data () {
 			return {
