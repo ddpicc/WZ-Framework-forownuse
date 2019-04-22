@@ -330,12 +330,12 @@
 				let mydate = this.getNowFormatDate();
 
 				if(this.createOrdData.length == 0){
-					alert("订单为空");
+					this.$Message.warning('订单为空');
 					return;
 				}
 
 				if(this.patientName == ''){
-					alert('姓名不能为空');
+					this.$Message.warning('姓名不能为空');
 					return;
 				}
 

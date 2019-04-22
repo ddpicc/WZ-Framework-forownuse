@@ -36,7 +36,7 @@
       <p slot="header" style="color:#f60;text-align:center">
           <span>添加临时收入/支出</span>
       </p>
-      <Form :model="formAddAdhoc" :label-width="40">
+      <Form :model="formAddAdhoc" :rules="ruleValidate" :label-width="40">
         <FormItem label="名称"  prop="patient">
             <Input v-model="formAddAdhoc.patient"></Input>
         </FormItem>
@@ -171,6 +171,14 @@
           type: '支出',
           total: 0
         },
+        ruleValidate: {
+          patient: [
+            { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+          ],
+          date: [
+            { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+          ]
+        }
 			}
 		},
 		methods: {
@@ -315,7 +323,11 @@
         });
         let result3 = promise3;
         let promise4 = new Promise((resolve, reject) => {
-					this.$http.get("/ordapi/order").then(response => {
+					this.$http.get("/ordapi/order",{
+							params: {
+								type : this.transactiontype
+							}
+						}).then(response => {
             this.cacheAllOrder = response.data;
             let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
             this.orderData = editableOrder;
