@@ -9,7 +9,7 @@ const Med = require("../models/medSchema");
 // 查询所有英雄信息路由
 router.get("/allmed", (req, res) => {
   let type = req.query.type;
-  Med.find({"medtype": type})
+  Med.find({'medtype': type})
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);
@@ -35,7 +35,7 @@ router.get("/checkMianjian", (req, res) => {
       res.json(err);
     });
   }
-);
+); 
 
 //查看草药库存，返回库存小于count的数据
 router.get("/checkMianjian", (req, res) => {

@@ -9,7 +9,7 @@
 						<Radio label="全部"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
-						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="toLoading">添加</Button>
+						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="toAdd">添加</Button>
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="searchPatient">搜索</Button>
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="outerDb">出库</Button>
 						<Button type="success" size="small" :disabled="isDisabled" v-if="!outerNotClick" @click="outerDbSure">出库</Button>
@@ -32,10 +32,27 @@
     </Modal>
 
     <Modal v-model="addAdhoc" :closable="false" ok-text="添加"
-        cancel-text="取消" @on-ok="addHandler">
-      <div style="text-align:center">
-        
-      </div>
+        cancel-text="取消" @on-ok="addHandler" @on-cancel="cancelHandler">
+      <p slot="header" style="color:#f60;text-align:center">
+          <span>添加临时收入/支出</span>
+      </p>
+      <Form :model="formAddAdhoc" :label-width="40">
+        <FormItem label="名称"  prop="patient">
+            <Input v-model="formAddAdhoc.patient"></Input>
+        </FormItem>
+        <FormItem label="详情"  prop="comment">
+            <Input v-model="formAddAdhoc.comment"></Input>
+        </FormItem>
+        <FormItem label="类型">
+            <RadioGroup v-model="formAddAdhoc.type">
+                <Radio label="收入"></Radio>
+                <Radio label="支出"></Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem label="价钱"  prop="total">
+            <Input v-model="formAddAdhoc.total"></Input> 
+        </FormItem>
+      </Form>
     </Modal>
   </div>
 </template>
@@ -137,7 +154,13 @@
 				],
         orderData: [],
         cacheAllOrder: [],
-        cacheSelectedRow: []
+        cacheSelectedRow: [],
+        formAddAdhoc:{
+          patient: '',
+          comment: '',
+          type: '支出',
+          total: 0
+        },
 			}
 		},
 		methods: {
@@ -175,12 +198,19 @@
         this.cacheSelectedRow = selection;
       },
 
-			toLoading () {
-        alert("添加");
+			toAdd () {
+        this.addAdhoc = true;
       },
       
       addHandler: function(){
+        
 
+      },
+
+      cancelHandler: function(){
+        this.formAddAdhoc.patient = '';
+        this.formAddAdhoc.comment = '';
+        this.formAddAdhoc.total = 0;
       },
 
       //display select column and enable selection
