@@ -23,6 +23,8 @@ router.get("/allmed", (req, res) => {
 //查看免煎药库存，返回库存小于count的数据
 router.get("/checkMianjian", (req, res) => {
   let count = req.query.count;
+  //Med.update({"count": null,
+  //          "medtype": "免煎药"}, {"count": 0},{multi: true})
   Med.find({"count":{$lte: count},
             "medtype": "免煎药"})
     .sort({ update_at: -1 })
