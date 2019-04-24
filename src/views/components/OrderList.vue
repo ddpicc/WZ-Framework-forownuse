@@ -36,7 +36,7 @@
       <p slot="header" style="color:#f60;text-align:center">
           <span>添加临时收入/支出</span>
       </p>
-      <Form :model="formAddAdhoc" :rules="ruleValidate" :label-width="40">
+      <Form :model="formAddAdhoc" :rules="ruleValidate" :label-width="60">
         <FormItem label="名称"  prop="patient">
             <Input v-model="formAddAdhoc.patient"></Input>
         </FormItem>

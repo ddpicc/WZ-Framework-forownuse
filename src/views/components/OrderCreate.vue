@@ -78,21 +78,23 @@
 		<Modal v-model="printmodal" ok-text="打印" cancel-text="取消" @on-ok="printOrder">
 			<div ref="print">
 				<Row :gutter="16">
-					<Col span="4">
+					<Col span="8">
 						<p>姓名：{{patientName}}</p>
 					</Col>
-					<Col span="4">
+					<Col span="8">
 						<p>性别： {{patientSex}}</p>
 					</Col>
-					<Col span="4">
+					<Col span="8">
 						<p>年龄： {{patientAge}}</p>
 					</Col>
-					<Col span="12">
+				</Row>
+				<Row>
+					<Col span="24">
 						<p>症状：{{patientComment}}</p>
 					</Col>
 				</Row>
 				<br>		
-				<Row :gutter="16" v-for="item in createOrdData" :key="item.id">
+				<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
 					<Col span="6">
 							<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
 					</Col>

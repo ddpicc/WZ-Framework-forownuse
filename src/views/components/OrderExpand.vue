@@ -6,16 +6,18 @@
 <template>
   <div>
     <Row :gutter="16">
-    	<Col span="4">
+    	<Col span="8">
         <p>姓名：{{row.patient}}</p>
 			</Col>
-      <Col span="4">
+      <Col span="8">
         <p>性别： {{row.sex}}</p>
       </Col>
-      <Col span="4">
+      <Col span="8">
         <p>年龄： {{row.age}}</p>
       </Col>
-      <Col span="12">
+    </Row>
+    <Row>
+      <Col span="24">
         <p>症状：{{row.comment}}</p>
       </Col>
     </Row>
