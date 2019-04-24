@@ -9,7 +9,7 @@
 				<div style="" class="doc-content">
 					<Collapse v-model="value1">
         		<Panel name="1">
-            	检查免煎药
+            	检查免煎药 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如滑块在1，返回少于1盒的药材
 							<div slot='content'>
 								<Row>
         					<Col span="18">
@@ -88,7 +88,7 @@
 				return {
 					count: [],
 					value1: '1',
-					mianjianV: 2,
+					mianjianV: 1,
 					caoyaoV: 2,
 					value4: 2,
 					tabsValue: "name2",
@@ -206,12 +206,16 @@
 
 				checkMianjian: function() {
 					return new Promise((resolve, reject) => {
-						this.$http.get('/medapi/checkMianjian', {
+						this.$http.get("/medapi/allmed",{
 							params: {
-								count : this.mianjianV
+								type : '免煎药'
 							}
 						}).then(response => {
-							cacheList = response.data;
+							for(let item of response.data){
+								let boxCount = Math.floor(item.count /  item.bagperbox);
+								if(boxCount <= this.mianjianV)
+									cacheList.push(item);
+							}
 							this.dataMianjian = [];
 							var emptyStr = "{";
 							var carry = 4;

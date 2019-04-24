@@ -33,19 +33,22 @@ rule.hour = 0;
 rule.minute = 0;
 rule.second = 0;
 schedule.scheduleJob(rule, function(){
-	Med.find({"count":{$lte: 1},
-	"checked": true,
-	"medtype": "草药"})
+	console.log('scheduler run');
+	var msgString = '注意以下药品可能短缺： ';
+	Med.find({"checked": true,})
 	.then(heros => {
-		console.log(heros)
+		for(let item of heros){
+			let boxCount = Math.floor(item.count /  item.bagperbox);
+			if(boxCount <= 1)
+				msgString = msgString + '	' + item.medname;
+		}
+		overallStatus.findOne({name: "GlobalStatus"}, function(err, doc){
+			let msgArray = doc.warning;
+			msgArray.unshift(msgString);
+			doc.warning = msgArray;
+			doc.save();
+		});
     })
-	overallStatus.findOne({name: "GlobalStatus"}, function(err, doc){
-	let msgArray = doc.warning;
-	msgArray.unshift("fuck");
-	doc.warning = msgArray;
-	doc.save();
-	});
-	
 });
 
 

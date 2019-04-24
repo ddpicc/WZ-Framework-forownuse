@@ -3,7 +3,7 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-						<p> Status </p>
+					<p> Status </p>
 				</div>
 		
 				<div style="" class="doc-content">
@@ -11,7 +11,7 @@
       			<Col :xs="24" :sm="24" :md="8" :lg="8">
 							<Table size="small" border :columns="columns7" :data="data6"></Table>
 						</Col>
-						<Col  :xs="24" :sm="24"   :md="16" :lg="16" >
+						<Col  :xs="24" :sm="24" :md="16" :lg="16" >
 							<p> Status </p>
 							<Divider />
 							
