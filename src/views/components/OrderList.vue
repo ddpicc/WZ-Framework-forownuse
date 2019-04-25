@@ -228,6 +228,36 @@
             response => {
             this.adhocVisible = false;
             this.$Message.success('添加成功!');
+            let tempDate = this.formAddAdhoc.date;
+            let yearIndex = tempDate.split('/')[0];
+            let yearAndMonIndex = tempDate.substr(0,7);
+            var promise3;
+            if(this.formAddAdhoc.type == "收入"){
+              if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
+                globalStatus.yearlyIncome[yearIndex] = (parseFloat(this.formAddAdhoc.total)).toFixed(2);
+              } else{
+                let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + parseFloat(this.formAddAdhoc.total);
+                globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
+              }
+              let temp = {"yearlyIncome": globalStatus.yearlyIncome };
+              promise3 = new Promise((resolve, reject) => {
+                this.$http.put('/ordapi/updateAdhocIncome', temp);
+                resolve();
+              });
+            }else if(this.formAddAdhoc.type == "支出"){
+              if(typeof(globalStatus.yearlyOutcome[yearIndex]) == 'undefined'){
+                globalStatus.yearlyOutcome[yearIndex] = (parseFloat(this.formAddAdhoc.total)).toFixed(2);
+              } else{
+                let temp = parseFloat(globalStatus.yearlyOutcome[yearIndex]) + parseFloat(this.formAddAdhoc.total);
+                globalStatus.yearlyOutcome[yearIndex] = temp.toFixed(2);
+              }
+              let temp = {"yearlyOutcome": globalStatus.yearlyOutcome };
+              promise3 = new Promise((resolve, reject) => {
+                this.$http.put('/ordapi/updateAdhocOutcome', temp);
+                resolve();
+              });
+            }
+            let result3 = promise3;
             this.getAll();
             this.clesrFormAddAdhoc();
             resolve();
@@ -414,6 +444,9 @@
             globalStatus = response.data;
             if(typeof(globalStatus.yearlyIncome) == 'undefined'){
               globalStatus.yearlyIncome = {};
+            }
+            if(typeof(response.data.yearlyOutcome) == 'undefined'){
+              globalStatus.yearlyOutcome = {};
             }
             if(typeof(globalStatus.monthlyIncome) == 'undefined'){
               globalStatus.monthlyIncome = {};

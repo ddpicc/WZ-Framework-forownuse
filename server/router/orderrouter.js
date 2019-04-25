@@ -279,6 +279,28 @@ router.put("/updateGlobalStatus", (req, res) => {
   });
 }),
 
+//update only adhoc in global status
+router.put("/updateAdhocIncome", (req, res) => {
+  var objYearlyIncome = req.body.yearlyIncome;
+  objYearlyIncome = JSON.stringify(objYearlyIncome).replace(/'/g, '"');
+  Status.findOne({name: "GlobalStatus"}, function(err, doc){
+    doc.yearlyIncome = JSON.parse(objYearlyIncome);
+    doc.markModified('yearlyIncome');
+    doc.save();
+  });
+}),
+
+//update only adhoc in global status
+router.put("/updateAdhocOutcome", (req, res) => {
+  var objYearlyOutcome = req.body.yearlyOutcome;
+  objYearlyOutcome = JSON.stringify(objYearlyOutcome).replace(/'/g, '"');
+  Status.findOne({name: "GlobalStatus"}, function(err, doc){
+    doc.yearlyOutcome = JSON.parse(objYearlyOutcome);
+    doc.markModified('yearlyOutcome');
+    doc.save();
+  });
+}),
+
 
     
 

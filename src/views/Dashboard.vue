@@ -167,6 +167,7 @@ export default {
 					this.$http.get("/ordapi/getGlobalStatus").then(response => {
             let dataArray = response.data;
             this.yearIncome = dataArray.yearlyIncome[yearIndex];
+            this.yearOutcome = dataArray.yearlyOutcome[yearIndex];
 						resolve();
 					}).catch(error => {
 						reject(error);
