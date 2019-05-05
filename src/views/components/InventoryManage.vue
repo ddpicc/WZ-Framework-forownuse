@@ -28,7 +28,7 @@
 							<div slot='content'>
             		<Row>
         					<Col span="18">
-										<Slider v-model="caoyaoV" :min=0 :max=8></Slider>
+										<Slider v-model="caoyaoV" :min=100 :max=800 :step=100></Slider>
         					</Col>
         					<Col span="6">
 										<Button type="success" size="large" class="pannelInline"  @click="checkCaoyao">检查</Button>
@@ -89,7 +89,7 @@
 					count: [],
 					value1: '1',
 					mianjianV: 1,
-					caoyaoV: 2,
+					caoyaoV: 100,
 					value4: 2,
 					tabsValue: "name2",
 					inputMed: '',

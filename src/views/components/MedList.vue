@@ -294,7 +294,7 @@
       searchHandler: function(){
         let searchStr = this.searchMedString;
         this.data6 = cacheAllMed.filter( function (item) {
-  				return item.medname.indexOf(searchStr) === 0;
+  				return item.medname.indexOf(searchStr) != -1;
 					}
 				);
       },

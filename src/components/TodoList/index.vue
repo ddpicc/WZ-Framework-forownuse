@@ -2,7 +2,7 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input class="new-todo" autofocus autocomplete="off" placeholder="TODO LIST (input sth here)" @keyup.enter="addTodo">
+      <input class="new-todo" autofocus autocomplete="off" placeholder="要做的事 (输入..)" @keyup.enter="addTodo">
 
     </header>
     <!-- main section -->
@@ -18,7 +18,7 @@
     <footer class="footer" v-show="todos.length">
       <span class="todo-count">
         <strong>{{ remaining }}</strong>
-        {{ remaining | pluralize('item') }} left
+        {{ remaining | pluralize('item') }} 剩下
       </span>
       <ul class="filters">
         <li v-for="(val, key) in filters" :key="key">
@@ -26,7 +26,7 @@
         </li>
       </ul>
       <button class="clear-completed" v-show="todos.length > remaining" @click="clearCompleted">
-        Clear completed
+        删除已完成的
       </button>
     </footer>
   </section>
@@ -42,14 +42,7 @@ const filters = {
   completed: todos => todos.filter(todo => todo.done)
 }
 const defalutList = [
-{ text: '吾日七省吾身', done: false },
-  { text: 'star this repository  (给这个项目点星了吗？)', done: false },
-  { text: 'fork this repository  (fork这个项目了吗？)', done: false },
-  { text: 'follow author         (关注这个作者了吗？)', done: false },
-  { text: 'read blogs            (阅读教程了吗？)', done: false },
-  { text: 'use and learn         (学到新东西了吗？)', done: false },
-  { text: 'make a cool project?  (搞了一个牛项目吗？)', done: false },
-   { text: 'are you a single dog?(是不是女朋友丢了？)', done: false },
+{ text: '崔潜 药丸 1300', done: false },
 ]
 export default {
   components: { Todo },

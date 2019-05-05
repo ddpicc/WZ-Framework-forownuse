@@ -3,18 +3,13 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<p> Status </p>
+					<p> 药丸记录 </p>
 				</div>
 		
 				<div style="" class="doc-content">
 					<Row  :gutter="16">
-      			<Col :xs="24" :sm="24" :md="8" :lg="8">
-							<Table size="small" border :columns="columns7" :data="data6"></Table>
-						</Col>
-						<Col  :xs="24" :sm="24" :md="16" :lg="16" >
-							<p> Status </p>
-							<Divider />
-							
+      			<Col :xs="24" :sm="24" :md="24" :lg="24">
+         			<todo-list></todo-list>
 						</Col>
 					</Row>
 				</div>
@@ -23,7 +18,9 @@
   </div>
 </template>
 <script>
+		import TodoList from 'src/components/TodoList'
     export default {
+			components:{TodoList},
       data () {
 				return {
 					columns7: [],

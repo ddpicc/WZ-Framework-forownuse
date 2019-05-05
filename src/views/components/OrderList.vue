@@ -27,7 +27,18 @@
     <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
         cancel-text="取消" @on-ok="searchHandler">
       <div style="text-align:center">
-        <Input v-model="searchPatientName" placeholder="名称"></Input>
+        <Row>
+          <Col :md="24">
+            <Input v-model="searchPatientName" placeholder="名称"></Input>
+          </Col>
+        </Row>
+        <!--
+        <Row>
+          <Col :md="24">
+            <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+          </Col>
+        </Row>
+        -->
       </div>
     </Modal>
 
@@ -84,7 +95,7 @@
         searchPatientName: '',
         loading: false,
         //page
-        pageSize: 5,
+        pageSize: 50,
         orderCount: 0,
 				orderCol: [
           {
@@ -407,7 +418,7 @@
       searchHandler: function(){
         let searchStr = this.searchPatientName;
         this.orderData = this.cacheAllOrder.filter( function (item) {
-  				return item.patient.indexOf(searchStr) === 0;
+  				return item.patient.indexOf(searchStr) != -1;;
 					}
         );
       },

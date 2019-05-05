@@ -214,7 +214,10 @@
 				for(var i=0; i < this.orderMed1PerObj.length; i++){
 					let tempStrName = "medname" + (i%4+1);
 					let tempStrNumber = 'count' + (i%4+1);
-					emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
+					if(this.medtype == "草药")
+						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '克",';
+					else if(this.medtype == "免煎药")
+						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
 					if(i>0 && (i+1) % 4 == 0){
 						emptyStr = emptyStr.substr(0,emptyStr.length-1);
 						emptyStr = emptyStr + '}';
