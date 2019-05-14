@@ -23,6 +23,10 @@
 		<Row>
 			<Col :xs="24" :sm="24" :md="12" :lg="12">
 				<div class="emptyTop"> </div>
+				<RadioGroup v-model="typeinMode" size="small">
+						<Radio label="首字母"></Radio>
+						<Radio label="名字"></Radio>
+					</RadioGroup>
 				<Row :gutter="8">
 					<Col span="7">
 						<Input v-model="patientName" border placeholder="输入姓名..."/>
@@ -79,11 +83,14 @@
 				</Col>
 			</Col>
     </Row>
-		<Modal v-model="printmodal" ok-text="打印" cancel-text="取消" @on-ok="printOrder">
+		<Modal v-model="printmodal" ok-text="打印" :closable="false" cancel-text="取消" @on-ok="printOrder">
 			<div ref="print">
+				<h4 style="text-align:center;">处  方</h4>
+				<br>
+				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
 				<Row :gutter="16">
 					<Col span="8">
-						<p>姓名：{{patientName}}</p>
+						<p>姓名： {{patientName}}</p>
 					</Col>
 					<Col span="8">
 						<p>性别： {{patientSex}}</p>
@@ -97,7 +104,8 @@
 						<p>症状：{{patientComment}}</p>
 					</Col>
 				</Row>
-				<br>		
+				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
+				<br>	
 				<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
 					<Col span="6">
 							<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
@@ -115,7 +123,22 @@
 				<br>
 				<Row>
 					<Col span="6"  offset="18">
+						<p>{{orderCount}} 付</p>
+					</Col>
+				</Row>
+				<Row>
+					<Col span="6"  offset="18">
 						<p>价钱: {{total}}</p>
+					</Col>
+				</Row>
+				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
+				<br>
+				<Row :gutter="16">
+					<Col span="8">
+						<p>处方医师： 崔云杰</p>
+					</Col>
+					<Col span="8"  offset="8">
+						<p>日期： {{nowdate}}</p>
 					</Col>
 				</Row>
   		</div>
@@ -129,6 +152,7 @@
 			return {
 				printmodal: false,
 				medtype: '免煎药',
+				typeinMode: '首字母',
 				deleteNotClick: true,
 				patientName: '',
 				patientAge: '',
@@ -142,6 +166,7 @@
 				total: '',			
 				list: [],
 				value9: '',
+				nowdate: this.getNowFormatDate(),
 				cacheMedData: [],
 				orderMed1PerObj: [],
 				createOrdCol: [
@@ -415,10 +440,19 @@
 				}
 
 				let state = this.cacheMedData;
-				this.list = state.filter( function (item) {
-  				return item.alias.indexOf(value) === 0;
-					}
-				);
+				if(this.typeinMode == '首字母'){
+					this.list = state.filter( function (item) {
+						return item.alias.indexOf(value) === 0;
+						}
+					);
+				}
+				else if(this.typeinMode == '名字'){
+					this.list = state.filter( function (item) {
+						return item.medname.indexOf(value) != -1;
+						}
+					);
+				}
+						
       },
 
 			deleteMed: function(){
@@ -710,7 +744,7 @@
 	}
 
 	.emptyTop{
-		margin-top:32px;
+		margin-top:12px;
 	}
 
 	.tableSum{
