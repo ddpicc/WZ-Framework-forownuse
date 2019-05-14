@@ -46,7 +46,7 @@ export const asyncRouterMap = [
       {path: '/dashboard',name: '总览',icon:'speedometer',component: _import('Dashboard'),icon:'md-book'},
       //{path: '/introduction',name: '介绍',icon:'thumbsup',component: _import('Introduction'),meta: { role: ['admin'] }},
       {path: '/orderCreate',name: '生成处方',component: _import('components/OrderCreate'),icon:'md-create'},
-      {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit'},
+      {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit',meta: { role: ['admin'] }},
       {path: '/orderlist',name: '订单管理',component: _import('components/OrderList'),icon:'md-list-box'},
       {path: '/inventoryManage',name: '库存管理',component: _import('components/InventoryManage'),icon:'md-archive'},
       {path: '/test',name: '药丸备忘',component: _import('components/test'),icon:'md-pricetag'},

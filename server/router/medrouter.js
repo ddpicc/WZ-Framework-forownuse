@@ -40,7 +40,7 @@ router.get("/checkMianjian", (req, res) => {
 ); 
 
 //查看草药库存，返回库存小于count的数据
-router.get("/checkMianjian", (req, res) => {
+router.get("/checkCaoyao", (req, res) => {
   let count = req.query.count;
   Med.find({"count":{$lte: count},
             "medtype": "草药"})

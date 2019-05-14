@@ -89,7 +89,7 @@
 					count: [],
 					value1: '1',
 					mianjianV: 1,
-					caoyaoV: 100,
+					caoyaoV: 200,
 					value4: 2,
 					tabsValue: "name2",
 					inputMed: '',

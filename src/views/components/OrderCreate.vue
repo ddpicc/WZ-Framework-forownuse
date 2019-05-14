@@ -8,6 +8,7 @@
 						<Radio label="草药"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
+						<Button type="success" size="small" v-if="deleteNotClick" @click="showPrint">打印</Button>
 						<Button type="success" size="small" v-if="deleteNotClick" @click="postOrdToDbSure">添加</Button>
 						<Button type="success" size="small" v-if="deleteNotClick" @click="deleteMed">删除</Button>
 						<Button type="success" size="small" v-if="!deleteNotClick" @click="deleteCancal">取消</Button>
@@ -30,7 +31,10 @@
 						<Input v-model="patientAge" placeholder="年龄..."/>
 					</Col>
 					<Col span="4">
-						<Input v-model="patientSex" placeholder="性别..."/>
+						<Select v-model="patientSex">
+        			<Option value="男">男</Option>
+							<Option value="女">女</Option>
+    				</Select>
 					</Col>
 					<Col span="9">
 						<Input v-model="patientComment" placeholder="症状..."/>
@@ -41,7 +45,7 @@
 						<AutoComplete
 							v-model="inputMed"
 							@on-search="handleSearch"
-							placeholder="input here"
+							placeholder="药品"
 							@on-focus="focus($event)"
 							@keyup.enter.native="moveFocusToDose"
 							@on-select="handleSelect"
@@ -108,6 +112,12 @@
 							<div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
 					</Col>
 				</Row>
+				<br>
+				<Row>
+					<Col span="6"  offset="18">
+						<p>价钱: {{total}}</p>
+					</Col>
+				</Row>
   		</div>
     </Modal>
 	</div>
@@ -122,7 +132,7 @@
 				deleteNotClick: true,
 				patientName: '',
 				patientAge: '',
-				patientSex: '',
+				patientSex: '男',
 				patientComment: '',
 				inputMed: '',
 				inputDose: '',
@@ -364,7 +374,7 @@
 						this.$Message.success('添加成功!');
 						this.patientName = '';
 						this.patientAge = '';
-						this.patientSex = '';
+						this.patientSex = '男';
 						this.patientComment = '';
 						this.inputMed = '';
 						this.inputDose = 1;
@@ -375,6 +385,7 @@
 						this.createOrdData = [];
 						this.orderMed1PerObj = [];
 						this.infoDisplayData = [];
+						this.$store.dispatch("setOrderToVuex",[]);
             resolve();
           }).catch(error => {
             this.$Message.error('修改失败');
@@ -515,6 +526,75 @@
 
 			radioChange: function(){
         this.getAll();
+			},
+			
+			unpackOrdVuex: function(){
+        let ordVuex = this.$store.getters.post_order;
+        
+        if(ordVuex.length == 0)
+          return;
+        
+        this.patientName = ordVuex.patient;
+				this.patientAge = ordVuex.age;
+				this.patientSex = ordVuex.sex;
+				this.patientComment = ordVuex.comment;
+				this.createOrdData = ordVuex.med;
+				this.orderCount = 1;
+        //unpack to orderMed
+        for(let item of ordVuex.med) {
+          if(typeof(item.medname1) == 'undefined')
+            break;
+          else{
+            var existInDb = this.cacheMedData.find(function(p){
+            return p.medname === item.medname1;
+						})
+            this.orderMed1PerObj.push({
+            medname: item.medname1,
+            count: item.count1,
+            baseprice: existInDb.baseprice,
+            sellprice: existInDb.sellprice
+            })
+          }
+          if(typeof(item.medname2) == 'undefined')
+            break;
+          else{
+            var existInDb = this.cacheMedData.find(function(p){
+            return p.medname === item.medname2;
+            })
+            this.orderMed1PerObj.push({
+            medname: item.medname2,
+            count: item.count2,
+            baseprice: existInDb.baseprice,
+            sellprice: existInDb.sellprice
+            })
+          }
+          if(typeof(item.medname3) == 'undefined')
+            break;
+          else{
+            var existInDb = this.cacheMedData.find(function(p){
+            return p.medname === item.medname3;
+            })
+            this.orderMed1PerObj.push({
+            medname: item.medname3,
+            count: item.count3,
+            baseprice: existInDb.baseprice,
+            sellprice: existInDb.sellprice
+            })
+          }
+          if(typeof(item.medname4) == 'undefined')
+            break;
+          else{
+            var existInDb = this.cacheMedData.find(function(p){
+            return p.medname === item.medname4;
+            })
+            this.orderMed1PerObj.push({
+            medname: item.medname4,
+            count: item.count4,
+            baseprice: existInDb.baseprice,
+            sellprice: existInDb.sellprice
+            })
+          }
+				}
       },
 
 			// 获取全部数据
@@ -527,6 +607,7 @@
 						}).then(response => {
 						this.cacheMedData = response.data;
 						//alert(JSON.stringify(this.cacheMedData));
+						this.unpackOrdVuex();
 						resolve();
 					}).catch(error => {
 						reject(error);

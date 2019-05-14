@@ -163,7 +163,7 @@
                     },
                       on: {
                         click: () => {
-                          this.remove(params.index)
+                          this.reUes(params.row)
                         }
                       }
                     }, '重用'
@@ -304,6 +304,21 @@
         //update table
         let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
         this.orderData = editableOrder;
+      },
+
+      reUes: function(row) {
+        let tempOrder = {
+          med: row.med,
+          patient: row.patient,
+          age: row.age,
+          sex: row.sex,
+          comment: row.comment,
+          dose: row.dose,
+          total: row.total,
+          totalprofit: row.totalprofit
+        }
+        this.$store.dispatch("setOrderToVuex",tempOrder);
+        this.$router.push('OrderCreate');
       },
 
       //need to divide them
