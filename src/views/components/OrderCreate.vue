@@ -6,6 +6,7 @@
 					<RadioGroup v-model="medtype" size="small" @on-change="radioChange">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
+						<Radio label="西药"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="deleteNotClick" @click="showPrint">打印</Button>
@@ -253,6 +254,8 @@
 						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '克",';
 					else if(this.medtype == "免煎药")
 						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
+					else if(this.medtype == "西药")
+						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '盒",';
 					if(i>0 && (i+1) % 4 == 0){
 						emptyStr = emptyStr.substr(0,emptyStr.length-1);
 						emptyStr = emptyStr + '}';
@@ -431,6 +434,7 @@
 
 			printOrder: function(){
 				this.$print(this.$refs.print);
+				this.postOrdToDbSure();
 			},
 
 			handleSearch (value) {

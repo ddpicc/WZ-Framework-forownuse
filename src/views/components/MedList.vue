@@ -6,6 +6,7 @@
 					<RadioGroup v-model="medtype" size="small" @on-change="radioChange">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
+            <Radio label="西药"></Radio>
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="searchNotClick" @click="toAdd">添加</Button>
@@ -32,6 +33,7 @@
 					<RadioGroup v-model="formModify.medtype" size="default" style="width: 136px">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
+            <Radio label="西药"></Radio>
 					</RadioGroup>
 				</FormItem>
 				<FormItem label="规格" prop="spec" class="aaaa">
@@ -67,6 +69,7 @@
 					<RadioGroup v-model="formAdd.medtype" size="default" style="width: 136px">
 						<Radio label="免煎药"></Radio>
 						<Radio label="草药"></Radio>
+            <Radio label="西药"></Radio>
 					</RadioGroup>
 				</FormItem>
 				<FormItem label="规格" prop="spec" class="aaaa">
