@@ -38,18 +38,18 @@ export default new Router({
 export const asyncRouterMap = [
   {
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/orderCreate',
     name: '首页',
     component: Full,
     hidden:false,
     children: [
-      {path: '/dashboard',name: '总览',icon:'speedometer',component: _import('Dashboard'),icon:'md-book'},
+      {path: '/dashboard',name: '总览',icon:'speedometer',component: _import('Dashboard'),icon:'md-book',meta: { role: ['admin'] }},
       //{path: '/introduction',name: '介绍',icon:'thumbsup',component: _import('Introduction'),meta: { role: ['admin'] }},
       {path: '/orderCreate',name: '生成处方',component: _import('components/OrderCreate'),icon:'md-create'},
       {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit',meta: { role: ['admin'] }},
       {path: '/orderlist',name: '订单管理',component: _import('components/OrderList'),icon:'md-list-box'},
-      {path: '/inventoryManage',name: '库存管理',component: _import('components/InventoryManage'),icon:'md-archive'},
-      {path: '/test',name: '药丸备忘',component: _import('components/test'),icon:'md-pricetag'},
+      {path: '/inventoryManage',name: '库存管理',component: _import('components/InventoryManage'),icon:'md-archive',meta: { role: ['admin'] }},
+      {path: '/test',name: '药丸备忘',component: _import('components/test'),icon:'md-pricetag',meta: { role: ['admin'] }},
       /* {path: '/charts',name: 'echart',redirect: '/charts/shopchart',icon:'pie-graph',
         component: {render (c) { return c('router-view') }},
         children: [ {path: 'shopchart',name: '商场统计图表',icon:'stats-bars',component: _import('charts/ShopChart'), hidden:false, },
