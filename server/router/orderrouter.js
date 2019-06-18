@@ -24,7 +24,7 @@ router.get("/order", (req, res) => {
   if(type == '全部') {
     Ord.find()
       //.limit(1)
-      .sort({ update_at: -1 })
+      .sort({'_id':-1})
       .then(heros => {
         res.json(heros);
       })
@@ -35,7 +35,7 @@ router.get("/order", (req, res) => {
   }else{
     Ord.find({'type': type})
       //.limit(1)
-      .sort({ update_at: -1 })
+      .sort({'_id':-1})
       .then(heros => {
         res.json(heros);
       })

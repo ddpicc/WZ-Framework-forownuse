@@ -48,7 +48,7 @@
                   last30daysNum[index] = 1;
                 }
                 else{
-                  last30daysIncome[index] = last30daysIncome[index] + item.total;
+                  last30daysIncome[index] = parseFloat((last30daysIncome[index] + item.total).toFixed(2));
                   last30daysNum[index] = last30daysNum[index] + 1;
                 }
               }

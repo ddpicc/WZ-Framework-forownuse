@@ -122,11 +122,15 @@
 </Row>
 
 <Row :gutter="16" >
-
     <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
       <dash-chart-large> </dash-chart-large>
     </Col>
+</Row>
 
+<Row :gutter="16" >
+    <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
+      <IntroChartPie> </IntroChartPie>
+    </Col>
 </Row>
 
 
@@ -136,9 +140,10 @@
 <script>
 import DashChartVisitor from './charts/DashChartVisitor';
 import DashChartLarge from './charts/DashChartLarge';
+import IntroChartPie from './charts/IntroChartPie';
 
 export default {
-  components:{DashChartVisitor,DashChartLarge},
+  components:{DashChartVisitor,DashChartLarge,IntroChartPie},
   name: 'dashboard',
     data () {
       return {

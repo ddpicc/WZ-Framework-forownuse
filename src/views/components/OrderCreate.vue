@@ -251,7 +251,7 @@
 					let tempStrName = "medname" + (i%4+1);
 					let tempStrNumber = 'count' + (i%4+1);
 					if(this.medtype == "草药")
-						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '克",';
+						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + parseInt(this.orderMed1PerObj[i].count) + '克",';
 					else if(this.medtype == "免煎药")
 						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
 					else if(this.medtype == "西药")
@@ -566,74 +566,6 @@
         this.getAll();
 			},
 			
-			unpackOrdVuex: function(){
-        let ordVuex = this.$store.getters.post_order;
-        
-        if(ordVuex.length == 0)
-          return;
-        
-        this.patientName = ordVuex.patient;
-				this.patientAge = ordVuex.age;
-				this.patientSex = ordVuex.sex;
-				this.patientComment = ordVuex.comment;
-				this.createOrdData = ordVuex.med;
-				this.orderCount = 1;
-        //unpack to orderMed
-        for(let item of ordVuex.med) {
-          if(typeof(item.medname1) == 'undefined')
-            break;
-          else{
-            var existInDb = this.cacheMedData.find(function(p){
-            return p.medname === item.medname1;
-						})
-            this.orderMed1PerObj.push({
-            medname: item.medname1,
-            count: item.count1,
-            baseprice: existInDb.baseprice,
-            sellprice: existInDb.sellprice
-            })
-          }
-          if(typeof(item.medname2) == 'undefined')
-            break;
-          else{
-            var existInDb = this.cacheMedData.find(function(p){
-            return p.medname === item.medname2;
-            })
-            this.orderMed1PerObj.push({
-            medname: item.medname2,
-            count: item.count2,
-            baseprice: existInDb.baseprice,
-            sellprice: existInDb.sellprice
-            })
-          }
-          if(typeof(item.medname3) == 'undefined')
-            break;
-          else{
-            var existInDb = this.cacheMedData.find(function(p){
-            return p.medname === item.medname3;
-            })
-            this.orderMed1PerObj.push({
-            medname: item.medname3,
-            count: item.count3,
-            baseprice: existInDb.baseprice,
-            sellprice: existInDb.sellprice
-            })
-          }
-          if(typeof(item.medname4) == 'undefined')
-            break;
-          else{
-            var existInDb = this.cacheMedData.find(function(p){
-            return p.medname === item.medname4;
-            })
-            this.orderMed1PerObj.push({
-            medname: item.medname4,
-            count: item.count4,
-            baseprice: existInDb.baseprice,
-            sellprice: existInDb.sellprice
-            })
-          }
-				}
-      },
 
 			// 获取全部数据
     	getAll: function() {
@@ -645,12 +577,102 @@
 						}).then(response => {
 						this.cacheMedData = response.data;
 						//alert(JSON.stringify(this.cacheMedData));
-						this.unpackOrdVuex();
 						resolve();
 					}).catch(error => {
 						reject(error);
 					});
 				});
+			},
+
+			unpackOrdVuex: function(ordVuex){
+				let tempMed = ordVuex.med;
+				if(JSON.stringify(tempMed).indexOf("克") != -1){
+					this.medtype = "草药";
+				}
+				this.patientName = ordVuex.patient;
+				this.patientAge = ordVuex.age;
+				this.patientSex = ordVuex.sex;
+				this.patientComment = ordVuex.comment;
+				return new Promise((resolve, reject) => {
+					this.$http.get("/medapi/allmed",{
+							params: {
+								type : this.medtype
+							}
+						}).then(response => {
+							this.cacheMedData = response.data;
+							//unpack to orderMed
+							for(let item of ordVuex.med) {
+								if(typeof(item.medname1) == 'undefined')
+									break;
+								else{
+									var existInDb = this.cacheMedData.find(function(p){
+									return p.medname === item.medname1;
+									})
+									if(typeof(existInDb) != 'undefined'){
+										this.orderMed1PerObj.push({
+										medname: item.medname1,
+										count: item.count1,
+										baseprice: existInDb.baseprice,
+										sellprice: existInDb.sellprice
+										})
+									}
+								}
+								if(typeof(item.medname2) == 'undefined')
+									break;
+								else{
+									var existInDb = this.cacheMedData.find(function(p){
+									return p.medname === item.medname2;
+									})
+									if(typeof(existInDb) != 'undefined'){
+										this.orderMed1PerObj.push({
+										medname: item.medname2,
+										count: item.count2,
+										baseprice: existInDb.baseprice,
+										sellprice: existInDb.sellprice
+										})
+									}
+								}
+								if(typeof(item.medname3) == 'undefined')
+									break;
+								else{
+									var existInDb = this.cacheMedData.find(function(p){
+									return p.medname === item.medname3;
+									})
+									if(typeof(existInDb) != 'undefined'){
+										this.orderMed1PerObj.push({
+										medname: item.medname3,
+										count: item.count3,
+										baseprice: existInDb.baseprice,
+										sellprice: existInDb.sellprice
+										})
+									}
+								}
+								if(typeof(item.medname4) == 'undefined')
+									break;
+								else{
+									var existInDb = this.cacheMedData.find(function(p){
+									return p.medname === item.medname4;
+									})
+									if(typeof(existInDb) != 'undefined'){
+										this.orderMed1PerObj.push({
+										medname: item.medname4,
+										count: item.count4,
+										baseprice: existInDb.baseprice,
+										sellprice: existInDb.sellprice
+										})
+									}
+								}
+							}
+							this.disPlayToTb();
+							this.orderCount = ordVuex.dose;
+							resolve();
+					}).catch(error => {
+						reject(error);
+					});
+				});		
+				
+        
+				this.orderCount = ordVuex.dose;
 			},
 
 			deleteAndDisplay(indexToDel){
@@ -687,7 +709,7 @@
         for(let item of this.orderMed1PerObj) {
           let basePriceOfMed = item.baseprice;
           let sellPriceOfMed = item.sellprice;
-          let medDose = item.count;
+          let medDose = parseInt(item.count);
           this.ordBaseTotal = parseFloat((this.ordBaseTotal + parseFloat((basePriceOfMed*medDose).toFixed(2))).toFixed(2));
           this.ordTotal = parseFloat((this.ordTotal + parseFloat((sellPriceOfMed*medDose).toFixed(2))).toFixed(2));
           let temp = (this.ordTotal * this.orderCount).toFixed(2);
@@ -707,7 +729,12 @@
 		},
 
 		mounted: function() {
-			this.getAll();
+			var ordVuex = this.$store.getters.post_order; 
+      if(ordVuex.length != 0){
+				this.unpackOrdVuex(ordVuex);
+			}else{
+				this.getAll();
+			}
 		},
 
 		created:function(e){

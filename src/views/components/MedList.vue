@@ -10,14 +10,15 @@
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="searchNotClick" @click="toAdd">添加</Button>
-						<Button type="success" size="small" v-if="searchNotClick" @click="searchMed">搜索</Button>
-						<Button type="success" size="small" v-if="!searchNotClick" @click="searchCancal">取消</Button>
+						<Button type="success" size="small" @click="searchMed">搜索</Button>
+						<Button type="success" size="small" v-if="!searchNotClick" @click="searchCancal">退出搜索模式</Button>
 					</div>
 				</div>
 
 				<div style="" class="doc-content">
 					<Table :loading="loading" size="small" border :columns="columns7" :data="data6"></Table>
 				</div>
+        <Button class="backTopBtn" type="success" size="small" @click="backTop">回到顶部</Button>
 			</Col>
 		</Row>
 
@@ -93,10 +94,10 @@
     	</Form>
 		</Modal>
 
-    <Modal v-model="searchVisible" :closable="false" ok-text="搜索"
-        cancel-text="取消" @on-ok="searchHandler">
+    <Modal v-model="searchVisible" :closable="false" :mask-closable="false" ok-text="搜索"
+        cancel-text="取消" @on-ok="searchHandler" @on-cancel="cancelSearchInModel">
       <div style="text-align:center">
-        <Input v-model="searchMedString" placeholder="药品名称"></Input>
+        <Input v-model="searchMedString" placeholder="药品名称" autofocus/>
       </div>
     </Modal>
 	</div>
@@ -231,7 +232,7 @@
         ruleAdd: {}
 			}
 		},
-		methods: {
+		methods: {      
 			modify (index) {
 				this.formModifyVisible = true;
         this.formModify = Object.assign({}, this.data6[index]);
@@ -281,11 +282,15 @@
         });
       },
 
+      backTop() {
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      },
+
 			searchMed: function(){
         this.searchNotClick = false;
         this.searchVisible = true;
-        
-        
+        this.searchMedString = "";
 			},
 
 			searchCancal: function(){
@@ -297,9 +302,15 @@
       searchHandler: function(){
         let searchStr = this.searchMedString;
         this.data6 = cacheAllMed.filter( function (item) {
-  				return item.medname.indexOf(searchStr) != -1;
+  				return (item.medname.indexOf(searchStr) != -1) || (item.alias.indexOf(searchStr) != -1);
 					}
 				);
+      },
+
+      cancelSearchInModel: function(){
+        this.searchNotClick = true;
+        this.searchMedString = "";
+        this.data6 = cacheAllMed;
       },
 
       toAdd () {
@@ -379,6 +390,10 @@
 
   .ivu-form .aaaa{
     vertical-align: right;
+  }
+
+  .backTopBtn{
+    float: right;
   }
 
 </style>

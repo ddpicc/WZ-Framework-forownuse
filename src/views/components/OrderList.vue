@@ -95,7 +95,7 @@
         searchPatientName: '',
         loading: false,
         //page
-        pageSize: 50,
+        pageSize: 100,
         orderCount: 0,
 				orderCol: [
           {
@@ -111,7 +111,7 @@
           },
 					{
 						type: 'index',
-						width: 40,
+						width: 53,
             align: 'center'
           },
 					{
@@ -318,7 +318,7 @@
           totalprofit: row.totalprofit
         }
         this.$store.dispatch("setOrderToVuex",tempOrder);
-        this.$router.push('OrderCreate');
+        this.$router.push({path: '/orderCreate'});
       },
 
       //need to divide them
