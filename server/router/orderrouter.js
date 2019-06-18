@@ -6,6 +6,7 @@ const Ord = require("../models/ordSchema");
 const Med = require("../models/medSchema");
 const Status = require("../models/overallStatus");
 
+//创建订单
 router.post("/order", (req, res) => {
   console.log(req.body);
   Ord.create(req.body, (err, hero) => {
@@ -23,7 +24,6 @@ router.get("/order", (req, res) => {
   let type = req.query.type;
   if(type == '全部') {
     Ord.find()
-      //.limit(1)
       .sort({'_id':-1})
       .then(heros => {
         res.json(heros);
@@ -47,7 +47,7 @@ router.get("/order", (req, res) => {
   }
 );
 
-// 添加一个adhoc 订单
+// 添加一个临时订单
 router.post("/adhoc", (req, res) => {
   //使用Ord model上的create方法储存数据
   req.body.editable = false;
@@ -120,6 +120,35 @@ router.get("/getCurrentMonth", (req, res) => {
   console.log(start);
   console.log(end);
   Ord.find({"date":{$gte: start, $lte: end},
+            "editable": false,
+            "type": "收入"})
+    .then(heros => {
+      console.log(heros);
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log('error');
+      res.json(err);
+    });
+  }
+);
+
+//查找当天的订单
+router.get("/getCurrenDay", (req, res) => {
+  console.log("hahahaha");
+  var date = new Date();
+  var seperator1 = "/";
+  var year = date.getFullYear();  //年
+  var month = date.getMonth() + 1;   //月
+  var strDate = date.getDate();   //日
+  if (month >= 1 && month <= 9) {
+    month = "0" + month;
+  }
+  if (strDate >= 0 && strDate <= 9) {
+    strDate = "0" + strDate;
+  }
+  var currentdate = year + seperator1 + month + seperator1 + strDate;
+  Ord.find({"date": currentdate,
             "editable": false,
             "type": "收入"})
     .then(heros => {

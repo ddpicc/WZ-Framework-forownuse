@@ -118,6 +118,11 @@
 						title: '名字',
 						key: 'patient',
 						align: 'center',
+          },
+          {
+						title: '类型',
+						key: 'ordType',
+						align: 'center',
 					},
 					{
 						title: '数量',

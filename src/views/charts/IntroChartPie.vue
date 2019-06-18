@@ -36,15 +36,12 @@ export default {
   methods: {
     loadIncomePie: function(){
       return new Promise((resolve, reject) => {
-        var end = '06/05';
-        var start = '06/07';
-        this.$http.get('/ordapi/getLast30Days', {
-          params: {
-            startDate: start,
-            endDate: end
-          }
-        }).then(response => {
+        this.$http.get('/ordapi/getCurrenDay').then(response => {
           this.$nextTick( () => {
+            alert(JSON.stringify(response.data));
+            for(let item of response.data){
+              
+            }
             this.option1 = {
               title : {
                 text: '当天收入',
