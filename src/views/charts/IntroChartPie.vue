@@ -38,13 +38,23 @@ export default {
       return new Promise((resolve, reject) => {
         this.$http.get('/ordapi/getCurrenDay').then(response => {
           this.$nextTick( () => {
-            alert(JSON.stringify(response.data));
+            let incomeMianjian = 0;
+            let incomeCaoyao = 0;
+            let profitMianjian = 0;
+            let profitCaoyao = 0;        
             for(let item of response.data){
-              
+              if(item.medType == "免煎药"){
+                incomeMianjian = parseFloat((incomeMianjian + item.total).toFixed(2));
+                profitMianjian = parseFloat((profitMianjian + item.totalprofit).toFixed(2));
+              } 
+              else if(item.medType == "草药"){
+                incomeCaoyao = parseFloat((incomeCaoyao + item.total).toFixed(2));
+                profitCaoyao = parseFloat((profitCaoyao + item.totalprofit).toFixed(2));
+              }              
             }
             this.option1 = {
               title : {
-                text: '当天收入',
+                text: '当天收入组成',
                 x:'center'
               },
               tooltip : {
@@ -54,7 +64,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['vue 2976','webpack 1092','node 241','css 59']
+                data:['免煎药','草药','其他']
               },
               toolbox: {
                 show : true,
@@ -77,17 +87,15 @@ export default {
                   radius : [30, 110],
                   center : ['55%', '55%'],
                   data:[
-                    {value:300, name:'vue 2976'},
-                    {value:124, name:'webpack 1092'},
-                    {value:54, name:'node 241'},
-                    {value:899, name:'css 59'},
+                    {value:incomeMianjian, name:'免煎药'},
+                    {value:incomeCaoyao, name:'草药'},
                   ]
                 }
               ]
             },
             this.option2 = {
               title : {
-                text: '当天利润',
+                text: '当天利润组成',
                 x:'center'
               },
               tooltip : {
@@ -97,7 +105,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['vue 2976','webpack 1092','node 241','css 59']
+                data:['免煎药','草药','其他']
               },
               toolbox: {
                 show : true,
@@ -120,10 +128,8 @@ export default {
                   radius : [30, 110],
                   center : ['55%', '55%'],
                   data:[
-                      {value:300, name:'vue 2976'},
-                      {value:124, name:'webpack 1092'},
-                      {value:54, name:'node 241'},
-                      {value:899, name:'css 59'},
+                      {value:profitMianjian, name:'免煎药'},
+                      {value:profitCaoyao, name:'草药'},
                   ]
                 }      
               ]

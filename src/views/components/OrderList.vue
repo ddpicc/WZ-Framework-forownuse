@@ -121,7 +121,7 @@
           },
           {
 						title: '类型',
-						key: 'ordType',
+						key: 'medType',
 						align: 'center',
 					},
 					{
