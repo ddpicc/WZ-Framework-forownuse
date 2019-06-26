@@ -20,6 +20,7 @@
 				<div style="" class="doc-content">
 					<Table :loading="loading" size="small" border ref="selectionTB" :columns="orderCol" :data="orderData" @on-selection-change="handleSelectChange"></Table>
           <Page :total="orderCount" :page-size="pageSize" show-total class="paging" @on-change="changepage"></Page>
+          <Button size="small" class="loadAllBtn" @click="load_all">读取全部</Button>
 				</div>
 			</Col>
 		</Row>
@@ -32,13 +33,6 @@
             <Input v-model="searchPatientName" placeholder="名称"></Input>
           </Col>
         </Row>
-        <!--
-        <Row>
-          <Col :md="24">
-            <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
-          </Col>
-        </Row>
-        -->
       </div>
     </Modal>
 
@@ -198,6 +192,7 @@
 			}
 		},
 		methods: {
+      //删除一个没有出库的订单
 			remove (index) {
         this.$Modal.confirm({
           content: '此操作将永久删除该处方, 是否继续?',
@@ -221,7 +216,6 @@
             this.$Message.info('已取消删除');
           }
         });
-				//this.data6.splice(index, 1);
       },
 
       handleSelectChange: function(selection){
@@ -235,6 +229,7 @@
 			toAdd () {
         this.adhocVisible = true;
       },
+      
       
       addHandler: function(){
         //alert(dateToString(this.formAddAdhoc.date));
@@ -329,25 +324,19 @@
       //need to divide them
       updateOrdMedandStatus: async function() {
         this.loading = true;
+        var idList = [];
         for(let item of this.cacheSelectedRow){
           let temp = {
             medary: item.med,
             dose: item.dose
           }
-          let promise1 = new Promise((resolve, reject) => {
-            this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
-              resolve();
-            }).catch(error => {
-              //reject(error);
-            });
+          this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
+            console.log("updated med")
+          }).catch(error => {
+            console.log("error");
           });
-          let result1 = promise1;
 
-          let promise2 = new Promise((resolve, reject) => {
-            this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
-            resolve();
-          });
-          let result2 = await promise2;
+          idList.push(item._id);
 
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];
@@ -383,6 +372,15 @@
           resolve();
         });
         let result3 = promise3;
+        temp = {
+            ids: idList
+          }
+        let promise2 = new Promise((resolve, reject) => {
+          this.$http.put('/ordapi/updateOrdstatus', temp)
+          resolve();            
+        });
+        let result2 = await promise2;
+          
         let promise4 = new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order",{
 							params: {
@@ -445,6 +443,10 @@
 
       radioChange: function(){
         this.getAll();
+      },
+
+      load_all: function(){
+
       },
     
     // 获取全部数据
@@ -514,6 +516,10 @@
   .paging{
     float:right;
     margin-top:10px;
+  }
+
+  .loadAllBtn{
+    margin-top: 13px;
   }
 
 </style>

@@ -6,6 +6,7 @@
       </Col>   
             
       <div class="state-info">
+        <Icon class="refresh-icon" type="md-refresh" size="24" @click="reCalculateTotal"/>
         <section class="panel">
           <div class="panel-body">
             <div class="summary">
@@ -26,7 +27,7 @@
               <img src="static/img/redincome.png">                     
             </div>
           </div>
-        </section>             
+        </section>          
       </div>           
     </Row>
 
@@ -221,6 +222,10 @@ export default {
 						reject(error);
 					});
 				});
+      },
+
+      reCalculateTotal: function(){
+        alert("Start recalculate");
       }
 
     },

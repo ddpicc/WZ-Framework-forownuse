@@ -217,10 +217,12 @@ router.delete("/order/:id", (req, res) => {
 );
 
 //更新订单状态
-router.put("/updateOrdstatus/:id", (req, res) => {
+router.put("/updateOrdstatus", (req, res) => {
   console.log("Update order status");
-  Ord.findOneAndUpdate(
-    { _id: req.params.id },
+  let ids = req.body.ids;
+  console.log(ids);
+  Ord.updateMany(
+    { _id: {$in: ids} },
     {
       $set: {
         editable: false,
@@ -230,7 +232,7 @@ router.put("/updateOrdstatus/:id", (req, res) => {
       new: true
     }
   )
-    .then(hero => res.json(hero))
+    .then(hero => console.log(hero))
     .catch(err => res.json(err));
 });
 

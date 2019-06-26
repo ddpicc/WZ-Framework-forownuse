@@ -12,7 +12,7 @@ var schedule = require("node-schedule");
 
 //这一句是连接上数据库
 var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
-var db = mongoose.connect(url, {useNewUrlParser: true});
+var db = mongoose.connect(url, {useNewUrlParser: true, useFindAndModify: false});
 
 //var url = 'mongodb://qcui:cnaiq1988@localhost:27017/myDbs?authSource=myDbs';
 //var db = mongoose.connect(url, {useNewUrlParser: true});
