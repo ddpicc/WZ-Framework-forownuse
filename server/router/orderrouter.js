@@ -19,8 +19,37 @@ router.post("/order", (req, res) => {
   }
 );
 
- //查找所有订单
+ //查找所有订单限制前1200个
 router.get("/order", (req, res) => {
+  let type = req.query.type;
+  if(type == '全部') {
+    Ord.find()
+      .limit(1200)
+      .sort({'_id':-1})
+      .then(heros => {
+        res.json(heros);
+      })
+      .catch(err => {
+        console.log(2);
+        res.json(err);
+      });
+  }else{
+    Ord.find({'type': type})
+      .limit(1200)
+      .sort({'_id':-1})
+      .then(heros => {
+        res.json(heros);
+      })
+      .catch(err => {
+        console.log(2);
+        res.json(err);
+      });
+  }
+  }
+);
+
+ //查找所有订单没有限制
+ router.get("/orderall", (req, res) => {
   let type = req.query.type;
   if(type == '全部') {
     Ord.find()
@@ -34,7 +63,6 @@ router.get("/order", (req, res) => {
       });
   }else{
     Ord.find({'type': type})
-      //.limit(1)
       .sort({'_id':-1})
       .then(heros => {
         res.json(heros);

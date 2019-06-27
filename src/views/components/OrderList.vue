@@ -445,11 +445,29 @@
         this.getAll();
       },
 
+    // 获取全部order数据  
       load_all: function(){
-
+        return new Promise((resolve, reject) => {
+					this.$http.get("/ordapi/orderall",{
+							params: {
+								type : this.transactiontype
+							}
+						}).then(response => {
+            this.cacheAllOrder = response.data;
+            this.orderCount = this.cacheAllOrder.length;
+            if(this.orderCount < this.pageSize){
+              this.orderData = this.cacheAllOrder;
+            }else{
+              this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
+            }
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
+				});
       },
     
-    // 获取全部数据
+    // 获取order数据，只取前1200个
     	getAll: function() {
 				return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order",{
