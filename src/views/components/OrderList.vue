@@ -20,7 +20,7 @@
 				<div style="" class="doc-content">
 					<Table :loading="loading" size="small" border ref="selectionTB" :columns="orderCol" :data="orderData" @on-selection-change="handleSelectChange"></Table>
           <Page :total="orderCount" :page-size="pageSize" show-total class="paging" @on-change="changepage"></Page>
-          <Button size="small" class="loadAllBtn" @click="load_all">读取全部</Button>
+          <Button size="small" class="loadAllBtn" @click="load_all">读取所有处方</Button>
 				</div>
 			</Col>
 		</Row>
