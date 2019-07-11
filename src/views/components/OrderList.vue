@@ -150,8 +150,21 @@
                           this.remove(params.index)
                         }
                       }
-                    }, '删除'
-                  )
+                    }, '删除'),
+                  h('Button', {
+                    props: {
+                      type: 'success',
+                      size: 'small'
+                    },
+                    style: {
+　　　　　　　　　　    margin: '5px'
+　　　　　　　　      },
+                      on: {
+                        click: () => {
+                          this.printOrd(params.row)
+                        }
+                      }
+                    }, '打印')
                 ]);
               }else{
                 return h('div', [
@@ -165,8 +178,21 @@
                           this.reUes(params.row)
                         }
                       }
-                    }, '重用'
-                  )
+                    }, '重用'),
+                  h('Button', {
+                    props: {
+                      type: 'success',
+                      size: 'small'
+                    },
+                    style: {
+　　　　　　　　　　    margin: '5px'
+　　　　　　　　      },
+                      on: {
+                        click: () => {
+                          this.printOrd(params.row)
+                        }
+                      }
+                    }, '打印')
                 ]);
               }
 						}
@@ -324,19 +350,25 @@
       //need to divide them
       updateOrdMedandStatus: async function() {
         this.loading = true;
-        var idList = [];
         for(let item of this.cacheSelectedRow){
           let temp = {
             medary: item.med,
             dose: item.dose
           }
-          this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
-            console.log("updated med")
-          }).catch(error => {
-            console.log("error");
+          let promise1 = new Promise((resolve, reject) => {
+            this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
+              resolve();
+            }).catch(error => {
+              //reject(error);
+            });
           });
 
-          idList.push(item._id);
+          let result1 = promise1;
+          let promise2 = new Promise((resolve, reject) => {
+            this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
+            resolve();
+          });
+          let result2 = await promise2;
 
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];
@@ -372,15 +404,7 @@
           resolve();
         });
         let result3 = promise3;
-        temp = {
-            ids: idList
-          }
-        let promise2 = new Promise((resolve, reject) => {
-          this.$http.put('/ordapi/updateOrdstatus', temp)
-          resolve();            
-        });
-        let result2 = await promise2;
-          
+        
         let promise4 = new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order",{
 							params: {
@@ -443,6 +467,10 @@
 
       radioChange: function(){
         this.getAll();
+      },
+
+      printOrd: function(){
+        alert("print");
       },
 
     // 获取全部order数据  

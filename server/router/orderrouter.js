@@ -19,12 +19,11 @@ router.post("/order", (req, res) => {
   }
 );
 
- //查找所有订单限制前1200个
+ //查找所有订单
 router.get("/order", (req, res) => {
   let type = req.query.type;
   if(type == '全部') {
     Ord.find()
-      .limit(1200)
       .sort({'_id':-1})
       .then(heros => {
         res.json(heros);
@@ -35,34 +34,7 @@ router.get("/order", (req, res) => {
       });
   }else{
     Ord.find({'type': type})
-      .limit(1200)
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }
-  }
-);
-
- //查找所有订单没有限制
- router.get("/orderall", (req, res) => {
-  let type = req.query.type;
-  if(type == '全部') {
-    Ord.find()
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }else{
-    Ord.find({'type': type})
+      //.limit(1)
       .sort({'_id':-1})
       .then(heros => {
         res.json(heros);
@@ -245,12 +217,10 @@ router.delete("/order/:id", (req, res) => {
 );
 
 //更新订单状态
-router.put("/updateOrdstatus", (req, res) => {
+router.put("/updateOrdstatus/:id", (req, res) => {
   console.log("Update order status");
-  let ids = req.body.ids;
-  console.log(ids);
-  Ord.updateMany(
-    { _id: {$in: ids} },
+  Ord.findOneAndUpdate(
+    { _id: req.params.id },
     {
       $set: {
         editable: false,

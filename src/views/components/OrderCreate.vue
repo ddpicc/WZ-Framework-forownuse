@@ -10,8 +10,8 @@
 					</RadioGroup>
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="deleteNotClick" @click="showPrint">打印</Button>
-						<Button type="success" size="small" v-if="deleteNotClick" @click="postOrdToDbSure">添加</Button>
 						<Button type="success" size="small" v-if="deleteNotClick" @click="deleteMed">删除</Button>
+						<Button type="success" size="small" v-if="deleteNotClick" @click="postOrdToDbSure">添加</Button>
 						<Button type="success" size="small" v-if="!deleteNotClick" @click="deleteCancal">取消</Button>
 					</div>
 				</div>
@@ -43,6 +43,11 @@
 					</Col>
 					<Col span="9">
 						<Input v-model="patientComment" placeholder="症状..."/>
+					</Col>
+				</Row>
+				<Row :gutter="8">
+					<Col>
+						<Input v-model="patientName" border placeholder="输入姓名..."/>
 					</Col>
 				</Row>
 				<Row :gutter="8">
