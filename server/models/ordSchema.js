@@ -6,6 +6,7 @@ const ordSchema = new Schema({
     age: String,
     sex: String,
     comment: String,
+    orderComment: String,
     orderalias: String,
     type : String,
     medType: String,

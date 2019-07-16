@@ -40,8 +40,10 @@ export default {
           this.$nextTick( () => {
             let incomeMianjian = 0;
             let incomeCaoyao = 0;
+            let incomeXiyao = 0;
             let profitMianjian = 0;
-            let profitCaoyao = 0;        
+            let profitCaoyao = 0;
+            let profitXiyao = 0;       
             for(let item of response.data){
               if(item.medType == "免煎药"){
                 incomeMianjian = parseFloat((incomeMianjian + item.total).toFixed(2));
@@ -50,7 +52,11 @@ export default {
               else if(item.medType == "草药"){
                 incomeCaoyao = parseFloat((incomeCaoyao + item.total).toFixed(2));
                 profitCaoyao = parseFloat((profitCaoyao + item.totalprofit).toFixed(2));
-              }              
+              }
+              else if(item.medType == "西药"){
+                incomeXiyao = parseFloat((incomeXiyao + item.total).toFixed(2));
+                profitXiyao = parseFloat((profitXiyao + item.totalprofit).toFixed(2));
+              }           
             }
             this.option1 = {
               title : {
@@ -64,7 +70,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['免煎药','草药','其他']
+                data:['免煎药','草药','西药']
               },
               toolbox: {
                 show : true,
@@ -89,6 +95,7 @@ export default {
                   data:[
                     {value:incomeMianjian, name:'免煎药'},
                     {value:incomeCaoyao, name:'草药'},
+                    {value:incomeXiyao, name:'西药'},
                   ]
                 }
               ]
@@ -105,7 +112,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['免煎药','草药','其他']
+                data:['免煎药','草药','西药']
               },
               toolbox: {
                 show : true,
@@ -130,6 +137,7 @@ export default {
                   data:[
                       {value:profitMianjian, name:'免煎药'},
                       {value:profitCaoyao, name:'草药'},
+                      {value:profitXiyao, name:'西药'},
                   ]
                 }      
               ]

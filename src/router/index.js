@@ -50,7 +50,6 @@ export const asyncRouterMap = [
       {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit',meta: { role: ['admin'] }},
       {path: '/orderlist',name: '订单管理',component: _import('components/OrderList'),icon:'md-list-box'},
       {path: '/inventoryManage',name: '库存管理',component: _import('components/InventoryManage'),icon:'md-archive',meta: { role: ['admin'] }},
-      {path: '/test',name: '药丸备忘',component: _import('components/test'),icon:'md-pricetag',meta: { role: ['admin'] }},
       /* {path: '/charts',name: 'echart',redirect: '/charts/shopchart',icon:'pie-graph',
         component: {render (c) { return c('router-view') }},
         children: [ {path: 'shopchart',name: '商场统计图表',icon:'stats-bars',component: _import('charts/ShopChart'), hidden:false, },

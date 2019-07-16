@@ -41,7 +41,7 @@
               </div>
               <div  class="state-value">
                 <div class="value">
-                    $ {{dayIncome}}
+                   {{dayIncome}}
                 </div>
                 <div class="title">
                     当天收入
@@ -78,7 +78,7 @@
                   </div>
                     <div  class="state-value">
                         <div class="value">
-                          $ {{monthIncome}}
+                         {{monthIncome}}
                         </div>
                          <div class="title">
                            月收入
@@ -142,6 +142,7 @@ import IntroChartPie from './charts/IntroChartPie';
 
 export default {
   components:{DashChartVisitor,DashChartLarge,IntroChartPie},
+  inject: ['reload'],
   name: 'dashboard',
     data () {
       return {
@@ -225,9 +226,91 @@ export default {
       },
 
       reCalculateTotal: function(){
-        alert("Start recalculate");
+        this.$Notice.open({
+          title: '重新修正计算...',
+          duration: 2
+        });
+
+        let oneStatus = {};
+        oneStatus.yearlyIncome = {};
+        oneStatus.monthlyIncome = {};
+        oneStatus.monthlyProfit = {};
+        return new Promise((resolve, reject) => {
+					this.$http.get("/ordapi/orderall",{
+            params: {
+              type : "收入"
+            }
+						}).then(response => {
+              for(let item of response.data) {
+                let tempDate = item.date;
+                let yearIndex = tempDate.split('/')[0];
+                let yearAndMonIndex = tempDate.substr(0,7);
+                if(typeof(oneStatus.yearlyIncome[yearIndex]) === 'undefined'){
+                  oneStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
+                } else{
+                  let temp = parseFloat(oneStatus.yearlyIncome[yearIndex]) + item.total;
+                  oneStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
+                }
+                if(typeof(oneStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
+                  oneStatus.monthlyIncome[yearAndMonIndex] = (item.total).toFixed(2);
+                } else{
+                  let temp = parseFloat(oneStatus.monthlyIncome[yearAndMonIndex]) + item.total;
+                  oneStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
+                }
+                if(typeof(oneStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
+                  oneStatus.monthlyProfit[yearAndMonIndex] = (item.totalprofit).toFixed(2);
+                } else{
+                  let temp = parseFloat(oneStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
+                  oneStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
+                }
+              }
+              let temp = {
+                "yearlyIncome": oneStatus.yearlyIncome,
+                "monthlyIncome": oneStatus.monthlyIncome,
+                "monthlyProfit": oneStatus.monthlyProfit
+              }
+              let promise3 = new Promise((resolve, reject) => {
+                this.$http.put('/ordapi/updateGlobalStatus', temp)
+                resolve();
+              });
+              let result3 = promise3;
+              resolve();
+              this.reload();
+					}).catch(error => {
+						reject(error);
+					});
+        });
       }
 
+        /* let tempDate = item.date;
+          let yearIndex = tempDate.split('/')[0];
+          let yearAndMonIndex = tempDate.substr(0,7);
+          //alert(JSON.stringify(globalStatus.yearlyIncome));
+          if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
+            globalStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
+          } else{
+            let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + item.total;
+            globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
+          }
+          if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
+            globalStatus.monthlyIncome[yearAndMonIndex] = (item.total).toFixed(2);
+          } else{
+            let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + item.total;
+            globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
+          }
+          if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
+            globalStatus.monthlyProfit[yearAndMonIndex] = (item.totalprofit).toFixed(2);
+          } else{
+            let temp = parseFloat(globalStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
+            globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
+          }
+        }
+        //alert(JSON.stringify(globalStatus.yearlyIncome));
+        let temp = {
+          "yearlyIncome": globalStatus.yearlyIncome,
+          "monthlyIncome": globalStatus.monthlyIncome,
+          "monthlyProfit": globalStatus.monthlyProfit
+        } */
     },
 
     mounted(){

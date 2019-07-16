@@ -150,21 +150,7 @@
                           this.remove(params.index)
                         }
                       }
-                    }, '删除'),
-                  h('Button', {
-                    props: {
-                      type: 'success',
-                      size: 'small'
-                    },
-                    style: {
-　　　　　　　　　　    margin: '5px'
-　　　　　　　　      },
-                      on: {
-                        click: () => {
-                          this.printOrd(params.row)
-                        }
-                      }
-                    }, '打印')
+                    }, '删除')
                 ]);
               }else{
                 return h('div', [
@@ -178,21 +164,7 @@
                           this.reUes(params.row)
                         }
                       }
-                    }, '重用'),
-                  h('Button', {
-                    props: {
-                      type: 'success',
-                      size: 'small'
-                    },
-                    style: {
-　　　　　　　　　　    margin: '5px'
-　　　　　　　　      },
-                      on: {
-                        click: () => {
-                          this.printOrd(params.row)
-                        }
-                      }
-                    }, '打印')
+                    }, '重用')
                 ]);
               }
 						}
@@ -338,7 +310,9 @@
           patient: row.patient,
           age: row.age,
           sex: row.sex,
+          medType: row.medType,
           comment: row.comment,
+          orderComment: row.orderComment,
           dose: row.dose,
           total: row.total,
           totalprofit: row.totalprofit
@@ -469,8 +443,14 @@
         this.getAll();
       },
 
-      printOrd: function(){
+      printOrd: function(row){
         alert("print");
+        this.$Modal.confirm({
+          title: 'Title',
+          content: row.patient,
+          okText: 'OK',
+          cancelText: 'Cancel'
+        });
       },
 
     // 获取全部order数据  
@@ -495,7 +475,7 @@
 				});
       },
     
-    // 获取order数据，只取前1200个
+    // 获取order数据，只取前1000个
     	getAll: function() {
 				return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order",{

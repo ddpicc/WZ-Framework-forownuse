@@ -46,12 +46,7 @@
 					</Col>
 				</Row>
 				<Row :gutter="8">
-					<Col>
-						<Input v-model="patientName" border placeholder="输入姓名..."/>
-					</Col>
-				</Row>
-				<Row :gutter="8">
-					<Col span="14">
+					<Col span="10">
 						<AutoComplete
 							v-model="inputMed"
 							@on-search="handleSearch"
@@ -63,7 +58,10 @@
 							<Option v-for="item in list" :value="item.medname" :key="item._id">{{ item.alias }}    {{item.medname}} </Option>
 						</AutoComplete>
 					</Col>
-					<Col span="6">
+					<Col span="8">
+						<Input v-model="medComment" v-bind:disabled="dis" placeholder="用法用量..." ref="mark2" @keyup.enter.native="fouceToDose"/>
+					</Col>
+					<Col span="3">
 						<Input v-model="inputDose" placeholder="数量" @on-focus="focus($event)" ref="mark" @keyup.enter.native="postToTb"/>
 					</Col>
 					<Col span="2">
@@ -79,6 +77,7 @@
 				</Row>
 				<Row>
 					<Col span="24" style="text-align:right">
+					  <Input v-model="orderComment" border placeholder="处方备注.." style="width: 44%"/>
 						<Input v-model="orderCount"  @on-focus="focus($event)" placeholder="几付" style="width: 15%"/>
 						<Input v-model="value9"  style="width: 15%" :readonly="true" placeholder="合计:" />
 						<Input v-model="total"  @on-focus="focus($event)" style="width: 15%"/>
@@ -110,22 +109,39 @@
 						<p>症状：{{patientComment}}</p>
 					</Col>
 				</Row>
-				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
-				<br>	
-				<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
-					<Col span="6">
-							<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
-					</Col>
-					<Col span="6">
-							<div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
-					</Col>
-					<Col span="6">
-							<div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
-					</Col>
-					<Col span="6">
-							<div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
+				<Row>
+					<Col span="24">
+						<p>备注：{{orderComment}}</p>
 					</Col>
 				</Row>
+				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
+				<br>
+				<template v-if="medtype != '西药'">
+					<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
+						<Col span="6">
+								<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}</div>
+						</Col>
+						<Col span="6">
+								<div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}</div>
+						</Col>
+						<Col span="6">
+								<div>{{item.medname3}}&nbsp;&nbsp;{{item.count3}}</div>
+						</Col>
+						<Col span="6">
+								<div>{{item.medname4}}&nbsp;&nbsp;{{item.count4}}</div>
+						</Col>
+					</Row>
+				</template>
+				<template v-else>
+					<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
+						<Col span="12">
+								<div>{{item.medname1}}&nbsp;&nbsp;{{item.count1}}&nbsp;&nbsp;{{item.medComment1}}</div>
+						</Col>
+						<Col span="12">
+								<div>{{item.medname2}}&nbsp;&nbsp;{{item.count2}}&nbsp;&nbsp;{{item.medComment2}}</div>
+						</Col>
+					</Row>
+				</template>
 				<br>
 				<Row>
 					<Col span="6"  offset="18">
@@ -153,6 +169,48 @@
 </template>
 
 <script>
+	var staticCol = [
+		{
+			title: '名称',
+			key: 'medname1',
+			align: 'center',
+		},
+		{
+			title: '数量',
+			key: 'count1',
+			align: 'center'
+		},
+		{
+			title: '名称',
+			key: 'medname2',
+			align: 'center',
+		},
+		{
+			title: '数量',
+			key: 'count2',
+			align: 'center'
+		},
+		{
+			title: '名称',
+			key: 'medname3',
+			align: 'center',
+		},
+		{
+			title: '数量',
+			key: 'count3',
+			align: 'center'
+		},
+		{
+			title: '名称',
+			key: 'medname4',
+			align: 'center',
+		},
+		{
+			title: '数量',
+			key: 'count4',
+			align: 'center'
+		},
+	]
 	export default {
 		data () {
 			return {
@@ -164,6 +222,8 @@
 				patientAge: '',
 				patientSex: '男',
 				patientComment: '',
+				orderComment: '',
+				medComment: '',
 				inputMed: '',
 				inputDose: '',
 				ordTotal: 0,
@@ -175,7 +235,9 @@
 				nowdate: this.getNowFormatDate(),
 				cacheMedData: [],
 				orderMed1PerObj: [],
-				createOrdCol: [
+				dis: true,
+				createOrdCol: staticCol,
+				xiyaoCol: [
 					{
 						title: '名称',
 						key: 'medname1',
@@ -187,33 +249,23 @@
 						align: 'center'
 					},
           {
+						title: '用量',
+						key: 'medComment1',
+						align: 'center',
+					},
+					{
 						title: '名称',
 						key: 'medname2',
-						align: 'center',
+						align: 'center'
 					},
-					{
+          {
 						title: '数量',
 						key: 'count2',
-						align: 'center'
-					},
-          {
-						title: '名称',
-						key: 'medname3',
 						align: 'center',
 					},
 					{
-						title: '数量',
-						key: 'count3',
-						align: 'center'
-					},
-          {
-						title: '名称',
-						key: 'medname4',
-						align: 'center',
-					},
-					{
-						title: '数量',
-						key: 'count4',
+						title: '用量',
+						key: 'medComment2',
 						align: 'center'
 					},
 				],
@@ -252,16 +304,19 @@
 				this.createOrdData = [];
 				var emptyStr = "{";
 				var carry = 4;
+				if(this.medtype == "西药")
+					carry = 2;
 				for(var i=0; i < this.orderMed1PerObj.length; i++){
-					let tempStrName = "medname" + (i%4+1);
-					let tempStrNumber = 'count' + (i%4+1);
+					let tempStrName = "medname" + (i%carry+1);
+					let tempStrNumber = 'count' + (i%carry+1);
+					let tempStrMedComment = 'medComment' + (i%carry+1);
 					if(this.medtype == "草药")
 						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + parseInt(this.orderMed1PerObj[i].count) + '克",';
 					else if(this.medtype == "免煎药")
 						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '",';
 					else if(this.medtype == "西药")
-						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + this.orderMed1PerObj[i].count + '盒",';
-					if(i>0 && (i+1) % 4 == 0){
+						emptyStr = emptyStr + '"' + tempStrName + '":"' + this.orderMed1PerObj[i].medname + '","'  + tempStrNumber + '":"' + parseInt(this.orderMed1PerObj[i].count) + '盒","' + tempStrMedComment + '":"' + this.orderMed1PerObj[i].medComment + '",';
+					if(i>0 && (i+1) % carry == 0){
 						emptyStr = emptyStr.substr(0,emptyStr.length-1);
 						emptyStr = emptyStr + '}';
 						let tempObj = JSON.parse(emptyStr);
@@ -269,12 +324,16 @@
 						emptyStr = "{";
 					}
 				}
-				if( i%4 != 0){
+				if( i%carry != 0){
 					emptyStr = emptyStr.substr(0,emptyStr.length-1);
 					emptyStr = emptyStr + '}';
 					let tempObj = JSON.parse(emptyStr);
 					this.createOrdData.push(tempObj);
 				}
+			},
+
+			fouceToDose(){
+				this.$refs.mark.$el.querySelector('input').focus();
 			},
 
 			moveFocusToDose: function(){
@@ -309,9 +368,12 @@
 					"unitprice": existInDb.sellprice,
 				}];
 				this.infoDisplayData = tempObj;
- 
-        //move focus to input dose
-        this.$refs.mark.$el.querySelector('input').focus();
+				this.inputDose = 1;
+				//move focus to input dose
+				if(this.medtype != "西药")
+					this.$refs.mark.$el.querySelector('input').focus();
+				else
+					this.$refs.mark2.$el.querySelector('input').focus();
       },
 
 			postToTb () {
@@ -343,12 +405,22 @@
 				}
 				
 				//update order med cache
-				this.orderMed1PerObj.push({
-					medname: this.inputMed,
-					count: this.inputDose,
-					baseprice: existInDb.baseprice,
-					sellprice: existInDb.sellprice
-				})
+				if(this.medtype != "西药"){
+					this.orderMed1PerObj.push({
+						medname: this.inputMed,
+						count: this.inputDose,
+						baseprice: existInDb.baseprice,
+						sellprice: existInDb.sellprice
+					})
+				}else{
+					this.orderMed1PerObj.push({
+						medname: this.inputMed,
+						count: this.inputDose,
+						medComment: this.medComment,
+						baseprice: existInDb.baseprice,
+						sellprice: existInDb.sellprice
+					})
+				}
 
 				this.disPlayToTb();
 				if(this.orderCount === '')
@@ -392,6 +464,7 @@
 					age: this.patientAge,
 					sex: this.patientSex,
 					comment: this.patientComment,
+					orderComment: this.orderComment,
 					orderalias: 'new',
 					type: '收入',
 					medType: this.medtype,
@@ -405,6 +478,7 @@
 
 				return new Promise((resolve, reject) => {
           this.$http.post("/ordapi/order", addOrd).then(response => {
+						//clear all value
 						this.$Message.success('添加成功!');
 						this.patientName = '';
 						this.patientAge = '';
@@ -469,107 +543,166 @@
 				this.deleteNotClick = false;
 				//dynamic modify column
 				//need to find a better way
-				let deleteCol1 = {
-					title: '',
-					key: 'action',
-					width: 30,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Icon', {
-								props: {
-									type: 'md-trash',
-									size: 'small'
-								},
-								on: {
-									click: () => {
-										this.remove1(params.index)
+				if(this.medtype != "西药"){
+					let deleteCol1 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove1(params.index)
+										}
 									}
-								}
-							},)
-						]);
-					}
-				};
-				this.createOrdCol.splice(2,0,deleteCol1);
-				let deleteCol2 = {
-					title: '',
-					key: 'action',
-					width: 30,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Icon', {
-								props: {
-									type: 'md-trash',
-									size: 'small'
-								},
-								on: {
-									click: () => {
-										this.remove2(params.index)
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(2,0,deleteCol1);
+					let deleteCol2 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove2(params.index)
+										}
 									}
-								}
-							},)
-						]);
-					}
-				};
-				this.createOrdCol.splice(5,0,deleteCol2);
-				let deleteCol3 = {
-					title: '',
-					key: 'action',
-					width: 30,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Icon', {
-								props: {
-									type: 'md-trash',
-									size: 'small'
-								},
-								on: {
-									click: () => {
-										this.remove3(params.index)
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(5,0,deleteCol2);
+					let deleteCol3 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove3(params.index)
+										}
 									}
-								}
-							},)
-						]);
-					}
-				};
-				this.createOrdCol.splice(8,0,deleteCol3);
-				let deleteCol4 = {
-					title: '',
-					key: 'action',
-					width: 30,
-					align: 'center',
-					render: (h, params) => {
-						return h('div', [
-							h('Icon', {
-								props: {
-									type: 'md-trash',
-									size: 'small'
-								},
-								on: {
-									click: () => {
-										this.remove4(params.index)
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(8,0,deleteCol3);
+					let deleteCol4 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove4(params.index)
+										}
 									}
-								}
-							},)
-						]);
-					}
-				};
-				this.createOrdCol.splice(11,0,deleteCol4);
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(11,0,deleteCol4);
+				} else{
+					let deleteCol1 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove1(params.index)
+										}
+									}
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(3,0,deleteCol1);
+					let deleteCol2 = {
+						title: '',
+						key: 'action',
+						width: 30,
+						align: 'center',
+						render: (h, params) => {
+							return h('div', [
+								h('Icon', {
+									props: {
+										type: 'md-trash',
+										size: 'small'
+									},
+									on: {
+										click: () => {
+											this.remove2(params.index)
+										}
+									}
+								},)
+							]);
+						}
+					};
+					this.createOrdCol.splice(7,0,deleteCol2);
+				}
 			},
 
 			deleteCancal: function(){
 				this.deleteNotClick = true;
 				//restore column
-				this.createOrdCol.splice(2,1);
-				this.createOrdCol.splice(4,1);
-				this.createOrdCol.splice(6,1);
-				this.createOrdCol.splice(8,1);
+				if(this.medtype != "西药"){
+					this.createOrdCol.splice(2,1);
+					this.createOrdCol.splice(4,1);
+					this.createOrdCol.splice(6,1);
+					this.createOrdCol.splice(8,1);
+				}else{
+					this.createOrdCol.splice(3,1);
+					this.createOrdCol.splice(6,1);
+				}
 			},
 
 			radioChange: function(){
-        this.getAll();
+				this.getAll();
+				if(this.medtype == "西药"){
+					this.dis = false;
+					this.createOrdCol = this.xiyaoCol;
+				}else{
+					this.createOrdCol = staticCol;
+					this.dis = true;
+				}					
 			},
 			
 
@@ -592,13 +725,19 @@
 
 			unpackOrdVuex: function(ordVuex){
 				let tempMed = ordVuex.med;
-				if(JSON.stringify(tempMed).indexOf("克") != -1){
-					this.medtype = "草药";
+				this.medtype = ordVuex.medType;
+				if(this.medtype == "西药"){
+					this.dis = false;
+					this.createOrdCol = this.xiyaoCol;
+				}else{
+					this.createOrdCol = staticCol;
+					this.dis = true;
 				}
 				this.patientName = ordVuex.patient;
 				this.patientAge = ordVuex.age;
 				this.patientSex = ordVuex.sex;
 				this.patientComment = ordVuex.comment;
+				this.orderComment = ordVuex.orderComment;
 				return new Promise((resolve, reject) => {
 					this.$http.get("/medapi/allmed",{
 							params: {
@@ -618,6 +757,7 @@
 										this.orderMed1PerObj.push({
 										medname: item.medname1,
 										count: item.count1,
+										medComment: item.medComment1,
 										baseprice: existInDb.baseprice,
 										sellprice: existInDb.sellprice
 										})
@@ -633,6 +773,7 @@
 										this.orderMed1PerObj.push({
 										medname: item.medname2,
 										count: item.count2,
+										medComment: item.medComment2,
 										baseprice: existInDb.baseprice,
 										sellprice: existInDb.sellprice
 										})
@@ -781,7 +922,7 @@
 	}
 
 	.emptyTop{
-		margin-top:12px;
+		margin-top:7px;
 	}
 
 	.tableSum{
