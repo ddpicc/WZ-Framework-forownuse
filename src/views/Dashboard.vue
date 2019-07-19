@@ -282,35 +282,6 @@ export default {
         });
       }
 
-        /* let tempDate = item.date;
-          let yearIndex = tempDate.split('/')[0];
-          let yearAndMonIndex = tempDate.substr(0,7);
-          //alert(JSON.stringify(globalStatus.yearlyIncome));
-          if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
-            globalStatus.yearlyIncome[yearIndex] = (item.total).toFixed(2);
-          } else{
-            let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + item.total;
-            globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
-          }
-          if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
-            globalStatus.monthlyIncome[yearAndMonIndex] = (item.total).toFixed(2);
-          } else{
-            let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + item.total;
-            globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
-          }
-          if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
-            globalStatus.monthlyProfit[yearAndMonIndex] = (item.totalprofit).toFixed(2);
-          } else{
-            let temp = parseFloat(globalStatus.monthlyProfit[yearAndMonIndex]) + item.totalprofit;
-            globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
-          }
-        }
-        //alert(JSON.stringify(globalStatus.yearlyIncome));
-        let temp = {
-          "yearlyIncome": globalStatus.yearlyIncome,
-          "monthlyIncome": globalStatus.monthlyIncome,
-          "monthlyProfit": globalStatus.monthlyProfit
-        } */
     },
 
     mounted(){

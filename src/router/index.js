@@ -47,6 +47,7 @@ export const asyncRouterMap = [
       {path: '/detailInvoice',name: '详细账单',component: _import('components/DetailInvoice'),icon:'md-document',meta: { role: ['admin'] }},
       //{path: '/introduction',name: '介绍',icon:'thumbsup',component: _import('Introduction'),meta: { role: ['admin'] }},
       {path: '/orderCreate',name: '生成处方',component: _import('components/OrderCreate'),icon:'md-create'},
+      {path: '/otherIncome',name: '其它录入',component: _import('components/OtherIncome'),icon:'md-add'},
       {path: '/medlist',name: '药品管理',component: _import('components/MedList'),icon:'md-medkit',meta: { role: ['admin'] }},
       {path: '/orderlist',name: '订单管理',component: _import('components/OrderList'),icon:'md-list-box'},
       {path: '/inventoryManage',name: '库存管理',component: _import('components/InventoryManage'),icon:'md-archive',meta: { role: ['admin'] }},
