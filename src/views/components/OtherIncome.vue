@@ -161,6 +161,7 @@
 					"date" : this.dateValue,
 					"amount" : this.entryAmount,
 					"comment" : this.entryComment,
+					"profit" : this.entryProfit,
 					"editable" : true
 				}
 				return new Promise((resolve, reject) => {
@@ -213,22 +214,34 @@
 				let yearAndMonIndex = tempDate.substr(0,7);
 				if(tempObj.type == "药丸"){
 					if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
-						globalStatus.yearlyIncome[yearIndex] = (parseFloat(tempDate.amount)).toFixed(2);
+						globalStatus.yearlyIncome[yearIndex] = (parseFloat(tempObj.amount)).toFixed(2);
 					} else{
-						let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + parseFloat(tempDate.amount);
+						let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + parseFloat(tempObj.amount);
 						globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
 					}
 					if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
-						globalStatus.monthlyIncome[yearAndMonIndex] = (parseFloat(tempDate.amount)).toFixed(2);
+						globalStatus.monthlyIncome[yearAndMonIndex] = (parseFloat(tempObj.amount)).toFixed(2);
 					} else{
-						let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + parseFloat(tempDate.amount);
+						let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + parseFloat(tempObj.amount);
 						globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
 					}
-					let temp = {"yearlyIncome": globalStatus.yearlyIncome };
-					promise3 = new Promise((resolve, reject) => {
-						this.$http.put('/ordapi/updateAdhocIncome', temp);
-						resolve();
-					});
+					alert(JSON.stringify(globalStatus));
+					if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
+            globalStatus.monthlyProfit[yearAndMonIndex] = (tempObj.profit).toFixed(2);
+          } else{
+            let temp = parseFloat(globalStatus.monthlyProfit[yearAndMonIndex]) + tempObj.profit;
+            globalStatus.monthlyProfit[yearAndMonIndex] = temp.toFixed(2);
+          }
+					let temp = {
+						"yearlyIncome": globalStatus.yearlyIncome,
+						"monthlyIncome": globalStatus.monthlyIncome,
+						"monthlyProfit": globalStatus.monthlyProfit
+					};
+					let promise3 = new Promise((resolve, reject) => {
+          	this.$http.put('/ordapi/updateGlobalStatus', temp)
+          	resolve();
+        	});
+        	let result3 = promise3;
 				}
 			},
 
