@@ -12,14 +12,14 @@ var schedule = require("node-schedule");
 
 
 //这一句是连接上数据库
-var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
-var db = mongoose.connect(url, {useNewUrlParser: true, useFindAndModify: false});
+//var url = 'mongodb://qcui:8890@localhost:27017/myDbs?authSource=admin';
+//var db = mongoose.connect(url, {useNewUrlParser: true, useFindAndModify: false});
 
 //var url = 'mongodb://qcui:cnaiq1988@localhost:27017/myDbs?authSource=myDbs';
 //var db = mongoose.connect(url, {useNewUrlParser: true});
 
-//var url = 'mongodb://localhost:27017/myDbs';
-//var db = mongoose.connect(url, {useNewUrlParser: true});
+var url = 'mongodb://localhost:27017/myDbs';
+var db = mongoose.connect(url, {useNewUrlParser: true});
 
 //这里的myDbs是数据库的名字，不是表的名字
 
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/medapi',med);
 app.use('/ordapi',ord);
-//app.use('/othincomeapi',otherIncome);
+app.use('/othincomeapi',otherIncome);
 
 
 //定时任务  todo

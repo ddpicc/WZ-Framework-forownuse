@@ -11,20 +11,22 @@
 						<Col span="3">
 							<Select v-model="entryType">
 								<Option value="药丸">药丸</Option>
-								<Option value="其它">其它</Option>
 							</Select>
 						</Col>
-      			<Col span="7">
+      			<Col span="5">
 							<Input v-model="entryName" border placeholder="输入名称..."/>
 						</Col>
 						<Col span="3">
-							<Input v-model="entryAmount" border placeholder="输入价钱..."/>
+							<Input v-model="entryAmount" @on-focus="focus($event)" border placeholder="输入价钱..."/>
 						</Col>
 						<Col span="4">
 							<DatePicker type="date" :options="options" v-model="dateValue" placeholder="选择日期"></DatePicker>
 						</Col>
-						<Col span="6">
+						<Col span="5">
 							<Input v-model="entryComment" placeholder="备注..."/>
+						</Col>
+						<Col span="3">
+							<Input v-model="entryProfit" @on-focus="focus($event)" border placeholder="利润..."/>
 						</Col>
 						<Col span="1">
 						<Button type="success" @click="postToTb">+</Button>
@@ -43,6 +45,7 @@
 </template>
 <script>
 	import { dateToString } from 'utils/index';
+	var globalStatus = {};
 	export default {
 		data () {
 			return {
@@ -50,7 +53,9 @@
 				entryName: "",
 				dateValue: "",
 				entryAmount: 0.00,
+				entryProfit: "",
 				entryComment: "",
+				loading: false,
 				options: {
 					disabledDate (date) {
 						return date && (date.valueOf() > Date.now() || date.valueOf() < 1559260800000);
@@ -88,23 +93,44 @@
 						align: 'center'
 					},
 					{
+						title: '利润',
+						key: 'profit',
+						align: 'center'
+					},
+					{
 						title: '操作',
 						key: 'action',
 						align: 'center',
 						render: (h, params) => {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'success',
-										size: 'small'
-									},
+							if(params.row.editable){
+								return h('div', [
+									h('Button', {
+										props: {
+											type: 'success',
+											size: 'small'
+										},
+										style: {
+											marginRight: '5px'
+										},
 										on: {
 											click: () => {
 												this.handelOut(params.index)
 											}
 										}
-									}, '出库')
-							]);
+									}, '出库'),
+									h('Button', {
+										props: {
+											type: 'error',
+											size: 'small'
+										},
+										on: {
+											click: () => {
+												this.remove(params.index)
+											}
+										}
+									}, '删除'),
+								]);
+							}
 						}
 					}
 				],
@@ -113,7 +139,21 @@
 		},
 
 		methods: {
+			//select text when get focus
+      focus(event) {
+				//alert(event.currentTarget);
+        event.currentTarget.select();
+			},
+
 			postToTb: function(){
+				if(this.entryName === ""){
+					alert("名称不能是空");
+					return;
+				}
+				if(this.dateValue === ""){
+					alert("日期不能是空");
+					return;
+				}
 				this.dateValue = dateToString(this.dateValue);
 				let tempObj = {
 					"name" : this.entryName,
@@ -127,13 +167,69 @@
           this.$http.post("/othincomeapi/addIncome", tempObj).then(
             response => {
             this.$Message.success('添加成功!');
-            this.getAll();
+						this.getAll();
+						this.entryName = "";
+						this.dateValue = "";
+						this.entryAmount = 0;
+						this.entryComment = "";
             resolve();
           }).catch(error => {
             this.$Message.error('添加失败');
             reject(error);
           });
         });
+			},
+
+			remove: function(index) {
+        this.$Modal.confirm({
+          content: '此操作将永久删除该文件, 是否继续?',
+          onOk: ()=>{
+            let tempObj = Object.assign({}, this.tbData[index]);
+            let deleteId = tempObj['_id'];
+            return new Promise((resolve, reject) => {
+              this.$http.delete(`/othincomeapi/deletIncome/${deleteId}`).then(
+                response => {
+                  this.$Message.success('删除成功!');
+                  this.getAll();
+                  resolve();
+                }
+              ).catch(error => {
+                this.$Message.error('删除失败');
+                reject(error);
+              });
+            });
+          },
+          onCancel: ()=>{
+            this.$Message.info('已取消删除');
+          }
+        });
+			},
+			
+			handelOut: function(index) {
+				let tempObj = Object.assign({}, this.tbData[index]);
+				let updatedId = tempObj['_id'];
+				let tempDate = tempObj.date;
+        let yearIndex = tempDate.split('/')[0];
+				let yearAndMonIndex = tempDate.substr(0,7);
+				if(tempObj.type == "药丸"){
+					if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
+						globalStatus.yearlyIncome[yearIndex] = (parseFloat(tempDate.amount)).toFixed(2);
+					} else{
+						let temp = parseFloat(globalStatus.yearlyIncome[yearIndex]) + parseFloat(tempDate.amount);
+						globalStatus.yearlyIncome[yearIndex] = temp.toFixed(2);
+					}
+					if(typeof(globalStatus.monthlyIncome[yearAndMonIndex]) == 'undefined'){
+						globalStatus.monthlyIncome[yearAndMonIndex] = (parseFloat(tempDate.amount)).toFixed(2);
+					} else{
+						let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + parseFloat(tempDate.amount);
+						globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
+					}
+					let temp = {"yearlyIncome": globalStatus.yearlyIncome };
+					promise3 = new Promise((resolve, reject) => {
+						this.$http.put('/ordapi/updateAdhocIncome', temp);
+						resolve();
+					});
+				}
 			},
 
 			// 获取全部数据
@@ -148,11 +244,35 @@
 						reject(error);
 					});
 				});
-			}
+			},
+
+			getGlobalStatus: function() {
+        return new Promise((resolve, reject) => {
+          this.$http.get("/ordapi/getGlobalStatus").then(response => {
+            globalStatus = response.data;
+            if(typeof(globalStatus.yearlyIncome) == 'undefined'){
+              globalStatus.yearlyIncome = {};
+            }
+            if(typeof(response.data.yearlyOutcome) == 'undefined'){
+              globalStatus.yearlyOutcome = {};
+            }
+            if(typeof(globalStatus.monthlyIncome) == 'undefined'){
+              globalStatus.monthlyIncome = {};
+            }
+            if(typeof(globalStatus.monthlyProfit) == 'undefined'){
+              globalStatus.monthlyProfit = {};
+            }
+						resolve();
+					}).catch(error => {
+						reject(error);
+					});
+        })
+      },
 		},
 
 		mounted: function() {
 			this.getAll();
+			this.getGlobalStatus();
 		}
 	}
 </script>

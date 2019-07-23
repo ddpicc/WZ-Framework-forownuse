@@ -115,7 +115,6 @@
 					</Col>
 				</Row>
 				<hr style="height:1px;border:none;border-top:1px solid #555555;" />
-				<br>
 				<template v-if="medtype != '西药'">
 					<Row :gutter="8" v-for="item in createOrdData" :key="item.id">
 						<Col span="6">
@@ -220,7 +219,7 @@
 				deleteNotClick: true,
 				patientName: '',
 				patientAge: '',
-				patientSex: '男',
+				patientSex: '',
 				patientComment: '',
 				orderComment: '',
 				medComment: '',
@@ -368,7 +367,6 @@
 					"unitprice": existInDb.sellprice,
 				}];
 				this.infoDisplayData = tempObj;
-				this.inputDose = 1;
 				//move focus to input dose
 				if(this.medtype != "西药")
 					this.$refs.mark.$el.querySelector('input').focus();
@@ -381,6 +379,12 @@
         if(searchStr === ""){
           alert("不能为空");
           this.$refs.mark1.$el.querySelector('input').focus();
+          return;
+				}
+				
+				if(this.inputDose === "" || this.inputDose === "0"){
+          alert("药品数量不能为空");
+          this.$refs.mark.$el.querySelector('input').focus();
           return;
         }
         
@@ -485,7 +489,7 @@
 						this.patientSex = '男';
 						this.patientComment = '';
 						this.inputMed = '';
-						this.inputDose = 1;
+						this.inputDose = "";
 						this.ordTotal = 0;
 						this.ordBaseTotal = 0;
 						this.orderCount = '';
@@ -881,6 +885,7 @@
 				this.unpackOrdVuex(ordVuex);
 			}else{
 				this.getAll();
+				this.patientSex = "男";
 			}
 		},
 

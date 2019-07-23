@@ -17,6 +17,15 @@ router.post("/addIncome", (req, res) => {
 	});
 });
 
+//删除一条其他收入信息
+router.delete("/deletIncome/:id", (req, res) => {
+  OtherIncome.findOneAndRemove({
+    _id: req.params.id
+  })
+    .then(hero => res.send(`${hero.title}删除成功`))
+    .catch(err => res.json(err));
+})
+
 // 查询所有其他收入信息路由
 router.get("/getAllIncome", (req, res) => {
   OtherIncome.find({})
@@ -29,3 +38,5 @@ router.get("/getAllIncome", (req, res) => {
       res.json(err);
     });
 });
+
+module.exports = router;

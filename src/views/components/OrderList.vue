@@ -443,16 +443,6 @@
         this.getAll();
       },
 
-      printOrd: function(row){
-        alert("print");
-        this.$Modal.confirm({
-          title: 'Title',
-          content: row.patient,
-          okText: 'OK',
-          cancelText: 'Cancel'
-        });
-      },
-
     // 获取全部order数据  
       load_all: function(){
         return new Promise((resolve, reject) => {

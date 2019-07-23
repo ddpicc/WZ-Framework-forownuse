@@ -109,9 +109,9 @@
 	.doc-header .actionMenu{
 		float: right;
 	}
-  ul li div{display:inline-block;}
-  .list-line{border-top:1px dashed #d8d8d8;position:absolute;top:11px;margin: 0 5px;width: 75%;}
-  .list-con1{ position: absolute;right: 0px;padding: 0 5px;z-index: 100;text-align: right;background: #fff;padding-right: 80px;}
+  ul li div{display:inline-block;padding-left: 10px;}
+  .list-line{border-top:1px solid #d8d8d8;top:11px;margin: 0 5px;width: 85%;}
+  .list-con1{ position: absolute;right: 0px;padding: 0 5px;z-index: 100;text-align: right;background: #fff;padding-right: 10px;}
 
 
 </style>
