@@ -308,6 +308,7 @@ router.put("/updateGlobalStatus", (req, res) => {
     doc.markModified('monthlyProfit');
     doc.save();
   });
+  res.json("kkkk");
 }),
 
 //update only adhoc in global status

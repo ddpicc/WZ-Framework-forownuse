@@ -213,7 +213,7 @@
 				let tempDate = tempObj.date;
         let yearIndex = tempDate.split('/')[0];
 				let yearAndMonIndex = tempDate.substr(0,7);
-				if(tempObj.type == "药丸"){
+				if(tempObj.detailType == "药丸"){
 					if(typeof(globalStatus.yearlyIncome[yearIndex]) == 'undefined'){
 						globalStatus.yearlyIncome[yearIndex] = (parseFloat(tempObj.amount)).toFixed(2);
 					} else{
@@ -226,7 +226,6 @@
 						let temp = parseFloat(globalStatus.monthlyIncome[yearAndMonIndex]) + parseFloat(tempObj.amount);
 						globalStatus.monthlyIncome[yearAndMonIndex] = temp.toFixed(2);
 					}
-					alert(JSON.stringify(globalStatus));
 					if(typeof(globalStatus.monthlyProfit[yearAndMonIndex]) == 'undefined'){
             globalStatus.monthlyProfit[yearAndMonIndex] = (tempObj.profit).toFixed(2);
           } else{
@@ -250,7 +249,7 @@
     	getAll: function() {
         this.loading = true;
 				return new Promise((resolve, reject) => {
-					this.$http.get("/othentryapi/getAllEntry",).then(response => {
+					this.$http.get("/othentryapi/getAllEntry").then(response => {
             this.tbData = response.data;
             this.loading = false;
 						resolve();

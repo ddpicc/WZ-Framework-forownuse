@@ -4,7 +4,6 @@ const express = require("express");
 const router = express.Router();
 //引入数据模型模块
 const OtherEntry = require("../models/otherEntrySchema");
-const Status = require("../models/overallStatus");
 
 // 添加一个其他收入信息
 router.post("/addIncome", (req, res) => {
