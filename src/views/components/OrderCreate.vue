@@ -470,7 +470,6 @@
 					comment: this.patientComment,
 					orderComment: this.orderComment,
 					orderalias: 'new',
-					type: '收入',
 					medType: this.medtype,
 					date: mydate,
 					med: this.createOrdData,

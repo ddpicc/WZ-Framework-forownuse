@@ -3,11 +3,7 @@
 		<Row>
 			<Col :md="24" >
 				<div class="doc-header">
-					<RadioGroup v-model="transactiontype" size="small" @on-change="radioChange">
-						<Radio label="收入"></Radio>
-						<Radio label="支出"></Radio>
-						<Radio label="全部"></Radio>
-					</RadioGroup>
+					处方订单
 					<div class="actionMenu">
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="toAdd">添加</Button>
 						<Button type="success" size="small" v-if="outerNotClick && searchNotClick" @click="searchPatient">搜索</Button>
@@ -80,7 +76,6 @@
     components: { orderExpandRow },
 		data () {
 			return {
-				transactiontype: '收入',
         outerNotClick: true,
         isDisabled: true,
         searchNotClick: true,
@@ -380,11 +375,7 @@
         let result3 = promise3;
         
         let promise4 = new Promise((resolve, reject) => {
-					this.$http.get("/ordapi/order",{
-							params: {
-								type : this.transactiontype
-							}
-						}).then(response => {
+					this.$http.get("/ordapi/order").then(response => {
             this.cacheAllOrder = response.data;
             let editableOrder = this.cacheAllOrder.filter((item) => item.editable == true);
             this.orderData = editableOrder;
@@ -446,11 +437,7 @@
     // 获取全部order数据  
       load_all: function(){
         return new Promise((resolve, reject) => {
-					this.$http.get("/ordapi/orderall",{
-							params: {
-								type : this.transactiontype
-							}
-						}).then(response => {
+					this.$http.get("/ordapi/orderall").then(response => {
             this.cacheAllOrder = response.data;
             this.orderCount = this.cacheAllOrder.length;
             if(this.orderCount < this.pageSize){
@@ -468,11 +455,7 @@
     // 获取order数据，只取前1000个
     	getAll: function() {
 				return new Promise((resolve, reject) => {
-					this.$http.get("/ordapi/order",{
-							params: {
-								type : this.transactiontype
-							}
-						}).then(response => {
+					this.$http.get("/ordapi/order").then(response => {
             this.cacheAllOrder = response.data;
             this.orderCount = this.cacheAllOrder.length;
             if(this.orderCount < this.pageSize){

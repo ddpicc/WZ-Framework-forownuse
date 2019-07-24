@@ -74,7 +74,7 @@
 					},
 					{
 						title: '类型',
-						key: 'type',
+						key: 'detailType',
 						align: 'center'
 					},
 					{
@@ -157,7 +157,8 @@
 				this.dateValue = dateToString(this.dateValue);
 				let tempObj = {
 					"name" : this.entryName,
-					"type" : this.entryType,
+					"type" : "收入",
+					"detailType" : this.entryType,
 					"date" : this.dateValue,
 					"amount" : this.entryAmount,
 					"comment" : this.entryComment,
@@ -165,7 +166,7 @@
 					"editable" : true
 				}
 				return new Promise((resolve, reject) => {
-          this.$http.post("/othincomeapi/addIncome", tempObj).then(
+          this.$http.post("/othentryapi/addIncome", tempObj).then(
             response => {
             this.$Message.success('添加成功!');
 						this.getAll();
@@ -188,7 +189,7 @@
             let tempObj = Object.assign({}, this.tbData[index]);
             let deleteId = tempObj['_id'];
             return new Promise((resolve, reject) => {
-              this.$http.delete(`/othincomeapi/deletIncome/${deleteId}`).then(
+              this.$http.delete(`/othentryapi/deletIncome/${deleteId}`).then(
                 response => {
                   this.$Message.success('删除成功!');
                   this.getAll();
@@ -249,7 +250,7 @@
     	getAll: function() {
         this.loading = true;
 				return new Promise((resolve, reject) => {
-					this.$http.get("/othincomeapi/getAllIncome",).then(response => {
+					this.$http.get("/othentryapi/getAllEntry",).then(response => {
             this.tbData = response.data;
             this.loading = false;
 						resolve();

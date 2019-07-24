@@ -8,7 +8,6 @@ const ordSchema = new Schema({
     comment: String,
     orderComment: String,
     orderalias: String,
-    type : String,
     medType: String,
     date: String,
     med : [Schema.Types.Mixed],

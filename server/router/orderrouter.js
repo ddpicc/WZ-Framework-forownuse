@@ -4,6 +4,7 @@ const router = express.Router();
 //引入数据模型模块
 const Ord = require("../models/ordSchema");
 const Med = require("../models/medSchema");
+const OtherEntry = require("../models/otherEntrySchema");
 const Status = require("../models/overallStatus");
 
 //创建订单
@@ -21,57 +22,30 @@ router.post("/order", (req, res) => {
 
 //查找所有订单限制前1000个
 router.get("/order", (req, res) => {
-  let type = req.query.type;
-  if(type == '全部') {
-    Ord.find()
-      .limit(1000)
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }else{
-    Ord.find({'type': type})
-      .limit(1000)
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }
+  Ord.find()
+    .limit(1000)
+    .sort({'_id':-1})
+    .then(heros => {
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
   }
 );
 
  //查找所有订单没有限制
- router.get("/orderall", (req, res) => {
-  let type = req.query.type;
-  if(type == '全部') {
-    Ord.find()
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }else{
-    Ord.find({'type': type})
-      .sort({'_id':-1})
-      .then(heros => {
-        res.json(heros);
-      })
-      .catch(err => {
-        console.log(2);
-        res.json(err);
-      });
-  }
+router.get("/orderall", (req, res) => {
+  Ord.find()
+    .sort({'_id':-1})
+    .then(heros => {
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
   }
 );
 

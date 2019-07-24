@@ -3,12 +3,13 @@ const express = require("express");
 //定义路由级中间件
 const router = express.Router();
 //引入数据模型模块
-const OtherIncome = require("../models/otherIncomeSchema");
+const OtherEntry = require("../models/otherEntrySchema");
+const Status = require("../models/overallStatus");
 
 // 添加一个其他收入信息
 router.post("/addIncome", (req, res) => {
-	//使用OtherIncome model上的create方法储存数据
-	OtherIncome.create(req.body, (err, hero) => {
+	//OtherEntry model上的create方法储存数据
+	OtherEntry.create(req.body, (err, hero) => {
 		if (err) {
 			res.json(err);
 		} else {
@@ -19,7 +20,7 @@ router.post("/addIncome", (req, res) => {
 
 //删除一条其他收入信息
 router.delete("/deletIncome/:id", (req, res) => {
-  OtherIncome.findOneAndRemove({
+  OtherEntry.findOneAndRemove({
     _id: req.params.id
   })
     .then(hero => res.send(`${hero.title}删除成功`))
@@ -27,8 +28,8 @@ router.delete("/deletIncome/:id", (req, res) => {
 })
 
 // 查询所有其他收入信息路由
-router.get("/getAllIncome", (req, res) => {
-  OtherIncome.find({})
+router.get("/getAllEntry", (req, res) => {
+  OtherEntry.find({})
 		.sort({'_id':-1})
     .then(heros => {
       res.json(heros);

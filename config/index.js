@@ -41,10 +41,10 @@ module.exports = {
               changeOrigin: true,
               '^ordapi':''
             },
-            '/othincomeapi': {
+            '/othentryapi': {
               target: 'http://localhost:3000',
               changeOrigin: true,
-              '^othincomeapi':''
+              '^othentryapi':''
             }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"

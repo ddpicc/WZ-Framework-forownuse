@@ -1,14 +1,15 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
-const otherIncomeSchema = new Schema({
+const otherEntrySchema = new Schema({
     name :String,
     comment: String,
     type : String,
+    detailType: String,
     date: String,
     amount : Number,
     profit : Number,
     editable : Boolean,
-  }, { collection: 'otherIncome'})
+  }, { collection: 'otherEntry'})
 
-  module.exports = mongoose.model('otherIncome',otherIncomeSchema);
+  module.exports = mongoose.model('otherEntry',otherEntrySchema);
