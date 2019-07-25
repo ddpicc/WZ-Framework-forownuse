@@ -17,6 +17,24 @@ router.post("/addIncome", (req, res) => {
 	});
 });
 
+//更新订单状态
+router.put("/updateEntryStatus/:id", (req, res) => {
+  console.log("Update status");
+  OtherEntry.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        editable: false,
+      }
+    },
+    {
+      new: true
+    }
+  )
+    .then(hero => console.log(hero))
+    .catch(err => res.json(err));
+});
+
 //删除一条其他收入信息
 router.delete("/deletIncome/:id", (req, res) => {
   OtherEntry.findOneAndRemove({

@@ -67,71 +67,63 @@
           </Col>
         </div>
 
-
-      <div  class="state-overview">
-            <Col span="12" >
-                
-              <div class="panel blue" >
-                  <div class="symbol">
-                      <Icon type="cash" size="50" color="white"></Icon>
-                      
-                  </div>
-                    <div  class="state-value">
-                        <div class="value">
-                         {{monthIncome}}
-                        </div>
-                         <div class="title">
-                           月收入
-                        </div>
-                  </div>
+        <div  class="state-overview">
+          <Col span="12" >                
+            <div class="panel blue" >
+              <div class="symbol">
+                <Icon type="cash" size="50" color="white"></Icon>                      
               </div>
-
-            </Col>
-            <Col span="12" >
-               <div class="panel green" >
-                  <div class="symbol">
-                      <Icon type="eye" size="50" color="white"></Icon>
-                      
-                  </div>
-                    <div  class="state-value">
-                        <div class="value">
-                            {{monthPatient}}
-                        </div>
-                         <div class="title">
-                             月病人
-                        </div>
-                  </div>
+              <div  class="state-value">
+                <div class="value">
+                  {{monthIncome}}
                 </div>
-            </Col>
+                <div class="title">
+                  月收入
+                </div>
+              </div>
+            </div>
+          </Col>
+
+          <Col span="12" >
+            <div class="panel green" >
+              <div class="symbol">
+                <Icon type="eye" size="50" color="white"></Icon>                      
+              </div>
+              <div  class="state-value">
+                <div class="value">
+                  {{monthPatient}}
+                </div>
+                <div class="title">
+                  月病人
+                </div>
+              </div>
+            </div>
+          </Col>
         </div>
       </Col>
 
-    
-
-
       <Col  :xs="24" :sm="24"   :md="12" :lg="12" >
+        <dash-chart-visitor></dash-chart-visitor>
+      </Col>
+    </Row>
 
+    <Row :gutter="16" >
+      <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
+        <dash-chart-large> </dash-chart-large>
+      </Col>
+    </Row>
 
-          <dash-chart-visitor></dash-chart-visitor>
+    <Row :gutter="16" >
+      <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
+        <IntroChartPie> </IntroChartPie>
+      </Col>
+    </Row>
 
-
-    </Col>
-
-</Row>
-
-<Row :gutter="16" >
-    <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
-      <dash-chart-large> </dash-chart-large>
-    </Col>
-</Row>
-
-<Row :gutter="16" >
-    <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
-      <IntroChartPie> </IntroChartPie>
-    </Col>
-</Row>
-
-
+    <Row :gutter="16" >
+      <Col  :xs="24" :sm="24"   :md="24" :lg="24" >
+        <monthPie> </monthPie>
+      </Col>
+    </Row>
   </div>
 </template>
 
@@ -139,9 +131,10 @@
 import DashChartVisitor from './charts/DashChartVisitor';
 import DashChartLarge from './charts/DashChartLarge';
 import IntroChartPie from './charts/IntroChartPie';
+import monthPie from './charts/monthPie';
 
 export default {
-  components:{DashChartVisitor,DashChartLarge,IntroChartPie},
+  components:{DashChartVisitor,DashChartLarge,IntroChartPie,monthPie},
   inject: ['reload'],
   name: 'dashboard',
     data () {

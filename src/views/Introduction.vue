@@ -138,11 +138,10 @@
 </template>
 
 <script>
-import IntroChartCount from './charts/IntroChartCount';
 import IntroChartPie from './charts/IntroChartPie';
 
 export default {
-  components:{IntroChartCount,IntroChartPie},
+  components:{IntroChartPie},
   name: 'dashboard',
         data () {
             return {

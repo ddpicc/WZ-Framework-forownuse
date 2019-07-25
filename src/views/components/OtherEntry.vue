@@ -207,7 +207,7 @@
         });
 			},
 			
-			handelOut: function(index) {
+			handelOut: async function(index) {
 				let tempObj = Object.assign({}, this.tbData[index]);
 				let updatedId = tempObj['_id'];
 				let tempDate = tempObj.date;
@@ -237,11 +237,18 @@
 						"monthlyIncome": globalStatus.monthlyIncome,
 						"monthlyProfit": globalStatus.monthlyProfit
 					};
-					let promise3 = new Promise((resolve, reject) => {
+					let promise1 = new Promise((resolve, reject) => {
           	this.$http.put('/ordapi/updateGlobalStatus', temp)
           	resolve();
         	});
-        	let result3 = promise3;
+					let result1 = promise1;
+					
+					let promise2 = new Promise((resolve, reject) => {
+            this.$http.put(`/othentryapi/updateEntryStatus/${updatedId}`)
+            resolve();
+          });
+					let result2 = await promise2;
+					this.getAll();
 				}
 			},
 
