@@ -22,11 +22,11 @@
 						<Col span="4">
 							<DatePicker type="date" :options="options" v-model="dateValue" placeholder="选择日期"></DatePicker>
 						</Col>
-						<Col span="5">
-							<Input v-model="entryComment" placeholder="备注..."/>
-						</Col>
 						<Col span="3">
 							<Input v-model="entryProfit" @on-focus="focus($event)" border placeholder="利润..."/>
+						</Col>
+						<Col span="5">
+							<Input v-model="entryComment" placeholder="备注..."/>
 						</Col>
 						<Col span="1">
 						<Button type="success" @click="postToTb">+</Button>
@@ -88,13 +88,13 @@
 						align: 'center'
 					},
 					{
-						title: '备注',
-						key: 'comment',
+						title: '利润',
+						key: 'profit',
 						align: 'center'
 					},
 					{
-						title: '利润',
-						key: 'profit',
+						title: '备注',
+						key: 'comment',
 						align: 'center'
 					},
 					{
