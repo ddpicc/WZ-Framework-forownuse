@@ -36,31 +36,40 @@ export default {
   methods: {
     loadIncomePie: function(){
       return new Promise((resolve, reject) => {
-        this.$http.get('/ordapi/getCurrenDay').then(response => {
-          this.$nextTick( () => {
-            let incomeMianjian = 0;
-            let incomeCaoyao = 0;
-            let incomeXiyao = 0;
-            let profitMianjian = 0;
-            let profitCaoyao = 0;
-            let profitXiyao = 0;       
-            for(let item of response.data){
-              if(item.medType == "免煎药"){
-                incomeMianjian = parseFloat((incomeMianjian + item.total).toFixed(2));
-                profitMianjian = parseFloat((profitMianjian + item.totalprofit).toFixed(2));
-              } 
-              else if(item.medType == "草药"){
-                incomeCaoyao = parseFloat((incomeCaoyao + item.total).toFixed(2));
-                profitCaoyao = parseFloat((profitCaoyao + item.totalprofit).toFixed(2));
-              }
-              else if(item.medType == "西药"){
-                incomeXiyao = parseFloat((incomeXiyao + item.total).toFixed(2));
-                profitXiyao = parseFloat((profitXiyao + item.totalprofit).toFixed(2));
-              }           
+        let incomeMianjian = 0;
+        let incomeCaoyao = 0;
+        let incomeXiyao = 0;
+        let incomeYaowan = 0;
+        let profitMianjian = 0;
+        let profitCaoyao = 0;
+        let profitXiyao = 0;  
+        let profitYaowan = 0;
+        this.$http.get('/ordapi/getCurrentMonth').then(response => {   
+          for(let item of response.data){
+            if(item.medType == "免煎药"){
+              incomeMianjian = parseFloat((incomeMianjian + item.total).toFixed(2));
+              profitMianjian = parseFloat((profitMianjian + item.totalprofit).toFixed(2));
+            } 
+            else if(item.medType == "草药"){
+              incomeCaoyao = parseFloat((incomeCaoyao + item.total).toFixed(2));
+              profitCaoyao = parseFloat((profitCaoyao + item.totalprofit).toFixed(2));
             }
+            else if(item.medType == "西药"){
+              incomeXiyao = parseFloat((incomeXiyao + item.total).toFixed(2));
+              profitXiyao = parseFloat((profitXiyao + item.totalprofit).toFixed(2));
+            }           
+          }
+          this.$http.get('/othentryapi/getCurrentMonth').then(response => {
+            for(let item of response.data){
+              if(item.detailType == "药丸"){
+                incomeYaowan = parseFloat((incomeYaowan + item.amount).toFixed(2));
+                profitYaowan = parseFloat((profitYaowan + item.profit).toFixed(2));
+              }
+            }
+          this.$nextTick( () => {
             this.option1 = {
               title : {
-                text: '当天收入组成',
+                text: '当月收入组成',
                 x:'center'
               },
               tooltip : {
@@ -70,7 +79,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['免煎药','草药','西药']
+                data:['免煎药','草药','西药','药丸']
               },
               toolbox: {
                 show : true,
@@ -96,13 +105,14 @@ export default {
                     {value:incomeMianjian, name:'免煎药'},
                     {value:incomeCaoyao, name:'草药'},
                     {value:incomeXiyao, name:'西药'},
+                    {value:incomeYaowan, name:'药丸'},
                   ]
                 }
               ]
             },
             this.option2 = {
               title : {
-                text: '当天利润组成',
+                text: '当月利润组成',
                 x:'center'
               },
               tooltip : {
@@ -112,7 +122,7 @@ export default {
               legend: {
                 x : 'center',
                 y : 'bottom',
-                data:['免煎药','草药','西药']
+                data:['免煎药','草药','西药','药丸']
               },
               toolbox: {
                 show : true,
@@ -138,11 +148,14 @@ export default {
                       {value:profitMianjian, name:'免煎药'},
                       {value:profitCaoyao, name:'草药'},
                       {value:profitXiyao, name:'西药'},
+                      {value:profitYaowan, name:'药丸'},
                   ]
                 }      
               ]
             }
           })
+          }
+          )
           resolve();
         })
       })

@@ -57,4 +57,56 @@ router.get("/getAllEntry", (req, res) => {
     });
 });
 
+// 返回当月的其他收入订单
+router.get("/getCurrentMonth", (req, res) => {
+  let nowdate = new Date();
+  let curmonth = nowdate.getMonth()+1;
+  let curyear = nowdate.getFullYear();
+  let endyear = curyear;
+  let endMonth = (curmonth+1) %12;
+  if(endMonth == 0)
+    endMonth = '12';
+  if(endMonth < 10)
+    endMonth = '0' + endMonth;
+  if(curmonth < 10)
+    curmonth = '0' + curmonth;
+  if(curmonth == 12)
+    endyear = curyear + 1;
+  let start = curyear + '/' + curmonth;
+  let end = endyear + '/' + endMonth;
+  console.log("读取当月药丸订单信息");
+  OtherEntry.find({"date":{$gte: start, $lte: end},
+            "editable": false,
+            "type": "收入"})
+    .then(heros => {
+      console.log("success");
+      res.json(heros);
+    })
+    .catch(err => {
+      console.log('error');
+      res.json(err);
+    });
+  }
+);
+
+// 返回一个date range的其他收入订单
+router.get("/getOtherEntryRange", (req, res) => {
+  //console.log(req.query.startDate);
+  let start = req.query.startDate;
+  let end = req.query.endDate;
+  console.log("读取" + start + "到" + end + "的药丸订单信息");
+  OtherEntry.find({"date":{$gte: start, $lte: end},
+            "editable": false})
+    .sort({ update_at: -1 })
+    .then(heros => {
+      res.json(heros);
+      console.log(heros);
+    })
+    .catch(err => {
+      console.log(2);
+      res.json(err);
+    });
+  }
+);
+
 module.exports = router;

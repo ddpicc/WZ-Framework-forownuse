@@ -436,6 +436,7 @@
 
     // 获取全部order数据  
       load_all: function(){
+        this.loading = true;
         return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/orderall").then(response => {
             this.cacheAllOrder = response.data;
@@ -445,6 +446,7 @@
             }else{
               this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
             }
+            this.loading = false;
 						resolve();
 					}).catch(error => {
 						reject(error);
@@ -454,6 +456,7 @@
     
     // 获取order数据，只取前1000个
     	getAll: function() {
+        this.loading = true;
 				return new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order").then(response => {
             this.cacheAllOrder = response.data;
@@ -463,6 +466,7 @@
             }else{
               this.orderData = this.cacheAllOrder.slice(0, this.pageSize);
             }
+            this.loading = false;
 						resolve();
 					}).catch(error => {
 						reject(error);

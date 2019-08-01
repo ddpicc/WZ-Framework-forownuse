@@ -191,8 +191,7 @@ router.get("/getOrderStatement", (req, res) => {
   //console.log(req.query.startDate);
   let start = req.query.startDate;
   let end = req.query.endDate;
-  console.log(start);
-  console.log(end);
+  console.log("读取" + start + "到" + end + "的处方订单信息");
   Ord.find({"date":{$gte: start, $lte: end},
             "editable": false})
     .sort({ update_at: -1 })

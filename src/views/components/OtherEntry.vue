@@ -36,6 +36,7 @@
 					<Row>
       			<Col>
          			<Table :loading="loading" size="small" border :columns="tbCol" :data="tbData"></Table>
+							<Page :total="orderCount" :page-size="pageSize" show-total class="paging" @on-change="changepage"></Page>
 						</Col>
 					</Row>
 				</div>
@@ -56,6 +57,10 @@
 				entryProfit: "",
 				entryComment: "",
 				loading: false,
+				//page
+        pageSize: 50,
+				orderCount: 0,
+				cacheAllOrder: [],
 				options: {
 					disabledDate (date) {
 						return date && (date.valueOf() > Date.now() || date.valueOf() < 1559260800000);
@@ -252,12 +257,24 @@
 				}
 			},
 
+			changepage: function(index){
+        var _start = ( index - 1 ) * this.pageSize;
+        var _end = index * this.pageSize;
+        this.tbData = this.cacheAllOrder.slice(_start,_end);
+      },
+
 			// 获取全部数据
     	getAll: function() {
         this.loading = true;
 				return new Promise((resolve, reject) => {
 					this.$http.get("/othentryapi/getAllEntry").then(response => {
-            this.tbData = response.data;
+            this.cacheAllOrder = response.data;
+            this.orderCount = this.cacheAllOrder.length;
+            if(this.orderCount < this.pageSize){
+              this.tbData = this.cacheAllOrder;
+            }else{
+              this.tbData = this.cacheAllOrder.slice(0, this.pageSize);
+            }
             this.loading = false;
 						resolve();
 					}).catch(error => {
@@ -298,5 +315,8 @@
 </script>
 
 <style scoped>
-
+  .paging{
+    float:right;
+    margin-top:10px;
+  }
 </style>
