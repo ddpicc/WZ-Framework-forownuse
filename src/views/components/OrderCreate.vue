@@ -407,6 +407,12 @@
             this.$refs.mark1.$el.querySelector('input').focus();
             return;
 				}
+
+				if(this.medtype != "草药"){
+					if(this.inputDose === '1'){
+						alert("注意： 草药" + this.inputMed + "数量是1克")
+					}
+				}
 				
 				//update order med cache
 				if(this.medtype != "西药"){

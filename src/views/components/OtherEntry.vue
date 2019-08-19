@@ -17,13 +17,13 @@
 							<Input v-model="entryName" border placeholder="输入名称..."/>
 						</Col>
 						<Col span="3">
-							<Input v-model="entryAmount" @on-focus="focus($event)" border placeholder="输入价钱..."/>
+							<Input v-model="entryAmount" @on-focus="focus($event)" border @on-change="changeAmount" placeholder="输入价钱..."/>
 						</Col>
 						<Col span="4">
 							<DatePicker type="date" :options="options" v-model="dateValue" placeholder="选择日期"></DatePicker>
 						</Col>
 						<Col span="3">
-							<Input v-model="entryProfit" @on-focus="focus($event)" border placeholder="利润..."/>
+							<Input v-model="entryProfit" @on-focus="focus($event)" border placeholder="利润(默认总价75%)"/>
 						</Col>
 						<Col span="5">
 							<Input v-model="entryComment" placeholder="备注..."/>
@@ -261,7 +261,11 @@
         var _start = ( index - 1 ) * this.pageSize;
         var _end = index * this.pageSize;
         this.tbData = this.cacheAllOrder.slice(_start,_end);
-      },
+			},
+			
+			changeAmount: function(){
+				this.entryProfit = this.entryAmount * 3 / 4;
+			},
 
 			// 获取全部数据
     	getAll: function() {
