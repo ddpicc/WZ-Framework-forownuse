@@ -322,7 +322,8 @@
         for(let item of this.cacheSelectedRow){
           let temp = {
             medary: item.med,
-            dose: item.dose
+            dose: item.dose,
+            medtype: item.medType
           }
           let promise1 = new Promise((resolve, reject) => {
             this.$http.put('/ordapi/updateOrdMed', temp).then(response => {
@@ -337,7 +338,7 @@
             this.$http.put(`/ordapi/updateOrdstatus/${item._id}`)
             resolve();
           });
-          let result2 = await promise2;
+          //let result2 = await promise2;
 
           let tempDate = item.date;
           let yearIndex = tempDate.split('/')[0];
@@ -372,7 +373,7 @@
           this.$http.put('/ordapi/updateGlobalStatus', temp)
           resolve();
         });
-        let result3 = promise3;
+        //let result3 = promise3;
         
         let promise4 = new Promise((resolve, reject) => {
 					this.$http.get("/ordapi/order").then(response => {
@@ -385,7 +386,7 @@
 						reject(error);
 					});
         });
-        let result4 = promise4;
+        //let result4 = promise4;
       },
 
 			outerDbSure: function(){

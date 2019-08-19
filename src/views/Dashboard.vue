@@ -205,12 +205,24 @@ export default {
                 todayIncome = todayIncome + item.total;
               }
             }
-            monthTotal = monthTotal.toFixed(2);
-            todayIncome = todayIncome.toFixed(2);
-            this.monthIncome = monthTotal;
-            this.dayIncome  = todayIncome;
-            this.dayPatient = todayPatient;
-						resolve();
+            this.$http.get('/othentryapi/getCurrentMonth').then(response => {
+              for(let item of response.data){
+                monthTotal = monthTotal + item.amount;
+                this.monthPatient = this.monthPatient + 1;
+                if(item.date == today){
+                  if(item.detailType == "药丸"){
+                    todayPatient = todayPatient + 1;
+                    todayIncome = todayIncome + item.amount;
+                  }
+                }                
+              }
+              monthTotal = monthTotal.toFixed(2);
+              todayIncome = todayIncome.toFixed(2);
+              this.monthIncome = monthTotal;
+              this.dayIncome  = todayIncome;
+              this.dayPatient = todayPatient;
+              resolve();
+            })
 					}).catch(error => {
             console.log(error);
 						reject(error);

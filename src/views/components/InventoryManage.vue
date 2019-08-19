@@ -28,7 +28,7 @@
 							<div slot='content'>
             		<Row>
         					<Col span="18">
-										<Slider v-model="caoyaoV" :min=100 :max=800 :step=100></Slider>
+										<Slider v-model="caoyaoV" :min=300 :max=1000 :step=100></Slider>
         					</Col>
         					<Col span="6">
 										<Button type="success" size="large" class="pannelInline"  @click="checkCaoyao">检查</Button>
@@ -89,7 +89,7 @@
 					count: [],
 					value1: '1',
 					mianjianV: 1,
-					caoyaoV: 200,
+					caoyaoV: 500,
 					value4: 2,
 					tabsValue: "name2",
 					inputMed: '',
@@ -212,7 +212,8 @@
 							}
 						}).then(response => {
 							for(let item of response.data){
-								let boxCount = Math.floor(item.count /  item.bagperbox);
+                let boxCount = Math.floor(item.count /  item.bagperbox);
+                console.log(item.medname + ":" + boxCount);
 								if(boxCount <= this.mianjianV)
 									cacheList.push(item);
 							}

@@ -122,8 +122,7 @@ router.get("/getCurrentMonth", (req, res) => {
   console.log(start);
   console.log(end);
   Ord.find({"date":{$gte: start, $lte: end},
-            "editable": false,
-            "type": "收入"})
+            "editable": false})
     .then(heros => {
       console.log(heros);
       res.json(heros);
@@ -151,8 +150,7 @@ router.get("/getCurrenDay", (req, res) => {
   }
   var currentdate = year + seperator1 + month + seperator1 + strDate;
   Ord.find({"date": currentdate,
-            "editable": false,
-            "type": "收入"})
+            "editable": false})
     .then(heros => {
       console.log(heros);
       res.json(heros);
@@ -172,8 +170,7 @@ router.get("/getLast30Days", (req, res) => {
   console.log(start);
   console.log(end);
   Ord.find({"date":{$gte: start, $lte: end},
-            "editable": false,
-            "type": "收入"})
+            "editable": false})
     .sort({ update_at: -1 })
     .then(heros => {
       res.json(heros);
@@ -242,6 +239,7 @@ router.put("/updateOrdMed", (req, res) => {
   let dose = req.body.dose;
   let arr = [];
   arr = req.body.medary;
+  let type = req.body.medtype;
   arr.forEach(element => {
     //console.log(element.medname);
     var tempMedname;
@@ -252,32 +250,33 @@ router.put("/updateOrdMed", (req, res) => {
         if(typeof(element.medname1) == "undefined")
           break;
         tempMedname = element.medname1;
-        tempChangeCount = -1*element.count1*dose
+        tempChangeCount = -1*parseInt(element.count1)*dose
         index = index + 1;
       }
       else if(index==1){
         if(typeof(element.medname2) == "undefined")
           break;
         tempMedname = element.medname2;
-        tempChangeCount = -1*element.count2*dose
+        tempChangeCount = -1*parseInt(element.count2)*dose
         index = index + 1;
       }
       else if(index==2){
         if(typeof(element.medname3) == "undefined")
           break;
         tempMedname = element.medname3;
-        tempChangeCount = -1*element.count3*dose
+        tempChangeCount = -1*parseInt(element.count3)*dose
         index = index + 1;
       }
       else if(index==3){
         if(typeof(element.medname4) == "undefined")
           break;
         tempMedname = element.medname4;
-        tempChangeCount = -1*element.count4*dose
+        tempChangeCount = -1*parseInt(element.count4)*dose
         index = index + 1;
       }
-      //console.log(tempMedname + '  count change:' +  tempChangeCount);
+      console.log(tempMedname + '  count change:' +  tempChangeCount);
       Med.findOneAndUpdate({
+        medtype: type,
         medname: tempMedname},
         {$inc: {count: tempChangeCount}})
         .catch(err => {

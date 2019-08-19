@@ -18,6 +18,7 @@
         					<div  ref="print" v-if="reportDisplay">
             				<h4 style="text-align:center">{{startDay}} --- {{endDay}} 详情</h4>
 										<br>
+										<br>
 										  <ul>
 												<li><div class="list-nap1">总收入</div><div class="list-line"></div><div class="list-con1">{{totalIncome}}元</div></li>
 												<li><div class="list-nap1">总利润</div><div class="list-line"></div><div class="list-con1">{{totalProfit}}元</div></li>
@@ -157,10 +158,8 @@
 						}
 						_totalIncome = parseFloat((_totalIncome + item.total).toFixed(2));
 						_totalProfit = parseFloat((_totalProfit + item.totalprofit).toFixed(2));
-						_averageIncome = parseFloat((_totalIncome / days).toFixed(2));
-						_averageProfit = parseFloat((_totalProfit / days).toFixed(2));
 						_taotalPatient = _taotalPatient + 1;
-						_averagePatient = parseFloat((_taotalPatient / days).toFixed(2));
+						
 						if(parseInt(item.age) > 20){
 							_gt20Patient = _gt20Patient + 1;
 						}else{
@@ -172,6 +171,19 @@
 						}
 					}
 
+					for(let item of otherEntryObj){
+						if(item.detailType == "药丸"){
+							_incomeYaowan = parseFloat((_incomeYaowan + item.amount).toFixed(2));
+							_profitYaowan = parseFloat((_profitYaowan + item.profit).toFixed(2));
+						}
+						_totalIncome = parseFloat((_totalIncome + item.amount).toFixed(2));
+						_totalProfit = parseFloat((_totalProfit + item.profit).toFixed(2));
+						_taotalPatient = _taotalPatient + 1;
+
+					}
+					_averageIncome = parseFloat((_totalIncome / days).toFixed(2));
+					_averageProfit = parseFloat((_totalProfit / days).toFixed(2));
+					_averagePatient = parseFloat((_taotalPatient / days).toFixed(2));
 					//赋值
 					this.totalIncome = _totalIncome;
 					this.totalProfit = _totalProfit;
